@@ -32,3 +32,5 @@ sysinfo.txt
 ehthumbs.db
 Thumbs.db
 
+# vim
+*.swp
