@@ -30,14 +30,4 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 			buttonSubtitle.color = Color.white;
 		}
 	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
