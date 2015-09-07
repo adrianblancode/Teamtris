@@ -3,6 +3,10 @@ using System.Collections;
 
 public class TitleTextureMovement : MonoBehaviour {
 
+	int screenPadding = 50;
+	int buttonPadding = 150;
+	int blockWidth = 200;
+
 	bool isLeft;
 	float xpos;
 	float offset;
@@ -23,6 +27,7 @@ public class TitleTextureMovement : MonoBehaviour {
 	void Update () {
 		transform.Translate (Vector3.down);
 
+		// If the block has gone off screen
 		if (transform.position.y < -100) {
 			repositionBlock();
 		}
@@ -30,14 +35,18 @@ public class TitleTextureMovement : MonoBehaviour {
 
 	// Puts the block at the top of the screen at the appropriate x coordinate
 	void repositionBlock() {
-		offset = Random.Range (0, (Screen.width / 2) - 300);
-		
+
+		// We make sure that the button does not go offscreen, and does not collide with the buttons
 		if (isLeft) {
-			xpos = offset;
+			xpos = Random.Range (screenPadding, (Screen.width / 2) - (blockWidth + buttonPadding));
 		} else {
-			xpos = Screen.width - offset;
+			xpos = Random.Range ((Screen.width / 2) + blockWidth, Screen.width - screenPadding);
 		}
 
+		// Put the block at the top of the screen
 		transform.position = new Vector3(xpos, Screen.height + 50, 0);
 	}
+
+	// TODO changes the image of the block
+	void changeBlockType(){}
 }
