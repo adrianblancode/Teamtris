@@ -318,6 +318,7 @@ GameObject:
   - 92: {fileID: 1294289573}
   - 124: {fileID: 1294289572}
   - 81: {fileID: 1294289571}
+  - 114: {fileID: 1294289578}
   - 114: {fileID: 1294289577}
   - 114: {fileID: 1294289576}
   m_Layer: 0
@@ -357,7 +358,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: .215722322, g: .221177369, b: .257352948, a: 1}
+  m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -366,7 +367,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 12
+  field of view: 24
   orthographic: 1
   orthographic size: 12
   m_Depth: -1
@@ -389,7 +390,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294289570}
   m_LocalRotation: {x: .0871557519, y: 0, z: 0, w: .99619472}
-  m_LocalPosition: {x: 4.5, y: 30, z: -120}
+  m_LocalPosition: {x: 5, y: 20, z: -60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -406,8 +407,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  intensity: 2
-  chromaticAberration: 1
+  intensity: 5
+  chromaticAberration: 2
   axialAberration: 10
   blur: .100000001
   blurSpread: 1
@@ -423,7 +424,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294289570}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fceaeb339b971b429c4cc600acabd13, type: 3}
   m_Name: 
@@ -433,7 +434,7 @@ MonoBehaviour:
   hdr: 0
   sepBlurSpread: 2.5
   quality: 1
-  bloomIntensity: .300000012
+  bloomIntensity: .5
   bloomThreshold: .5
   bloomThresholdColor: {r: 1, g: 1, b: 1, a: 1}
   bloomBlurIterations: 2
@@ -455,6 +456,27 @@ MonoBehaviour:
   blurAndFlaresShader: {fileID: 4800000, guid: be6e39cf196f146d5be72fbefb18ed75, type: 3}
   brightPassFilterShader: {fileID: 4800000, guid: 0aeaa4cb29f5d4e9c8455f04c8575c8c,
     type: 3}
+--- !u!114 &1294289578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1294289570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84aa69c622f8aab41804fd5e2d625930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curShader: {fileID: 4800000, guid: 9e2c83d1a69ce224eb6f3c76a6ac5337, type: 3}
+  Distortion: .100000001
+  Gamma: .449999988
+  YExtra: 0
+  CurvatureSet1: .100000001
+  CurvatureSet2: .100000001
+  DotWeight: 9.99999975e-05
+  scanSize: 1024
+  rgb1: {r: 1, g: 1, b: 1, a: 1}
+  rgb2: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1637838149
 GameObject:
   m_ObjectHideFlags: 0
