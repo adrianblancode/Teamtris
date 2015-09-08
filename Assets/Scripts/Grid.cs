@@ -6,22 +6,6 @@ public class Grid : MonoBehaviour {
 	public static int w = 10;
 	public static int h = 20;
 	public static Transform[,] grid = new Transform[w, h];
-	public GameObject leftBorder = GameObject.Find("LeftBorder");
-	public GameObject rightBorder = GameObject.Find("RightBorder");
-	public GameObject bottom = GameObject.Find ("Bottom");
-
-
-	public Vector2 roundVec2(Vector2 v){
-		return new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));
-	}
-
-	public bool insideBorder(Vector2 pos){
-
-		Vector2 rounded_pos = roundVec2 (pos);
-		return (rounded_pos.x >= (leftBorder.transform.position.x + 0.5) &&
-		        rounded_pos.x <= (rightBorder.transform.position.x - 0.5) &&
-		        rounded_pos.y >= (bottom.transform.position.y + 0.5));
-	}
 
 	public static void deleteRow(int y) {
 		for (int x = 0; x < w; ++x) {
@@ -46,5 +30,34 @@ public class Grid : MonoBehaviour {
 	public static void decreaseRowsAbove(int y) {
 		for (int i = y; i < h; ++i)
 			decreaseRow(i);
+	}
+
+	public static bool isRowFull(int y) {
+		for (int x = 0; x < w; ++x)
+			if (grid[x, y] == null)
+				return false;
+		return true;
+	}
+
+	public static Vector2 roundVec2(Vector2 v){
+		return new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));
+	}
+	
+	public static bool insideBorder(Vector2 pos){
+		
+		Vector2 rounded_pos = roundVec2 (pos);
+		return (rounded_pos.x >= 0 &&
+		        rounded_pos.x < w &&
+		        rounded_pos.y >= 0);
+	}
+
+	public static void deleteFullRows() {
+		for (int y = 0; y < h; ++y) {
+			if (isRowFull(y)) {
+				deleteRow(y);
+				decreaseRowsAbove(y+1);
+				--y;
+			}
+		}
 	}
 }
