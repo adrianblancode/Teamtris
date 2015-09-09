@@ -3,18 +3,40 @@ using System.Collections;
 
 public class Grid : MonoBehaviour {
 	// The Grid itself
-	public static int w = 10;
-	public static int h = 20;
-	public static Transform[,] grid = new Transform[w, h];
+	private int w;
+	private int h;
+	public Transform[,] grid;
 
-	public static void deleteRow(int y) {
+	public Grid(int width, int height) {
+		w = width;
+		h = height;
+		grid = new Transform[w, h];
+	}
+
+	public int getHeight(){
+		return h;
+	}
+
+	public int getWidth(){
+		return w;
+	}
+
+	/*
+	 * Deletes one row of full blocks,
+	 * helper function for deleteFullRows
+	 */
+	private void deleteRow(int y) {
 		for (int x = 0; x < w; ++x) {
 			Destroy(grid[x, y].gameObject);
 			grid[x, y] = null;
 		}
 	}
 
-	public static void decreaseRow(int y) {
+	/*
+	 * Moves all rows above 'y' one step downwards,
+	 * helper function for deleteFullRows and decreaseRowsAbove
+	 */
+	private void decreaseRow(int y) {
 		for (int x = 0; x < w; ++x) {
 			if (grid[x, y] != null) {
 				// Move one towards bottom
@@ -27,31 +49,46 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
-	public static void decreaseRowsAbove(int y) {
+	/*
+	 * Decreases all rows above y
+	 */
+	private void decreaseRowsAbove(int y) {
 		for (int i = y; i < h; ++i)
 			decreaseRow(i);
 	}
 
-	public static bool isRowFull(int y) {
+	/*
+	 * Checks whether row 'y' is full or not
+	 */
+	private bool isRowFull(int y) {
 		for (int x = 0; x < w; ++x)
 			if (grid[x, y] == null)
 				return false;
 		return true;
 	}
 
-	public static Vector2 roundVec2(Vector2 v){
+	public Vector2 roundVec2(Vector2 v){
 		return new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));
 	}
-	
-	public static bool insideBorder(Vector2 pos){
-		
+
+	/*
+	 * Checks if the given Vector2 is within the gameboards border
+	 * (Currently hardcoded borders)
+	 * TODO: Make it dynamic so it calculates based on the gameboards position
+	 */
+	public bool insideBorder(Vector2 pos){
 		Vector2 rounded_pos = roundVec2 (pos);
 		return (rounded_pos.x >= 0 &&
 		        rounded_pos.x < w &&
 		        rounded_pos.y >= 0);
 	}
 
-	public static void deleteFullRows() {
+	/*
+	 * Goes through all rows and deletes the full ones,
+	 * then moves all the rows above one step down
+	 * called after each discrete timestep
+	 */
+	public void deleteFullRows() {
 		for (int y = 0; y < h; ++y) {
 			if (isRowFull(y)) {
 				deleteRow(y);
