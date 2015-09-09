@@ -5,16 +5,22 @@ public class BlockController : MonoBehaviour {
 
 	// Time since last gravity tick
 	float lastFall = 0;
-	float fallTime = 1.0f;
+
+	// Time in seconds between each fall of the block
+	float fallRate = 0.75f;
+	float fallRateMultiplier = 1.0f;
+
+	// Time in seconds between each fastfall of the block
+	private float fastFallRate = 0.07f;
+
 	private Grid blockGrid;
 	public GameObject currentBlock;
-
 	private Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
 	private float rotateRate = 0.1f;
 	private float horizontalRate = 0.2f;
-	private float fallRate = 0.2f;
+
 	
 	void Start () {
 		spawner = FindObjectOfType<Spawner> ();
@@ -33,16 +39,16 @@ public class BlockController : MonoBehaviour {
 		horizontalRate = h;
 	}
 
-	// Set rate at which user is able to make blocks fall
-	public void setFallRate(float f){
-		fallRate = f;
+	// Set the rate at which the blocks fall naturally
+	public void setFallRateMultiplier(float f){
+		fallRateMultiplier = f;
 	}
 
-	// Set the fall time of blocks
-	public void setFallTime(float f){
-		fallTime = f;
+	// Set rate at which user is able to make blocks fastfall
+	public void setFastFallRate(float f){
+		fastFallRate = f;
 	}
-	
+
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
@@ -68,7 +74,7 @@ public class BlockController : MonoBehaviour {
 		}
 		// Move Downwards and Fall
 		else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey (KeyCode.DownArrow) ||
-		         Time.time - lastFall >= fallTime) && !fall) {
+		         Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall) {
 			fall = true;
 			StartCoroutine("Fall");
 		}
@@ -143,7 +149,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock = spawner.spawnNext();
 		}
 		lastFall = Time.time;
-		yield return new WaitForSeconds(fallRate);
+		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
 	}
 
