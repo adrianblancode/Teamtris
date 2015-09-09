@@ -5,8 +5,13 @@ public class BlockController : MonoBehaviour {
 
 	// Time since last gravity tick
 	float lastFall = 0;
+	float fallTime = 1.0f;
 	private Grid blockGrid;
 	public GameObject currentBlock;
+
+	private bool left, right, rotate, fall = false;
+
+
 	// Use this for initialization
 	void Start () {
 		blockGrid = new Grid (10, 25);
@@ -20,72 +25,100 @@ public class BlockController : MonoBehaviour {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
-			Destroy(gameObject);
+			Destroy(this);
 		}
 
 		// Move Left
-		if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-			// Modify position
-			currentBlock.transform.position += new Vector3(-1, 0, 0);
-			
-			// See if valid
-			if (isValidGridPos())
-				// Its valid. Update grid.
-				updateGrid();
-			else
-				// Its not valid. revert.
-				currentBlock.transform.position += new Vector3(1, 0, 0);
+		if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKey(KeyCode.LeftArrow)) && !left) {
+			left = true;
+			StartCoroutine("MoveLeft");
 		}
 
 		// Move Right
-		else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-			// Modify position
-			currentBlock.transform.position += new Vector3(1, 0, 0);
-			
-			// See if valid
-			if (isValidGridPos())
-				// It's valid. Update grid.
-				updateGrid();
-			else
-				// It's not valid. revert.
-				currentBlock.transform.position += new Vector3(-1, 0, 0);
+		else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyCode.RightArrow)) && !right) {
+			right = true;
+			StartCoroutine("MoveRight");
 		}
 		// Rotate
-		else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-			if(currentBlock.tag != "freeze"){
-				currentBlock.transform.Rotate(0, 0, -90);
-			}
-			
-			// See if valid
-			if (isValidGridPos())
-				// It's valid. Update grid.
-				updateGrid();
-			else
-				// It's not valid. revert.
-				currentBlock.transform.Rotate(0, 0, 90);
+		else if (Input.GetKeyDown(KeyCode.UpArrow) && !rotate) {
+			rotate = true;
+			StartCoroutine("Rotate");
 		}
 		// Move Downwards and Fall
-		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey (KeyCode.DownArrow) ||
-		         Time.time - lastFall >= 1) {
-			// Modify position
-			currentBlock.transform.position += new Vector3(0, -1, 0);
-			
-			// See if valid
-			if (isValidGridPos()) {
-				// It's valid. Update grid.
-				updateGrid();
-			} else {
-				// It's not valid. revert.
-				currentBlock.transform.position += new Vector3(0, 1, 0);
-				
-				// Clear filled horizontal lines
-				blockGrid.deleteFullRows();
-				
-				// Spawn next Group
-				currentBlock = FindObjectOfType<Spawner>().spawnNext();
-			}
-			lastFall = Time.time;
+		else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey (KeyCode.DownArrow) ||
+		         Time.time - lastFall >= fallTime) && !fall) {
+			fall = true;
+			StartCoroutine("Fall");
 		}
+	}
+
+	IEnumerator MoveLeft(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(-1, 0, 0);
+		// See if valid
+		if (isValidGridPos ()) {
+			// Its valid. Update grid.
+			updateGrid ();
+		} else {
+			// Its not valid. revert.
+			currentBlock.transform.position += new Vector3 (1, 0, 0);
+		}
+		yield return new WaitForSeconds(.2f);
+		left = false;
+	}
+	
+	IEnumerator MoveRight(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(1, 0, 0);
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.position += new Vector3 (-1, 0, 0);
+		}
+		yield return new WaitForSeconds(.2f);
+		right = false;
+	}
+	
+	IEnumerator Rotate(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, 0, -90);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, 0, 90);
+		}
+		yield return new WaitForSeconds(.2f);
+		rotate = false;
+	}
+	
+	IEnumerator Fall(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(0, -1, 0);
+		
+		// See if valid
+		if (isValidGridPos()) {
+			// It's valid. Update grid.
+			updateGrid();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.position += new Vector3(0, 1, 0);
+			// Clear filled horizontal lines
+			blockGrid.deleteFullRows();
+			// Spawn next Group
+			currentBlock = FindObjectOfType<Spawner>().spawnNext();
+		}
+		lastFall = Time.time;
+		yield return new WaitForSeconds(.2f);
+		fall = false;
 	}
 	
 	void updateGrid() {
