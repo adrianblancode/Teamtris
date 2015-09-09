@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Group : MonoBehaviour {
+public class BlockController : MonoBehaviour {
 
 	// Time since last gravity tick
 	float lastFall = 0;
@@ -46,7 +46,7 @@ public class Group : MonoBehaviour {
 		}
 		// Rotate
 		else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-			transform.Rotate(0, 0, -90);
+				transform.Rotate(0, 0, -90);
 			
 			// See if valid
 			if (isValidGridPos())
