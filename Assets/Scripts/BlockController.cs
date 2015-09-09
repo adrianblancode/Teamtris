@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class BlockController : MonoBehaviour {
@@ -46,7 +46,9 @@ public class BlockController : MonoBehaviour {
 		}
 		// Rotate
 		else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+			if(this.tag != "freeze"){
 				transform.Rotate(0, 0, -90);
+			}
 			
 			// See if valid
 			if (isValidGridPos())
