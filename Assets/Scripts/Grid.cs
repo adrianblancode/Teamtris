@@ -11,6 +11,16 @@ public class Grid : MonoBehaviour {
 		w = width;
 		h = height;
 		grid = new Transform[w, h];
+	}
+
+	public int getHeight(){
+		return h;
+	}
+
+	public int getWidth(){
+		return w;
+	}
+
 	private void deleteRow(int y) {
 		for (int x = 0; x < w; ++x) {
 			Destroy(grid[x, y].gameObject);
