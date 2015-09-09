@@ -3,18 +3,32 @@ using System.Collections;
 
 public class BlockController : MonoBehaviour {
 
+	// Which team owns this blockcontroller
+	// TODO make work for both teams
+	private int team = 1;
+
 	// Time since last gravity tick
-	float lastFall = 0;
-	float fallTime = 1.0f;
+	private float lastFall = 0;
+
+	// Rate in seconds between each natural fall of the block
+	private float fallRate = 0.75f;
+	private float fallRateMultiplier = 1.0f;
+
+	// Rate in seconds between each fastfall of the block
+	private float fastFallRate = 0.05f;
+
+	// Rate in seconds a block can be rotated
+	private float rotateRate = 0.4f;
+
+	// Rate in seconds a block can be moved horizontally
+	private float horizontalRate = 0.2f;
+
 	private Grid blockGrid;
 	public GameObject currentBlock;
-
 	private Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
-	private float rotateRate = 0.1f;
-	private float horizontalRate = 0.2f;
-	private float fallRate = 0.2f;
+
 	
 	void Start () {
 		spawner = FindObjectOfType<Spawner> ();
@@ -33,16 +47,16 @@ public class BlockController : MonoBehaviour {
 		horizontalRate = h;
 	}
 
-	// Set rate at which user is able to make blocks fall
-	public void setFallRate(float f){
-		fallRate = f;
+	// Set the rate at which the blocks fall naturally
+	public void setFallRateMultiplier(float f){
+		fallRateMultiplier = f;
 	}
 
-	// Set the fall time of blocks
-	public void setFallTime(float f){
-		fallTime = f;
+	// Set rate at which user is able to make blocks fastfall
+	public void setFastFallRate(float f){
+		fastFallRate = f;
 	}
-	
+
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
@@ -51,24 +65,32 @@ public class BlockController : MonoBehaviour {
 		}
 
 		// Move Left
-		if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKey(KeyCode.LeftArrow)) && !left) {
+		if (ControllerInterface.MoveLeft(team) && !left) {
 			left = true;
 			StartCoroutine("MoveLeft");
 		}
 
 		// Move Right
-		else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyCode.RightArrow)) && !right) {
+		else if (ControllerInterface.MoveRight(team) && !right) {
 			right = true;
 			StartCoroutine("MoveRight");
 		}
-		// Rotate
-		else if (Input.GetKeyDown(KeyCode.UpArrow) && !rotate) {
+
+		// Rotate Left
+		else if (ControllerInterface.RotLeft(team) && !rotate) {
 			rotate = true;
-			StartCoroutine("Rotate");
+			StartCoroutine("RotateLeft");
 		}
+
+		// Rotate Left
+		else if (ControllerInterface.RotRight(team) && !rotate) {
+			rotate = true;
+			StartCoroutine("RotateRight");
+		}
+
 		// Move Downwards and Fall
-		else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey (KeyCode.DownArrow) ||
-		         Time.time - lastFall >= fallTime) && !fall) {
+		else if ((ControllerInterface.ActionButtonCombined(1) ||
+		         Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall) {
 			fall = true;
 			StartCoroutine("Fall");
 		}
@@ -108,7 +130,7 @@ public class BlockController : MonoBehaviour {
 	}
 
 	// CoRoutine for rotating
-	IEnumerator Rotate(){
+	IEnumerator RotateLeft(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, -90);
 		}
@@ -120,6 +142,24 @@ public class BlockController : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, 90);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
+	// CoRoutine for rotating
+	IEnumerator RotateRight(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, 0, 90);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, 0, -90);
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -143,7 +183,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock = spawner.spawnNext();
 		}
 		lastFall = Time.time;
-		yield return new WaitForSeconds(fallRate);
+		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
 	}
 
