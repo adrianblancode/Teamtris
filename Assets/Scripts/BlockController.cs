@@ -10,7 +10,9 @@ public class BlockController : MonoBehaviour {
 	public GameObject currentBlock;
 
 	private bool left, right, rotate, fall = false;
-
+	private float rotateRate = 0.1f;
+	private float horizontalRate = 0.2f;
+	private float fallRate = 0.2f;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +21,22 @@ public class BlockController : MonoBehaviour {
 		currentBlock = FindObjectOfType<Spawner>().spawnNext();
 
 	}
-	
+
+	public void setRotateRate(float r){
+		rotateRate = r;
+	}
+
+	public void setHorizontalRate(float h){
+		horizontalRate = h;
+	}
+
+	public void setFallRate(float f){
+		fallRate = f;
+	}
+
+	public void setFallTime(float f){
+		fallTime = f;
+	}
 	// Update is called once per frame
 	void Update() {
 		// Default position not valid? Then it's game over
@@ -63,7 +80,7 @@ public class BlockController : MonoBehaviour {
 			// Its not valid. revert.
 			currentBlock.transform.position += new Vector3 (1, 0, 0);
 		}
-		yield return new WaitForSeconds(.2f);
+		yield return new WaitForSeconds(horizontalRate);
 		left = false;
 	}
 	
@@ -79,7 +96,7 @@ public class BlockController : MonoBehaviour {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3 (-1, 0, 0);
 		}
-		yield return new WaitForSeconds(.2f);
+		yield return new WaitForSeconds(horizontalRate);
 		right = false;
 	}
 	
@@ -96,7 +113,7 @@ public class BlockController : MonoBehaviour {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, 90);
 		}
-		yield return new WaitForSeconds(.2f);
+		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
 	
@@ -117,7 +134,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock = FindObjectOfType<Spawner>().spawnNext();
 		}
 		lastFall = Time.time;
-		yield return new WaitForSeconds(.2f);
+		yield return new WaitForSeconds(fallRate);
 		fall = false;
 	}
 	
