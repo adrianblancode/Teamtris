@@ -9,6 +9,8 @@ public class BlockController : MonoBehaviour {
 	private Grid blockGrid;
 	public GameObject currentBlock;
 
+	private Spawner spawner = FindObjectOfType<Spawner>();
+
 	private bool left, right, rotate, fall = false;
 	private float rotateRate = 0.1f;
 	private float horizontalRate = 0.2f;
@@ -17,8 +19,7 @@ public class BlockController : MonoBehaviour {
 	void Start () {
 		blockGrid = new Grid (10, 25);
 
-		currentBlock = FindObjectOfType<Spawner>().spawnNext();
-
+		currentBlock = spawner.spawnNext();
 	}
 
 	// Set rate at which user is able to rotate
@@ -138,7 +139,7 @@ public class BlockController : MonoBehaviour {
 			// Clear filled horizontal lines
 			blockGrid.deleteFullRows();
 			// Spawn next Group
-			currentBlock = FindObjectOfType<Spawner>().spawnNext();
+			currentBlock = spawner.spawnNext();
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fallRate);
