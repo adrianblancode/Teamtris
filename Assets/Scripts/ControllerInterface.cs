@@ -21,7 +21,7 @@ public class ControllerInterface : MonoBehaviour {
 	// team = 1 for team 1
 	public static bool MoveRight (int team) {
 		if (team == 1) {
-			return Input.GetKey (KeyCode.DownArrow);
+			return Input.GetKey (KeyCode.RightArrow);
 		} else {
 			return Input.GetKey (KeyCode.D);
 		}
