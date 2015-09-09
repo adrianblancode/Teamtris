@@ -13,8 +13,7 @@ public class BlockController : MonoBehaviour {
 	private float rotateRate = 0.1f;
 	private float horizontalRate = 0.2f;
 	private float fallRate = 0.2f;
-
-	// Use this for initialization
+	
 	void Start () {
 		blockGrid = new Grid (10, 25);
 
@@ -22,22 +21,26 @@ public class BlockController : MonoBehaviour {
 
 	}
 
+	// Set rate at which user is able to rotate
 	public void setRotateRate(float r){
 		rotateRate = r;
 	}
 
+	// Set rate at which user is able to move horizontally
 	public void setHorizontalRate(float h){
 		horizontalRate = h;
 	}
 
+	// Set rate at which user is able to make blocks fall
 	public void setFallRate(float f){
 		fallRate = f;
 	}
 
+	// Set the fall time of blocks
 	public void setFallTime(float f){
 		fallTime = f;
 	}
-	// Update is called once per frame
+	
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
@@ -69,6 +72,7 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
+	// CoRoutine for moving left
 	IEnumerator MoveLeft(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(-1, 0, 0);
@@ -83,7 +87,8 @@ public class BlockController : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		left = false;
 	}
-	
+
+	// CoRoutine for moving right
 	IEnumerator MoveRight(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(1, 0, 0);
@@ -99,7 +104,8 @@ public class BlockController : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		right = false;
 	}
-	
+
+	// CoRoutine for rotating
 	IEnumerator Rotate(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, -90);
@@ -116,7 +122,8 @@ public class BlockController : MonoBehaviour {
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
-	
+
+	// CoRoutine for making pieces fall
 	IEnumerator Fall(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(0, -1, 0);
@@ -137,7 +144,8 @@ public class BlockController : MonoBehaviour {
 		yield return new WaitForSeconds(fallRate);
 		fall = false;
 	}
-	
+
+	// Updating the grid with new positions
 	void updateGrid() {
 		// Remove old children from grid
 		for (int y = 0; y < blockGrid.getHeight(); ++y)
@@ -152,7 +160,8 @@ public class BlockController : MonoBehaviour {
 			blockGrid.grid[(int)v.x, (int)v.y] = child;
 		}        
 	}
-	
+
+	// Checks if the current block is in a valid grid position
 	bool isValidGridPos() {        
 		foreach (Transform child in currentBlock.transform) {
 			Vector2 v = blockGrid.roundVec2(child.position);
