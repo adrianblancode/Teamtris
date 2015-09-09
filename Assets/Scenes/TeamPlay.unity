@@ -144,7 +144,7 @@ GameObject:
   - 4: {fileID: 539141186}
   - 114: {fileID: 539141185}
   m_Layer: 0
-  m_Name: Group
+  m_Name: BlockController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,10 +158,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 539141184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70842ba380c6b4e579819f5fd8bd7375, type: 3}
+  m_Script: {fileID: 11500000, guid: eb796cbc46a854a6894d8428561890dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lastFall: 0
+  currentBlock: {fileID: 0}
 --- !u!4 &539141186
 Transform:
   m_ObjectHideFlags: 0
