@@ -9,7 +9,7 @@ public class BlockController : MonoBehaviour {
 	private Grid blockGrid;
 	public GameObject currentBlock;
 
-	private Spawner spawner = FindObjectOfType<Spawner>();
+	private Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
 	private float rotateRate = 0.1f;
@@ -17,6 +17,7 @@ public class BlockController : MonoBehaviour {
 	private float fallRate = 0.2f;
 	
 	void Start () {
+		spawner = FindObjectOfType<Spawner> ();
 		blockGrid = new Grid (10, 25);
 
 		currentBlock = spawner.spawnNext();
