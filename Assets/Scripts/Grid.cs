@@ -87,14 +87,18 @@ public class Grid : MonoBehaviour {
 	 * Goes through all rows and deletes the full ones,
 	 * then moves all the rows above one step down
 	 * called after each discrete timestep
+	 * @return The number of deleted rows.
 	 */
-	public void deleteFullRows() {
+	public int deleteFullRows() {
+		int linesDeleted = 0;
 		for (int y = 0; y < h; ++y) {
 			if (isRowFull(y)) {
+				linesDeleted++;
 				deleteRow(y);
 				decreaseRowsAbove(y+1);
 				--y;
 			}
 		}
+		return linesDeleted;
 	}
 }

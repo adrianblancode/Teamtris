@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BlockController : MonoBehaviour {
@@ -29,12 +30,31 @@ public class BlockController : MonoBehaviour {
 
 	private bool left, right, rotate, fall = false;
 
+	// Level and its display
+	private int level = 1;
+	public Text levelText;
+
+	// Number of lines deleted in the level and its display
+	private int lineCount = 0;
+	public Text countText;
+
+	// Global score and its display
+	private int score = 0;
+	public Text scoreText;
+
+	// Number of lines deleted each time a block falls down (ranges 0..4)
+	private int linesDeleted;
+
+	// Number of times in a row that 4 lines where deleted at the same time
+	private int combo = 1;
 	
 	void Start () {
 		spawner = FindObjectOfType<Spawner> ();
 		blockGrid = new Grid (10, 25);
 
 		currentBlock = spawner.spawnNext();
+
+		updateTexts();
 	}
 
 	// Set rate at which user is able to rotate
@@ -178,7 +198,9 @@ public class BlockController : MonoBehaviour {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3(0, 1, 0);
 			// Clear filled horizontal lines
-			blockGrid.deleteFullRows();
+			linesDeleted = blockGrid.deleteFullRows();
+			// Update the scores depending on the number of lines deleted
+			updateScores(linesDeleted);
 			// Spawn next Group
 			currentBlock = spawner.spawnNext();
 		}
@@ -220,4 +242,52 @@ public class BlockController : MonoBehaviour {
 		}
 		return true;
 	}
+
+	// Displays the new score, level and number of lines to go till next level
+	void updateTexts() {
+		levelText.text = "Level : " + level.ToString();
+		countText.text = "Lines to go : " + (10 - lineCount).ToString();
+		scoreText.text = "Score : " + score.ToString();
+	}
+
+	// Updates the score depending of the number of lines deleted with the last fallen block
+	void updateScores(int linesDeleted) {
+		// Increase the score and change the combo
+		switch (linesDeleted) {
+			case 1 :
+				score += 40*level;
+				combo = 1;
+				break;
+			case 2 :
+				score += 100*level;
+				combo = 1;
+				break;
+			case 3 :
+				score += 300*level;
+				combo = 1;
+				break;
+			case 4 :
+				score += 1200*level*combo;
+				combo++;
+				break;
+			default :
+				// If no line has been deleted, the score and combo do not change.
+				break;
+		}
+
+		// Increase this level's line count
+		lineCount += linesDeleted;
+
+		// If the player achieved the goal (10 lines)
+		// then level up and count set back to 0
+		if (lineCount + linesDeleted > 9) {
+			lineCount = lineCount % 10;
+			level++;
+		}
+
+		// Update of the displays
+		updateTexts();
+	}
 }
+
+
