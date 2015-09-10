@@ -204,16 +204,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 777617293}
+    m_SelectOnDown: {fileID: 1411370746}
+    m_SelectOnLeft: {fileID: 777617293}
+    m_SelectOnRight: {fileID: 1411370746}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: .866666675, g: .866666675, b: .866666675, a: 1}
-    m_DisabledColor: {r: .866666675, g: .866666675, b: .866666675, a: 1}
+    m_PressedColor: {r: .733333349, g: .733333349, b: .733333349, a: 1}
+    m_DisabledColor: {r: .733333349, g: .733333349, b: .733333349, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: .100000001
   m_SpriteState:
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: .501960814}
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 0
@@ -711,7 +711,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: .866666675, g: .866666675, b: .866666675, a: 1}
-    m_DisabledColor: {r: .866666675, g: .866666675, b: .866666675, a: 1}
+    m_DisabledColor: {r: .800000012, g: .800000012, b: .800000012, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: .100000001
   m_SpriteState:
