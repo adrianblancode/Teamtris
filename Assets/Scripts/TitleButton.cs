@@ -9,7 +9,8 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 	public Button button;
 	public Text buttonTitle;
 	public Text buttonSubtitle;
-	Color accentColorPrimary = new Color(0.482f, 0.294f, 1.0f);
+	//Color accentColorPrimary = new Color(0.482f, 0.294f, 1.0f);
+	Color accentColorPrimary = new Color(0.48f, 0.29f, 0.62f);
 
 	public void OnPointerEnter(PointerEventData eventData) {
 		button.image.fillCenter = true;
