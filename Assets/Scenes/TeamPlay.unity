@@ -195,7 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Texture: {fileID: 2800000, guid: 6937d68952313f14c92f9258b10a68f4, type: 3}
+  m_Texture: {fileID: 2800000, guid: 5e22b96b2acb2c64890332185f765976, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -549,7 +549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Texture: {fileID: 2800000, guid: 6937d68952313f14c92f9258b10a68f4, type: 3}
+  m_Texture: {fileID: 2800000, guid: 5bcf56f58072ed14780d98d5bac08bc0, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
