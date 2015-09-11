@@ -234,7 +234,7 @@ public class BlockController : MonoBehaviour {
 				return false;
 			
 			// Block in grid cell (and not part of same group)?
-			Debug.Log (v);
+			//Debug.Log (v);
 			if (blockGrid.grid[(int)v.x, (int)v.y] != null &&
 			    blockGrid.grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
