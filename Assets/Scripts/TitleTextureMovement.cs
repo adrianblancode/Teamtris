@@ -6,7 +6,9 @@ public class TitleTextureMovement : MonoBehaviour {
 	int screenPadding = 50;
 	int buttonPadding = 150;
 	int blockWidth = 200;
+	float fallSpeed = 0.02f;
 
+	Vector3 originalPosition;
 	bool isLeft;
 	float xpos;
 	float offset;
@@ -20,12 +22,13 @@ public class TitleTextureMovement : MonoBehaviour {
 			isLeft = true;
 		}
 
-		repositionBlock();
+		originalPosition = transform.position;
+		//repositionBlock();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate (Vector3.down);
+		transform.Translate (Vector3.down * fallSpeed);
 
 		// If the block has gone off screen
 		if (transform.position.y < -100) {
@@ -44,7 +47,10 @@ public class TitleTextureMovement : MonoBehaviour {
 		}
 
 		// Put the block at the top of the screen
-		transform.position = new Vector3(xpos, Screen.height + 50, 0);
+		//transform.position = new Vector3(xpos, Screen.height + 50, 0);
+		print ("Repositioning block!");
+		originalPosition.y = 0;
+		transform.position = originalPosition;
 	}
 
 	// TODO changes the image of the block

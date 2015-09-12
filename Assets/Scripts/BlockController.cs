@@ -12,7 +12,7 @@ public class BlockController : MonoBehaviour {
 	private float lastFall = 0;
 
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 0.75f;
+	private float fallRate = 0.5f;
 	private float fallRateMultiplier = 1.0f;
 
 	// Rate in seconds between each fastfall of the block
@@ -53,7 +53,6 @@ public class BlockController : MonoBehaviour {
 		blockGrid = new Grid (10, 25);
 
 		currentBlock = spawner.spawnNext();
-
 		updateTexts();
 	}
 
@@ -235,7 +234,7 @@ public class BlockController : MonoBehaviour {
 				return false;
 			
 			// Block in grid cell (and not part of same group)?
-			Debug.Log (v);
+			//Debug.Log (v);
 			if (blockGrid.grid[(int)v.x, (int)v.y] != null &&
 			    blockGrid.grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
@@ -247,7 +246,7 @@ public class BlockController : MonoBehaviour {
 	void updateTexts() {
 		levelText.text = "Level : " + level.ToString();
 		countText.text = "Lines to go : " + (10 - lineCount).ToString();
-		scoreText.text = "Score : " + score.ToString();
+		scoreText.text = score.ToString();
 	}
 
 	// Updates the score depending of the number of lines deleted with the last fallen block
