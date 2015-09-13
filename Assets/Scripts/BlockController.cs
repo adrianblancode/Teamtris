@@ -70,15 +70,13 @@ public class BlockController : MonoBehaviour {
 
 		blockGrid = new Grid (10, 25);
 
-<<<<<<< HEAD
-=======
 		currentBlock = spawner.spawnNext();
 		effect = (ParticleSystem)Instantiate(effect,
 		                                     transform.position,
 		                                     Quaternion.identity);
 		effect.transform.Rotate(-170, 0, 0);
 		effect.Stop();
->>>>>>> First version of explosion
+
 		updateTexts();
 
 		// Initialize wiimote receiver
