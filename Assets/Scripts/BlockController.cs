@@ -14,6 +14,9 @@ public class BlockController : MonoBehaviour {
 	// The wii controllers for this team
 	private Wiimote player1;
 
+// Gameboard for this script
+	private GameObject gameBoard;
+
 	// Time since last gravity tick
 	private float lastFall = 0;
 
@@ -53,12 +56,19 @@ public class BlockController : MonoBehaviour {
 
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
-	
+
 	void Start () {
+		if (team == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
+		} else {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
+		}
+
 		spawner = FindObjectOfType<Spawner> ();
+		currentBlock = spawner.spawnNext();
+
 		blockGrid = new Grid (10, 25);
 
-		currentBlock = spawner.spawnNext();
 		updateTexts();
 
 		// Initialize wiimote receiver
@@ -155,7 +165,7 @@ public class BlockController : MonoBehaviour {
 	IEnumerator MoveRight(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(1, 0, 0);
-		
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -173,7 +183,7 @@ public class BlockController : MonoBehaviour {
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, -90);
 		}
-		
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -191,7 +201,7 @@ public class BlockController : MonoBehaviour {
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, 90);
 		}
-		
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -208,7 +218,7 @@ public class BlockController : MonoBehaviour {
 	IEnumerator Fall(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(0, -1, 0);
-		
+
 		// See if valid
 		if (isValidGridPos()) {
 			// It's valid. Update grid.
@@ -236,23 +246,25 @@ public class BlockController : MonoBehaviour {
 				if (blockGrid.grid[x, y] != null)
 					if (blockGrid.grid[x, y].parent == currentBlock.transform)
 						blockGrid.grid[x, y] = null;
-		
+
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
-			Vector2 v = blockGrid.roundVec2(child.position);
+			// Offset the position with the gameboards position
+			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
 			blockGrid.grid[(int)v.x, (int)v.y] = child;
-		}        
+		}
 	}
 
 	// Checks if the current block is in a valid grid position
-	bool isValidGridPos() {        
+	bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
-			Vector2 v = blockGrid.roundVec2(child.position);
-			
+			// Offset the position with the gameboards position
+			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
+
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
 				return false;
-			
+
 			// Block in grid cell (and not part of same group)?
 			//Debug.Log (v);
 			if (blockGrid.grid[(int)v.x, (int)v.y] != null &&
