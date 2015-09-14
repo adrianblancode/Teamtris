@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Grid : MonoBehaviour {
+public class Grid {
 	// The Grid itself
 	private int w;
 	private int h;
@@ -27,7 +27,7 @@ public class Grid : MonoBehaviour {
 	 */
 	private void deleteRow(int y) {
 		for (int x = 0; x < w; ++x) {
-			Destroy(grid[x, y].gameObject);
+			MonoBehaviour.Destroy(grid[x, y].gameObject);
 			grid[x, y] = null;
 		}
 	}
