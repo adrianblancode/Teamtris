@@ -35,6 +35,7 @@ public class BlockController : MonoBehaviour {
 
 	private Grid blockGrid;
 	public GameObject currentBlock;
+	public ParticleSystem effect;
 	private Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
@@ -68,6 +69,12 @@ public class BlockController : MonoBehaviour {
 		currentBlock = spawner.spawnNext();
 
 		blockGrid = new Grid (10, 25);
+
+		effect = (ParticleSystem)Instantiate(effect,
+		                                     transform.position,
+		                                     Quaternion.identity);
+		effect.transform.Rotate(-170, 0, 0);
+		effect.Stop();
 
 		updateTexts();
 
@@ -226,6 +233,9 @@ public class BlockController : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3(0, 1, 0);
+			// Play the explosion effect
+			effect.transform.position = currentBlock.transform.position;
+			effect.Play();
 			// Clear filled horizontal lines
 			linesDeleted = blockGrid.deleteFullRows();
 			// Update the scores depending on the number of lines deleted

@@ -487,6 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBlock: {fileID: 0}
+  effect: {fileID: 19821162, guid: c8814b8fd0f9c45589ceb0526224564c, type: 2}
   levelText: {fileID: 1957254102}
   countText: {fileID: 1714938742}
   scoreText: {fileID: 2075436440}
