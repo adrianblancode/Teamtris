@@ -8,6 +8,12 @@ public class BlockController : MonoBehaviour {
 	// TODO make work for both teams
 	private int team = 1;
 
+	// Wiimote controller
+	private WiimoteReceiver receiver;
+
+	// The wii controllers for this team
+	private Wiimote player1;
+
 	// Time since last gravity tick
 	private float lastFall = 0;
 
@@ -54,6 +60,14 @@ public class BlockController : MonoBehaviour {
 
 		currentBlock = spawner.spawnNext();
 		updateTexts();
+
+		// Initialize wiimote receiver
+		// TODO(Douglas): Make this work for multiple controllers (if needed)
+		receiver = WiimoteReceiver.Instance;
+		receiver.connect ();
+
+		// Create a dummy wiimote to avoid the NullReferenceException in Update()
+		player1 = new Wiimote ();
 	}
 
 	// Set rate at which user is able to rotate
@@ -83,33 +97,39 @@ public class BlockController : MonoBehaviour {
 			Destroy(this);
 		}
 
+		// Grab the wiimote
+		if (receiver.wiimotes.ContainsKey (1)) {
+			player1 = (Wiimote)receiver.wiimotes [1];
+		}
+
+		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if (ControllerInterface.MoveLeft(team) && !left) {
+		if ( (ControllerInterface.MoveLeft (team) || player1.BUTTON_LEFT == 1) && !left) {
 			left = true;
-			StartCoroutine("MoveLeft");
+			StartCoroutine ("MoveLeft");
 		}
 
 		// Move Right
-		else if (ControllerInterface.MoveRight(team) && !right) {
+		else if ( (ControllerInterface.MoveRight(team) || player1.BUTTON_RIGHT == 1) && !right) {
 			right = true;
 			StartCoroutine("MoveRight");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotLeft(team) && !rotate) {
+		else if ( (ControllerInterface.RotLeft(team) || player1.BUTTON_A == 1) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateLeft");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotRight(team) && !rotate) {
+		else if ( (ControllerInterface.RotRight(team) || player1.BUTTON_B == 1) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateRight");
 		}
 
 		// Move Downwards and Fall
 		else if ((ControllerInterface.ActionButtonCombined(1) ||
-		         Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall) {
+		         Time.time - lastFall >= fallRate * fallRateMultiplier || player1.BUTTON_DOWN == 1) && !fall) {
 			fall = true;
 			StartCoroutine("Fall");
 		}
