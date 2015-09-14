@@ -2,8 +2,8 @@
 using System.Collections;
 
 //
-// Interface between the playertris game and the 
-// HW drivers for the playertris controller(s)
+// Interface between the Teamtris game and the 
+// HW drivers for the Teamtris controller(s)
 //
 // *** NOTE: This script should execute before 
 // *** the default timeline to ensure that it
@@ -17,8 +17,7 @@ public class ControllerInterface : MonoBehaviour {
 	// The value is stable during the frame and will only 
 	// change between frames
 
-	// Player 1 (Player who moves sideways
-	// player = 1 for player 1
+	// 1 == player 1, 2 == player 2
 	public static bool MoveRight (int player) {
 		if (player == 1) {
 			return Input.GetKey (KeyCode.RightArrow);
@@ -42,9 +41,7 @@ public class ControllerInterface : MonoBehaviour {
 	public static bool RightButton(int player){
 		return MoveRight(player);
 	}
-
-	// Player 2 (Player who rotates
-	// player = 1 for player 1
+	
 	public static bool RotRight (int player) {
 		if (player == 1) {
 			return Input.GetKey (KeyCode.DownArrow);
@@ -73,7 +70,7 @@ public class ControllerInterface : MonoBehaviour {
 	 * Action button, this should be the button for menu selection and drop blocks 
 	 */
 
-	// Checks if a specific player on a specific player has pushed the action button
+	// Checks if a specific player has pushed the action button
 	// TODO assign wiimote buttons to players
 	public static bool ActionButton (int player) {
 		if(player == 1) {
@@ -85,7 +82,7 @@ public class ControllerInterface : MonoBehaviour {
 		return false;
 	}
 
-	// Checks whether both players of the player have pressed the action button
+	// Checks whether both players have pressed the action button
 	public static bool ActionButtonCombined (int player) {
 		return ActionButton(1) && ActionButton(2); 
 	}
