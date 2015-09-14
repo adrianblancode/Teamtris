@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - freeze
+  - Team1_GameBoard
+  - Team2_GameBoard
   layers:
   - Default
   - TransparentFX
