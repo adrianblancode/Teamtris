@@ -31,7 +31,7 @@ public class DemoController : MonoBehaviour {
 			transform.Translate (Vector3.right, Space.World);
 
 		// Check key for player 1 (translate)
-		if (ControllerInterface.ActionButton(1, 1))
+		if (ControllerInterface.ActionButton(1))
 			transform.position = startPos;
 
 
@@ -44,7 +44,7 @@ public class DemoController : MonoBehaviour {
 			transform.Rotate (new Vector3(0f, 0f, 90f), Space.Self);
 
 		// Check key for player 2 (rotate)
-		if (ControllerInterface.ActionButton(1, 2))
+		if (ControllerInterface.ActionButton(2))
 			transform.position = startPos - fallDistance * Vector3.down;
 
 	
