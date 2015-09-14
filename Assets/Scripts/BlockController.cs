@@ -70,7 +70,6 @@ public class BlockController : MonoBehaviour {
 
 		blockGrid = new Grid (10, 25);
 
-		currentBlock = spawner.spawnNext();
 		effect = (ParticleSystem)Instantiate(effect,
 		                                     transform.position,
 		                                     Quaternion.identity);
