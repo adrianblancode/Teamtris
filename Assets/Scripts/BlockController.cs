@@ -8,6 +8,8 @@ public class BlockController : MonoBehaviour {
 	// TODO make work for both teams
 	private int team = 1;
 
+	private GameObject gameBoard;
+
 	// Time since last gravity tick
 	private float lastFall = 0;
 
@@ -49,10 +51,17 @@ public class BlockController : MonoBehaviour {
 	private int combo = 1;
 	
 	void Start () {
+		if (team == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
+		} else {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
+		}
+
 		spawner = FindObjectOfType<Spawner> ();
+		currentBlock = spawner.spawnNext();
+
 		blockGrid = new Grid (10, 25);
 
-		currentBlock = spawner.spawnNext();
 		updateTexts();
 	}
 
@@ -219,7 +228,8 @@ public class BlockController : MonoBehaviour {
 		
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
-			Vector2 v = blockGrid.roundVec2(child.position);
+			// Offset the position with the gameboards position
+			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
 			blockGrid.grid[(int)v.x, (int)v.y] = child;
 		}        
 	}
@@ -227,7 +237,8 @@ public class BlockController : MonoBehaviour {
 	// Checks if the current block is in a valid grid position
 	bool isValidGridPos() {        
 		foreach (Transform child in currentBlock.transform) {
-			Vector2 v = blockGrid.roundVec2(child.position);
+			// Offset the position with the gameboards position
+			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
 			
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
