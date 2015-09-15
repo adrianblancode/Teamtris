@@ -14,7 +14,7 @@ public class BlockController : MonoBehaviour {
 	// The wii controllers for this team
 	private Wiimote player1;
 
-// Gameboard for this script
+	// Gameboard for this script
 	private GameObject gameBoard;
 
 	// Time since last gravity tick
