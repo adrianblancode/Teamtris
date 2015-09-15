@@ -221,6 +221,74 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
+	// CoRoutine for moving left on the z-axis
+	IEnumerator MoveLeftZ(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(0, 0, -1);
+		// See if valid
+		if (isValidGridPos ()) {
+			// Its valid. Update grid.
+			updateGrid ();
+		} else {
+			// Its not valid. revert.
+			currentBlock.transform.position += new Vector3 (0, 0, 1);
+		}
+		yield return new WaitForSeconds(horizontalRate);
+		left = false;
+	}
+
+	// CoRoutine for moving right on the z-axis
+	IEnumerator MoveRightZ(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(0, 0, 1);
+		// See if valid
+		if (isValidGridPos ()) {
+			// Its valid. Update grid.
+			updateGrid ();
+		} else {
+			// Its not valid. revert.
+			currentBlock.transform.position += new Vector3 (0, 0, -1);
+		}
+		yield return new WaitForSeconds(horizontalRate);
+		right = false;
+	}
+
+	// CoRoutine for rotating left around the z-axis
+	IEnumerator RotateLeftZ(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(-90, 0, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (90, 0, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
+	// CoRoutine for moving right around the z-axis
+	IEnumerator RotateRightZ(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(90, 0, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (-90, 0, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
 	// CoRoutine for making pieces fall
 	IEnumerator Fall(){
 		// Modify position
