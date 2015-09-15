@@ -123,25 +123,29 @@ public class BlockController : MonoBehaviour {
 		// Move Left
 		if ( (ControllerInterface.MoveLeft (team) || player1.BUTTON_LEFT == 1) && !left) {
 			left = true;
-			StartCoroutine ("MoveLeft");
+//			StartCoroutine ("MoveLeftX");
+			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Move Right
 		else if ( (ControllerInterface.MoveRight(team) || player1.BUTTON_RIGHT == 1) && !right) {
 			right = true;
-			StartCoroutine("MoveRight");
+//			StartCoroutine("MoveRightX");
+			StartCoroutine("MoveRightZ");
 		}
 
 		// Rotate Left
 		else if ( (ControllerInterface.RotLeft(team) || player1.BUTTON_A == 1) && !rotate) {
 			rotate = true;
-			StartCoroutine("RotateLeft");
+//			StartCoroutine("RotateLeftX");
+			StartCoroutine("RotateLeftZ");
 		}
 
 		// Rotate Left
 		else if ( (ControllerInterface.RotRight(team) || player1.BUTTON_B == 1) && !rotate) {
 			rotate = true;
-			StartCoroutine("RotateRight");
+//			StartCoroutine("RotateRightX");
+			StartCoroutine("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
