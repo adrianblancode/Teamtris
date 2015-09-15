@@ -91,11 +91,13 @@ public class Grid {
 	 * (Currently hardcoded borders)
 	 * TODO: Make it dynamic so it calculates based on the gameboards position
 	 */
-	public bool insideBorder(Vector2 pos){
-		Vector2 rounded_pos = roundVec2 (pos);
+	public bool insideBorder(Vector3 pos){
+		Vector3 rounded_pos = roundVec3 (pos);
 		return (rounded_pos.x >= 0 &&
 		        rounded_pos.x < w &&
-		        rounded_pos.y >= 0);
+		        rounded_pos.y >= 0 &&
+		        rounded_pos.z >= 0 &&
+		        rounded_pos.z < d);
 	}
 
 	/*
