@@ -68,7 +68,7 @@ public class BlockController : MonoBehaviour {
 		spawner = FindObjectOfType<Spawner> ();
 		currentBlock = spawner.spawnNext();
 
-		blockGrid = new Grid (10, 25);
+		blockGrid = new Grid (10, 25, 10);
 
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
