@@ -347,16 +347,17 @@ public class BlockController : MonoBehaviour {
 	bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 v = blockGrid.roundVec3(temp);
 
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
 				return false;
 
 			// Block in grid cell (and not part of same group)?
-			//Debug.Log (v);
-			if (blockGrid.grid[(int)v.x, (int)v.y] != null &&
-			    blockGrid.grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
+			Transform[,] grid = blockGrid.getGrid ((int)v.z);
+			if (grid[(int)v.x, (int)v.y] != null &&
+			    grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
 		}
 		return true;
