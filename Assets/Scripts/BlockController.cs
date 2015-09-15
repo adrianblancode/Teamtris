@@ -14,7 +14,7 @@ public class BlockController : MonoBehaviour {
 	// The wii controllers for this team
 	private Wiimote player1;
 
-// Gameboard for this script
+	// Gameboard for this script
 	private GameObject gameBoard;
 
 	// Time since last gravity tick
@@ -68,13 +68,13 @@ public class BlockController : MonoBehaviour {
 		spawner = FindObjectOfType<Spawner> ();
 		currentBlock = spawner.spawnNext();
 
-		blockGrid = new Grid (10, 25);
+		blockGrid = new Grid (10, 25, 10);
 
-		effect = (ParticleSystem)Instantiate(effect,
-		                                     transform.position,
-		                                     Quaternion.identity);
-		effect.transform.Rotate(-170, 0, 0);
-		effect.Stop();
+//		effect = (ParticleSystem)Instantiate(effect,
+//		                                     transform.position,
+//		                                     Quaternion.identity);
+//		effect.transform.Rotate(-170, 0, 0);
+//		effect.Stop();
 
 		updateTexts();
 
@@ -123,25 +123,29 @@ public class BlockController : MonoBehaviour {
 		// Move Left
 		if ( (ControllerInterface.MoveLeft (team) || player1.BUTTON_LEFT == 1) && !left) {
 			left = true;
-			StartCoroutine ("MoveLeft");
+//			StartCoroutine ("MoveLeftX");
+			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Move Right
 		else if ( (ControllerInterface.MoveRight(team) || player1.BUTTON_RIGHT == 1) && !right) {
 			right = true;
-			StartCoroutine("MoveRight");
+//			StartCoroutine("MoveRightX");
+			StartCoroutine("MoveRightZ");
 		}
 
 		// Rotate Left
 		else if ( (ControllerInterface.RotLeft(team) || player1.BUTTON_A == 1) && !rotate) {
 			rotate = true;
-			StartCoroutine("RotateLeft");
+//			StartCoroutine("RotateLeftX");
+			StartCoroutine("RotateLeftZ");
 		}
 
 		// Rotate Left
 		else if ( (ControllerInterface.RotRight(team) || player1.BUTTON_B == 1) && !rotate) {
 			rotate = true;
-			StartCoroutine("RotateRight");
+//			StartCoroutine("RotateRightX");
+			StartCoroutine("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
@@ -152,8 +156,8 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
-	// CoRoutine for moving left
-	IEnumerator MoveLeft(){
+	// CoRoutine for moving left on the x-axis
+	IEnumerator MoveLeftX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(-1, 0, 0);
 		// See if valid
@@ -168,8 +172,8 @@ public class BlockController : MonoBehaviour {
 		left = false;
 	}
 
-	// CoRoutine for moving right
-	IEnumerator MoveRight(){
+	// CoRoutine for moving right on the x-axis
+	IEnumerator MoveRightX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(1, 0, 0);
 
@@ -185,8 +189,8 @@ public class BlockController : MonoBehaviour {
 		right = false;
 	}
 
-	// CoRoutine for rotating
-	IEnumerator RotateLeft(){
+	// CoRoutine for rotating left around the x-axis
+	IEnumerator RotateLeftX(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, -90);
 		}
@@ -203,8 +207,8 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
-	// CoRoutine for rotating
-	IEnumerator RotateRight(){
+	// CoRoutine for rotating right around the x-axis
+	IEnumerator RotateRightX(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, 90);
 		}
@@ -216,6 +220,74 @@ public class BlockController : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, -90);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
+	// CoRoutine for moving left on the z-axis
+	IEnumerator MoveLeftZ(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(0, 0, -1);
+		// See if valid
+		if (isValidGridPos ()) {
+			// Its valid. Update grid.
+			updateGrid ();
+		} else {
+			// Its not valid. revert.
+			currentBlock.transform.position += new Vector3 (0, 0, 1);
+		}
+		yield return new WaitForSeconds(horizontalRate);
+		left = false;
+	}
+
+	// CoRoutine for moving right on the z-axis
+	IEnumerator MoveRightZ(){
+		// Modify position
+		currentBlock.transform.position += new Vector3(0, 0, 1);
+		// See if valid
+		if (isValidGridPos ()) {
+			// Its valid. Update grid.
+			updateGrid ();
+		} else {
+			// Its not valid. revert.
+			currentBlock.transform.position += new Vector3 (0, 0, -1);
+		}
+		yield return new WaitForSeconds(horizontalRate);
+		right = false;
+	}
+
+	// CoRoutine for rotating left around the z-axis
+	IEnumerator RotateLeftZ(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(-90, 0, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (90, 0, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
+	// CoRoutine for moving right around the z-axis
+	IEnumerator RotateRightZ(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(90, 0, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (-90, 0, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -234,10 +306,11 @@ public class BlockController : MonoBehaviour {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3(0, 1, 0);
 			// Play the explosion effect
-			effect.transform.position = currentBlock.transform.position;
-			effect.Play();
+//			effect.transform.position = currentBlock.transform.position;
+//			effect.Play();
 			// Clear filled horizontal lines
-			linesDeleted = blockGrid.deleteFullRows();
+//			linesDeleted = blockGrid.deleteFullRows();
+			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 			updateScores(linesDeleted);
 			// Spawn next Group
@@ -251,17 +324,26 @@ public class BlockController : MonoBehaviour {
 	// Updating the grid with new positions
 	void updateGrid() {
 		// Remove old children from grid
-		for (int y = 0; y < blockGrid.getHeight(); ++y)
-			for (int x = 0; x < blockGrid.getWidth(); ++x)
-				if (blockGrid.grid[x, y] != null)
-					if (blockGrid.grid[x, y].parent == currentBlock.transform)
-						blockGrid.grid[x, y] = null;
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (int z = 0; z < blockGrid.getDepth(); ++z) {
+					Transform[,] grid = blockGrid.getGrid(z);
+					if (grid[x, y] != null) {
+						if (grid[x, y].parent == currentBlock.transform) {
+							grid[x, y] = null;
+						}
+					}
+				}
+			}
+		}
 
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
-			blockGrid.grid[(int)v.x, (int)v.y] = child;
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 v = blockGrid.roundVec3(temp);
+
+			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 	}
 
@@ -269,16 +351,17 @@ public class BlockController : MonoBehaviour {
 	bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 v = blockGrid.roundVec3(temp);
 
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
 				return false;
 
 			// Block in grid cell (and not part of same group)?
-			//Debug.Log (v);
-			if (blockGrid.grid[(int)v.x, (int)v.y] != null &&
-			    blockGrid.grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
+			Transform[,] grid = blockGrid.getGrid ((int)v.z);
+			if (grid[(int)v.x, (int)v.y] != null &&
+			    grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
 		}
 		return true;
