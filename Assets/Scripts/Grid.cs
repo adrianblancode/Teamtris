@@ -32,6 +32,10 @@ public class Grid {
 		return w;
 	}
 
+	public int getDepth(){
+		return d;
+	}
+
 	/*
 	 * Deletes one row of full blocks,
 	 * helper function for deleteFullRows
