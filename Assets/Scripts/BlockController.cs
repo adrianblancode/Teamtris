@@ -152,8 +152,8 @@ public class BlockController : MonoBehaviour {
 		}
 	}
 
-	// CoRoutine for moving left
-	IEnumerator MoveLeft(){
+	// CoRoutine for moving left on the x-axis
+	IEnumerator MoveLeftX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(-1, 0, 0);
 		// See if valid
@@ -168,8 +168,8 @@ public class BlockController : MonoBehaviour {
 		left = false;
 	}
 
-	// CoRoutine for moving right
-	IEnumerator MoveRight(){
+	// CoRoutine for moving right on the x-axis
+	IEnumerator MoveRightX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(1, 0, 0);
 
@@ -185,8 +185,8 @@ public class BlockController : MonoBehaviour {
 		right = false;
 	}
 
-	// CoRoutine for rotating
-	IEnumerator RotateLeft(){
+	// CoRoutine for rotating left around the x-axis
+	IEnumerator RotateLeftX(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, -90);
 		}
@@ -203,8 +203,8 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
-	// CoRoutine for rotating
-	IEnumerator RotateRight(){
+	// CoRoutine for rotating right around the x-axis
+	IEnumerator RotateRightX(){
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 0, 90);
 		}
