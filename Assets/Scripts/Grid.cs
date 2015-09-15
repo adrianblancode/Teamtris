@@ -82,18 +82,8 @@ public class Grid {
 //		return true;
 //	}
 
-	/*
-	 * Checks whether row 'y' is full or not
-	 */
-	private bool isRowFull(int y) {
-		for (int x = 0; x < w; ++x)
-			if (grid[x, y] == null)
-				return false;
-		return true;
-	}
-
-	public Vector2 roundVec2(Vector2 v){
-		return new Vector2(Mathf.Round(v.x), Mathf.Round(v.y));
+	public Vector3 roundVec3(Vector3 v){
+		return new Vector3(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round (v.z));
 	}
 
 	/*
