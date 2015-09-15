@@ -70,11 +70,11 @@ public class BlockController : MonoBehaviour {
 
 		blockGrid = new Grid (10, 25);
 
-		effect = (ParticleSystem)Instantiate(effect,
-		                                     transform.position,
-		                                     Quaternion.identity);
-		effect.transform.Rotate(-170, 0, 0);
-		effect.Stop();
+//		effect = (ParticleSystem)Instantiate(effect,
+//		                                     transform.position,
+//		                                     Quaternion.identity);
+//		effect.transform.Rotate(-170, 0, 0);
+//		effect.Stop();
 
 		updateTexts();
 
@@ -234,10 +234,11 @@ public class BlockController : MonoBehaviour {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3(0, 1, 0);
 			// Play the explosion effect
-			effect.transform.position = currentBlock.transform.position;
-			effect.Play();
+//			effect.transform.position = currentBlock.transform.position;
+//			effect.Play();
 			// Clear filled horizontal lines
-			linesDeleted = blockGrid.deleteFullRows();
+//			linesDeleted = blockGrid.deleteFullRows();
+			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 			updateScores(linesDeleted);
 			// Spawn next Group
