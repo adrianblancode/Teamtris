@@ -5,12 +5,23 @@ public class Grid {
 	// The Grid itself
 	private int w;
 	private int h;
-	public Transform[,] grid;
+	private int d;
 
-	public Grid(int width, int height) {
-		w = width;
-		h = height;
-		grid = new Transform[w, h];
+	private ArrayList grid3d = new ArrayList();
+
+	public Grid(int x, int y, int z) {
+		w = x;
+		h = y;
+		d = z;
+
+		for (int i = 0; i < d; ++i) {
+			Transform[,] grid = new Transform[w,h];
+			grid3d.Add(grid);
+		}
+	}
+
+	public Transform[,] getGrid(int z){
+		return (Transform[,])grid3d[z];
 	}
 
 	public int getHeight(){
