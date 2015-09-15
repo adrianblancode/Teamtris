@@ -320,17 +320,26 @@ public class BlockController : MonoBehaviour {
 	// Updating the grid with new positions
 	void updateGrid() {
 		// Remove old children from grid
-		for (int y = 0; y < blockGrid.getHeight(); ++y)
-			for (int x = 0; x < blockGrid.getWidth(); ++x)
-				if (blockGrid.grid[x, y] != null)
-					if (blockGrid.grid[x, y].parent == currentBlock.transform)
-						blockGrid.grid[x, y] = null;
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (int z = 0; z < blockGrid.getDepth(); ++z) {
+					Transform[,] grid = blockGrid.getGrid(z);
+					if (grid[x, y] != null) {
+						if (grid[x, y].parent == currentBlock.transform) {
+							grid[x, y] = null;
+						}
+					}
+				}
+			}
+		}
 
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector2 v = blockGrid.roundVec2(child.position - gameBoard.transform.position);
-			blockGrid.grid[(int)v.x, (int)v.y] = child;
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 v = blockGrid.roundVec3(temp);
+
+			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 	}
 
