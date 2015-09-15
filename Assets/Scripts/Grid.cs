@@ -25,37 +25,47 @@ public class Grid {
 	 * Deletes one row of full blocks,
 	 * helper function for deleteFullRows
 	 */
-	private void deleteRow(int y) {
-		for (int x = 0; x < w; ++x) {
-			MonoBehaviour.Destroy(grid[x, y].gameObject);
-			grid[x, y] = null;
-		}
-	}
+//	private void deleteRow(int y) {
+//		for (int x = 0; x < w; ++x) {
+//			MonoBehaviour.Destroy(grid[x, y].gameObject);
+//			grid[x, y] = null;
+//		}
+//	}
 
 	/*
 	 * Moves all rows above 'y' one step downwards,
 	 * helper function for deleteFullRows and decreaseRowsAbove
 	 */
-	private void decreaseRow(int y) {
-		for (int x = 0; x < w; ++x) {
-			if (grid[x, y] != null) {
-				// Move one towards bottom
-				grid[x, y-1] = grid[x, y];
-				grid[x, y] = null;
-				
-				// Update Block position
-				grid[x, y-1].position += new Vector3(0, -1, 0);
-			}
-		}
-	}
+//	private void decreaseRow(int y) {
+//		for (int x = 0; x < w; ++x) {
+//			if (grid[x, y] != null) {
+//				// Move one towards bottom
+//				grid[x, y-1] = grid[x, y];
+//				grid[x, y] = null;
+//				
+//				// Update Block position
+//				grid[x, y-1].position += new Vector3(0, -1, 0);
+//			}
+//		}
+//	}
 
 	/*
 	 * Decreases all rows above y
 	 */
-	private void decreaseRowsAbove(int y) {
-		for (int i = y; i < h; ++i)
-			decreaseRow(i);
-	}
+//	private void decreaseRowsAbove(int y) {
+//		for (int i = y; i < h; ++i)
+//			decreaseRow(i);
+//	}
+//
+//	/*
+//	 * Checks whether row 'y' is full or not
+//	 */
+//	private bool isRowFull(int y) {
+//		for (int x = 0; x < w; ++x)
+//			if (grid[x, y] == null)
+//				return false;
+//		return true;
+//	}
 
 	/*
 	 * Checks whether row 'y' is full or not
@@ -89,16 +99,16 @@ public class Grid {
 	 * called after each discrete timestep
 	 * @return The number of deleted rows.
 	 */
-	public int deleteFullRows() {
-		int linesDeleted = 0;
-		for (int y = 0; y < h; ++y) {
-			if (isRowFull(y)) {
-				linesDeleted++;
-				deleteRow(y);
-				decreaseRowsAbove(y+1);
-				--y;
-			}
-		}
-		return linesDeleted;
-	}
+//	public int deleteFullRows() {
+//		int linesDeleted = 0;
+//		for (int y = 0; y < h; ++y) {
+//			if (isRowFull(y)) {
+//				linesDeleted++;
+//				deleteRow(y);
+//				decreaseRowsAbove(y+1);
+//				--y;
+//			}
+//		}
+//		return linesDeleted;
+//	}
 }
