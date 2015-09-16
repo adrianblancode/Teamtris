@@ -5,7 +5,7 @@
 using System;
 using System.Collections;
 
-public class Wiimote {
+public class Wiimote : Controller {
 	
 	private int id;
 	private DateTime lastUpdate;
@@ -149,6 +149,36 @@ public class Wiimote {
 	public Wiimote(int id)
 	{
 		this.id = id;
+	}
+
+	public bool MoveRight() {
+		return BUTTON_RIGHT;
+	}
+	public bool MoveLeft() {
+		return BUTTON_LEFT;
+	}
+	public bool MoveUp() {
+		return BUTTON_UP;
+	}
+	public bool MoveDown() {
+		return BUTTON_DOWN;
+	}
+
+	public float RotateRight() {
+		return MOTION_ANGLE_ROLL;
+	}
+	public float RotateLeft() {
+		return MOTION_ANGLE_ROLL;
+	}
+	
+	public bool Confirm() {
+		return BUTTON_A;
+	}
+	public bool Reject() {
+		return BUTTON_B;
+	}
+	public bool Pause() {
+		return BUTTON_PLUS;
 	}
 	
 	public void update(string oscMessage, ArrayList values, DateTime currentTime)
