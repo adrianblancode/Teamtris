@@ -28,7 +28,7 @@ public class BlockController : MonoBehaviour {
 	private float lastFall = 0;
 
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 0.5f;
+	private float fallRate = 1.5f;
 	private float fallRateMultiplier = 1.0f;
 
 	// Rate in seconds between each fastfall of the block
@@ -43,7 +43,9 @@ public class BlockController : MonoBehaviour {
 	private Grid blockGrid;
 	public GameObject currentBlock;
 	public ParticleSystem effect;
-	public Spawner spawner;
+
+	private Spawner spawner;
+//	private Spawner spawner2;
 
 	private bool left, right, rotate, fall = false;
 	private bool otherPlayerMove, otherPlayerRotate, otherPlayerFall = false;
@@ -78,7 +80,7 @@ public class BlockController : MonoBehaviour {
 		}
 
 		GameObject block = spawner.getNext();
-	
+
 		//TODO update for small board
 		//Vector3 padding = new Vector3 (1, 0, -1);
 
@@ -90,7 +92,7 @@ public class BlockController : MonoBehaviour {
 			//initializePosition();
 		}
 
-		blockGrid = new Grid (10, 25, 10);
+		blockGrid = new Grid (5, 25, 5);
 
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
@@ -144,6 +146,7 @@ public class BlockController : MonoBehaviour {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
+			Destroy (currentBlock);
 			Destroy(this);
 		}
 
@@ -155,70 +158,67 @@ public class BlockController : MonoBehaviour {
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ((ControllerInterface.MoveLeft (player)) && !left) {
+//		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if(Input.GetKey(KeyCode.LeftArrow) && !left){
 			left = true;
 			StartCoroutine ("MoveLeftX");
+//			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Move Right
-		else if (ControllerInterface.MoveRight (player) && !right) {
+//		if (ControllerInterface.MoveRight (team) && !right) {
+		if(Input.GetKey(KeyCode.RightArrow) && !right){
 			right = true;
 			StartCoroutine("MoveRightX");
+//			StartCoroutine ("MoveRightZ");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotLeft (player) && !rotate) {
+//		if (ControllerInterface.RotLeft (team) && !rotate) {
+		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftX");
+//			StartCoroutine ("RotateLeftZ");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotRight (player) && !rotate) {
+//		if (ControllerInterface.RotRight (team) && !rotate) {
+		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightX");
+//			StartCoroutine ("RotateRightZ");
+		}
+
+		if(Input.GetKey(KeyCode.A) && !left){
+			left = true;
+			StartCoroutine ("MoveLeftZ");
+		}
+
+		if(Input.GetKey(KeyCode.D) && !right){
+			right = true;
+			StartCoroutine ("MoveRightZ");
+		}
+
+		if(Input.GetKey(KeyCode.W) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateLeftZ");
+		}
+
+		if(Input.GetKey(KeyCode.S) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
-		else if (ControllerInterface.ActionButtonCombined (1) ||
-			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
+//		if (ControllerInterface.ActionButtonCombined (1) ||
+//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
+		if(Input.GetKey(KeyCode.Space) ||
+		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
 		}
 
-		updateOtherPlayer();
-	}
 
-	public void updateOtherPlayer(){
-		// Rotate Left
-		if (player == 1) {
-			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
-				otherPlayerMove = true;
-				StartCoroutine ("MoveLeftZ");
-			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
-				otherPlayerMove = true;
-				StartCoroutine ("MoveRightZ");
-			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
-				otherPlayerRotate = true;
-				StartCoroutine("RotateLeftZ");
-			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
-				otherPlayerRotate = true;
-				StartCoroutine("RotateRightZ");
-			}
-		} else {
-			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
-				otherPlayerMove = true;
-				StartCoroutine ("MoveRightZ");
-			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
-				otherPlayerMove = true;
-				StartCoroutine ("MoveLeftZ");
-			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
-				otherPlayerRotate = true;
-				StartCoroutine("RotateLeftX");
-			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
-				otherPlayerRotate = true;
-				StartCoroutine("RotateRightX");
-			}
-		} 
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -277,7 +277,7 @@ public class BlockController : MonoBehaviour {
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, -90, 0);
 		}
-		
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -313,7 +313,7 @@ public class BlockController : MonoBehaviour {
 		if(currentBlock.tag != "freeze"){
 			currentBlock.transform.Rotate(0, 90, 0);
 		}
-		
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -360,10 +360,8 @@ public class BlockController : MonoBehaviour {
 
 	// CoRoutine for rotating left around the z-axis
 	IEnumerator RotateLeftZ(){
-		if(currentBlock.tag != "freeze"){
-			currentBlock.transform.Rotate(-90, 0, 0);
-		}
-		
+		currentBlock.transform.Rotate(-90, 0, 0);
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -378,10 +376,8 @@ public class BlockController : MonoBehaviour {
 
 	// CoRoutine for moving right around the z-axis
 	IEnumerator RotateRightZ(){
-		if(currentBlock.tag != "freeze"){
-			currentBlock.transform.Rotate(90, 0, 0);
-		}
-		
+		currentBlock.transform.Rotate(90, 0, 0);
+
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -410,8 +406,8 @@ public class BlockController : MonoBehaviour {
 //			effect.transform.position = currentBlock.transform.position;
 //			effect.Play();
 			// Clear filled horizontal lines
-//			linesDeleted = blockGrid.deleteFullRows();
-			linesDeleted = 0;
+			linesDeleted = blockGrid.deleteFullPlans();
+//			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 			updateScores(linesDeleted);
 
@@ -433,7 +429,6 @@ public class BlockController : MonoBehaviour {
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
-		otherPlayerFall = false;
 	}
 
 	// Updating the grid with new positions
@@ -455,7 +450,7 @@ public class BlockController : MonoBehaviour {
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z - gameBoard.transform.position.z);
 			Vector3 v = blockGrid.roundVec3(temp);
 
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
@@ -466,8 +461,13 @@ public class BlockController : MonoBehaviour {
 	bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
-			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z - gameBoard.transform.position.z);
 			Vector3 v = blockGrid.roundVec3(temp);
+
+			Debug.Log ("child pos: " + child.position);
+			Debug.Log ("gameboard: " + gameBoard.transform.position);
+			Debug.Log ("temp: " + temp);
+			Debug.Log ("spawner: " + spawner.transform.position);
 
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
@@ -478,6 +478,10 @@ public class BlockController : MonoBehaviour {
 			if (grid[(int)v.x, (int)v.y] != null &&
 			    grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
+//			Transform[,] grid = blockGrid.getGrid ((int)temp.z);
+//			if (grid[(int)temp.x, (int)temp.y] != null &&
+//			    grid[(int)temp.x, (int)temp.y].parent != currentBlock.transform)
+//				return false;
 		}
 		return true;
 	}
