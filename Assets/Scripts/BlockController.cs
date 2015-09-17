@@ -4,12 +4,16 @@ using System.Collections;
 
 public class BlockController : MonoBehaviour {
 
+	// WARNING This disables the wiimote for debugging
+	// Fixes crashes upon going into the editor
+	private bool ENABLE_WIIMOTE = true;
+
 	// Which team owns this blockcontroller
 	// TODO make work for both teams
 	private int team = 1;
 
 	// Wiimote controller
-	private WiimoteReceiver receiver;
+	private WiimoteReceiver receiver = null;
 
 	// The wii controllers for this team
 	private Wiimote player1;
@@ -42,11 +46,9 @@ public class BlockController : MonoBehaviour {
 
 	// Level and its display
 	private int level = 1;
-	public Text levelText;
 
 	// Number of lines deleted in the level and its display
 	private int lineCount = 0;
-	public Text countText;
 
 	// Global score and its display
 	private int score = 0;
@@ -80,11 +82,13 @@ public class BlockController : MonoBehaviour {
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		receiver = WiimoteReceiver.Instance;
-		receiver.connect ();
+		if (ENABLE_WIIMOTE) {
+			receiver = WiimoteReceiver.Instance;
+			receiver.connect ();
 
-		// Create a dummy wiimote to avoid the NullReferenceException in Update()
-		player1 = new Wiimote ();
+			// Create a dummy wiimote to avoid the NullReferenceException in Update()
+			player1 = new Wiimote ();
+		}
 	}
 
 	// Set rate at which user is able to rotate
@@ -115,44 +119,45 @@ public class BlockController : MonoBehaviour {
 		}
 
 		// Grab the wiimote
-		if (receiver.wiimotes.ContainsKey (1)) {
+		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
 			player1 = (Wiimote)receiver.wiimotes [1];
 		}
 
+
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ( (ControllerInterface.MoveLeft (team) || player1.BUTTON_LEFT == 1) && !left) {
+		if ((ControllerInterface.MoveLeft (team)) && !left) {
 			left = true;
 //			StartCoroutine ("MoveLeftX");
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Move Right
-		else if ( (ControllerInterface.MoveRight(team) || player1.BUTTON_RIGHT == 1) && !right) {
+		else if (ControllerInterface.MoveRight (team) && !right) {
 			right = true;
 //			StartCoroutine("MoveRightX");
-			StartCoroutine("MoveRightZ");
+			StartCoroutine ("MoveRightZ");
 		}
 
 		// Rotate Left
-		else if ( (ControllerInterface.RotLeft(team) || player1.BUTTON_A == 1) && !rotate) {
+		else if (ControllerInterface.RotLeft (team) && !rotate) {
 			rotate = true;
 //			StartCoroutine("RotateLeftX");
-			StartCoroutine("RotateLeftZ");
+			StartCoroutine ("RotateLeftZ");
 		}
 
 		// Rotate Left
-		else if ( (ControllerInterface.RotRight(team) || player1.BUTTON_B == 1) && !rotate) {
+		else if (ControllerInterface.RotRight (team) && !rotate) {
 			rotate = true;
 //			StartCoroutine("RotateRightX");
-			StartCoroutine("RotateRightZ");
+			StartCoroutine ("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
-		else if ((ControllerInterface.ActionButtonCombined(1) ||
-		         Time.time - lastFall >= fallRate * fallRateMultiplier || player1.BUTTON_DOWN == 1) && !fall) {
+		else if (ControllerInterface.ActionButtonCombined (1) ||
+			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
 			fall = true;
-			StartCoroutine("Fall");
+			StartCoroutine ("Fall");
 		}
 	}
 
@@ -369,8 +374,6 @@ public class BlockController : MonoBehaviour {
 
 	// Displays the new score, level and number of lines to go till next level
 	void updateTexts() {
-		levelText.text = "Level : " + level.ToString();
-		countText.text = "Lines to go : " + (10 - lineCount).ToString();
 		scoreText.text = score.ToString();
 	}
 
@@ -412,6 +415,10 @@ public class BlockController : MonoBehaviour {
 		// Update of the displays
 		updateTexts();
 	}
+
+	void OnApplicationQuit(){
+		if(receiver != null){
+			receiver.disconnect ();
+		}
+	}
 }
-
-
