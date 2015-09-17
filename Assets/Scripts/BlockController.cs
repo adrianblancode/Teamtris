@@ -12,6 +12,9 @@ public class BlockController : MonoBehaviour {
 	// TODO make work for both teams
 	public int player = 1;
 
+	// The other player on the team
+	private int otherPlayer = 2;
+
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
 
@@ -43,6 +46,7 @@ public class BlockController : MonoBehaviour {
 	public Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
+	private bool otherPlayerMove, otherPlayerRotate, otherPlayerFall = false;
 
 	// Level and its display
 	private int level = 1;
@@ -61,6 +65,12 @@ public class BlockController : MonoBehaviour {
 	private int combo = 1;
 
 	void Start () {
+
+		// Set who the other player is
+		if (player == 2) {
+			otherPlayer = 1;
+		}
+
 		if (player == 1) {
 			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
 		} else {
@@ -157,6 +167,25 @@ public class BlockController : MonoBehaviour {
 			fall = true;
 			StartCoroutine ("Fall");
 		}
+
+		updateOtherPlayer();
+	}
+
+	public void updateOtherPlayer(){
+		// Rotate Left
+		if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
+			otherPlayerMove = true;
+			StartCoroutine ("MoveLeftZ");
+		} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
+			otherPlayerMove = true;
+			StartCoroutine ("MoveRightZ");
+		} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
+			otherPlayerRotate = true;
+			StartCoroutine("RotateLeftZ");
+		} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
+			otherPlayerRotate = true;
+			StartCoroutine("RotateRightZ");
+		} 
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -241,7 +270,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, 1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		left = false;
+		otherPlayerMove = false;
 	}
 
 	// CoRoutine for moving right on the z-axis
@@ -257,7 +286,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, -1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		right = false;
+		otherPlayerMove = false;
 	}
 
 	// CoRoutine for rotating left around the z-axis
@@ -275,7 +304,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.Rotate (90, 0, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
+		otherPlayerRotate = false;
 	}
 
 	// CoRoutine for moving right around the z-axis
@@ -293,7 +322,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.Rotate (-90, 0, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
+		otherPlayerRotate = false;
 	}
 
 	// CoRoutine for making pieces fall
@@ -326,6 +355,7 @@ public class BlockController : MonoBehaviour {
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
+		otherPlayerFall = false;
 	}
 
 	// Updating the grid with new positions
