@@ -37,51 +37,70 @@ public class Grid {
 	}
 
 	/*
-	 * Deletes one row of full blocks,
-	 * helper function for deleteFullRows
+	 * Deletes one plan of full blocks,
+	 * helper function for deleteFullPlans
 	 */
-//	private void deleteRow(int y) {
-//		for (int x = 0; x < w; ++x) {
-//			MonoBehaviour.Destroy(grid[x, y].gameObject);
-//			grid[x, y] = null;
-//		}
-//	}
-
+	private void deletePlan(int y) {
+		for (int x = 0; x < w; ++x) {
+			for (int z = 0; z < d; ++z) {
+				MonoBehaviour.Destroy(getGrid(z)[x, y].gameObject);
+				getGrid(z)[x, y] = null;
+			}
+		}
+	}
+	
 	/*
-	 * Moves all rows above 'y' one step downwards,
-	 * helper function for deleteFullRows and decreaseRowsAbove
+	 * Moves all plans above 'y' one step downwards,
+	 * helper function for deleteFullPlans and decreasePlansAbove
 	 */
-//	private void decreaseRow(int y) {
-//		for (int x = 0; x < w; ++x) {
-//			if (grid[x, y] != null) {
-//				// Move one towards bottom
-//				grid[x, y-1] = grid[x, y];
-//				grid[x, y] = null;
-//				
-//				// Update Block position
-//				grid[x, y-1].position += new Vector3(0, -1, 0);
-//			}
-//		}
-//	}
-
+	private void decreasePlan(int y) {
+		for (int x = 0; x < w; ++x) {
+			for (int z = 0; z < d; z++) {
+				if (getGrid(z)[x, y] != null) {
+					// Move one towards bottom
+					getGrid(z)[x, y-1] = getGrid(z)[x, y];
+					getGrid(z)[x, y] = null;
+					// Update Block position
+					getGrid(z)[x, y-1].position += new Vector3(0, -1, 0);
+				}
+			}
+		}
+	}
+	
 	/*
-	 * Decreases all rows above y
+	 * Decreases all plans above y
 	 */
-//	private void decreaseRowsAbove(int y) {
-//		for (int i = y; i < h; ++i)
-//			decreaseRow(i);
-//	}
-//
-//	/*
-//	 * Checks whether row 'y' is full or not
-//	 */
-//	private bool isRowFull(int y) {
+	private void decreasePlansAbove(int y) {
+		for (int i = y; i < h; ++i)
+			decreasePlan(i);
+	}
+	
+	//	/*
+	//	 * Checks whether plan 'y' is full or not
+	//	 */
+	private bool isPlanFull(int y) {
+		for (int x = 0; x < w; ++x)
+			for (int z = 0; z < d; z++)
+				if (getGrid(z)[x, y] == null)
+					return false;
+		return true;
+	}
+	
+	//	/*
+	//	 * Checks whether plan 'y' has two full sides
+	//	 * from the players points of vue
+	//	 */
+//	private bool areSidesFull(int y) {
+//		// TODO : check for the front point of vue of each player
 //		for (int x = 0; x < w; ++x)
-//			if (grid[x, y] == null)
+//			if (getGrid(0)[x, y] == null)
+//				return false;
+//		for (int z = 0; z < d; ++z)
+//			if (getGrid(z)[0, y] == null)
 //				return false;
 //		return true;
 //	}
-
+	
 	public Vector3 roundVec3(Vector3 v){
 		return new Vector3(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round (v.z));
 	}
@@ -101,21 +120,23 @@ public class Grid {
 	}
 
 	/*
-	 * Goes through all rows and deletes the full ones,
-	 * then moves all the rows above one step down
+	 * Goes through all plans and deletes the full ones,
+	 * then moves all the plans above one step down
 	 * called after each discrete timestep
-	 * @return The number of deleted rows.
+	 * @return The number of deleted plans.
 	 */
-//	public int deleteFullRows() {
-//		int linesDeleted = 0;
-//		for (int y = 0; y < h; ++y) {
-//			if (isRowFull(y)) {
-//				linesDeleted++;
-//				deleteRow(y);
-//				decreaseRowsAbove(y+1);
-//				--y;
-//			}
-//		}
-//		return linesDeleted;
-//	}
+	public int deleteFullPlans() {
+		int plansDeleted = 0;
+		for (int y = 0; y < h; ++y) {
+			// Uncomment if using the "2sides" gameplay
+			// if (areSidesFull(y)) {
+			if (isPlanFull(y)) {
+				plansDeleted++;
+				deletePlan(y);
+				decreasePlansAbove(y+1);
+				--y;
+			}
+		}
+		return plansDeleted;
+	}
 }
