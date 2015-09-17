@@ -152,16 +152,16 @@ public class Wiimote : Controller {
 	}
 
 	public bool MoveRight() {
-		return BUTTON_RIGHT;
+		return BUTTON_RIGHT == 1 ? true : false;
 	}
 	public bool MoveLeft() {
-		return BUTTON_LEFT;
+		return BUTTON_LEFT == 1 ? true : false;
 	}
 	public bool MoveUp() {
-		return BUTTON_UP;
+		return BUTTON_UP == 1 ? true : false;
 	}
 	public bool MoveDown() {
-		return BUTTON_DOWN;
+		return BUTTON_DOWN == 1 ? true : false;
 	}
 
 	public float RotateRight() {
@@ -172,13 +172,13 @@ public class Wiimote : Controller {
 	}
 	
 	public bool Confirm() {
-		return BUTTON_A;
+		return BUTTON_A == 1 ? true : false;
 	}
 	public bool Reject() {
-		return BUTTON_B;
+		return BUTTON_B == 1 ? true : false;
 	}
 	public bool Pause() {
-		return BUTTON_PLUS;
+		return BUTTON_PLUS == 1 ? true : false;
 	}
 	
 	public void update(string oscMessage, ArrayList values, DateTime currentTime)

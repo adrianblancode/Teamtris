@@ -58,6 +58,8 @@ public class BlockController : MonoBehaviour {
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
 
+	private ControllerInterface ci = new ControllerInterface();
+
 	void Start () {
 		if (team == 1) {
 			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
@@ -80,11 +82,11 @@ public class BlockController : MonoBehaviour {
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		receiver = WiimoteReceiver.Instance;
-		receiver.connect ();
+//		receiver = WiimoteReceiver.Instance;
+//		receiver.connect ();
 
 		// Create a dummy wiimote to avoid the NullReferenceException in Update()
-		player1 = new Wiimote ();
+//		player1 = new Wiimote ();
 	}
 
 	// Set rate at which user is able to rotate
@@ -115,42 +117,42 @@ public class BlockController : MonoBehaviour {
 		}
 
 		// Grab the wiimote
-		if (receiver.wiimotes.ContainsKey (1)) {
-			player1 = (Wiimote)receiver.wiimotes [1];
-		}
+//		if (receiver.wiimotes.ContainsKey (1)) {
+//			player1 = (Wiimote)receiver.wiimotes [1];
+//		}
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ( (ControllerInterface.MoveLeft (team) || player1.BUTTON_LEFT == 1) && !left) {
+		if ( ( ci.MoveLeft (team) ) && !left) {
 			left = true;
 //			StartCoroutine ("MoveLeftX");
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Move Right
-		else if ( (ControllerInterface.MoveRight(team) || player1.BUTTON_RIGHT == 1) && !right) {
+		else if ( (ci.MoveRight(team) ) && !right) {
 			right = true;
 //			StartCoroutine("MoveRightX");
 			StartCoroutine("MoveRightZ");
 		}
 
 		// Rotate Left
-		else if ( (ControllerInterface.RotLeft(team) || player1.BUTTON_A == 1) && !rotate) {
+		else if ( ( ci.RotLeft(team) ) && !rotate) {
 			rotate = true;
 //			StartCoroutine("RotateLeftX");
 			StartCoroutine("RotateLeftZ");
 		}
 
 		// Rotate Left
-		else if ( (ControllerInterface.RotRight(team) || player1.BUTTON_B == 1) && !rotate) {
+		else if ( ( ci.RotRight(team) ) && !rotate) {
 			rotate = true;
 //			StartCoroutine("RotateRightX");
 			StartCoroutine("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
-		else if ((ControllerInterface.ActionButtonCombined(1) ||
-		         Time.time - lastFall >= fallRate * fallRateMultiplier || player1.BUTTON_DOWN == 1) && !fall) {
+		else if (( ci.ActionButtonCombined(1) ||
+		         Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
 			fall = true;
 			StartCoroutine("Fall");
 		}
