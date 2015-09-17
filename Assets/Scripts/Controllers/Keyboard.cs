@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * Implement this class and define the getters for the controller.
+ * This may not be needed if we make sure the players do not share buttons,
+ * but it works right now so there is no need to fix it.
+ */
 public abstract class Keyboard : Controller {
 
 	abstract public KeyCode right{ get; set; }

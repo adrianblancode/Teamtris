@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Keyboard_player1 : Keyboard {
 
+	// TODO(Douglas): Able to set the controls.
 	public override KeyCode right{ get { return b_right; } set{} }
 	public override KeyCode left{ get { return b_left; } set{} }
 	public override KeyCode up{ get { return b_up; } set{} }
