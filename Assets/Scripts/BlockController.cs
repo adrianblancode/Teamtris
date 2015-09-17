@@ -78,9 +78,17 @@ public class BlockController : MonoBehaviour {
 		}
 
 		GameObject block = spawner.getNext();
-		currentBlock = (GameObject)Instantiate(block,
-		                                       transform.position,
-		                                       Quaternion.identity);
+	
+		//TODO update for small board
+		//Vector3 padding = new Vector3 (1, 0, -1);
+
+		currentBlock = (GameObject)Instantiate (block,
+			                                    transform.position,
+			                                    Quaternion.identity);
+
+		if (player == 2) {
+			initializePosition();
+		}
 
 		blockGrid = new Grid (10, 25, 10);
 
@@ -101,6 +109,15 @@ public class BlockController : MonoBehaviour {
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
 			player1 = new Wiimote ();
 		}
+	}
+
+	public void initializePosition(){
+		for (int i = 0; i < 3; i++) {
+			StartCoroutine ("MoveRightX");
+			StartCoroutine ("MoveRightZ");
+		}
+
+		StartCoroutine("RotateLeftY");
 	}
 
 	// Set rate at which user is able to rotate
@@ -239,6 +256,24 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
+	// CoRoutine for rotating left around the x-axis
+	IEnumerator RotateLeftY(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, -90, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, 90, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
 	// CoRoutine for rotating right around the x-axis
 	IEnumerator RotateRightX(){
 		if(currentBlock.tag != "freeze"){
@@ -252,6 +287,24 @@ public class BlockController : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, -90);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
+	// CoRoutine for rotating right around the x-axis
+	IEnumerator RotateRightY(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, 90, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, -90, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -348,9 +401,18 @@ public class BlockController : MonoBehaviour {
 
 			// Spawn next Group
 			GameObject block = spawner.getNext();
+
+
+			//TODO update for small board
+			Vector3 padding = new Vector3 (2, 0, 2);
+
 			currentBlock = (GameObject)Instantiate(block,
-			                                       transform.position,
+			                                       transform.position + padding,
 			                                       Quaternion.identity);
+
+			if (player == 2) {
+				initializePosition();
+			}
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
