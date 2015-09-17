@@ -6,11 +6,11 @@ public class BlockController : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
-	// Which team owns this blockcontroller
+	// Which player owns this blockcontroller
 	// TODO make work for both teams
-	private int team = 1;
+	public int player = 1;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -40,7 +40,7 @@ public class BlockController : MonoBehaviour {
 	private Grid blockGrid;
 	public GameObject currentBlock;
 	public ParticleSystem effect;
-	private Spawner spawner;
+	public Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
 
@@ -61,14 +61,16 @@ public class BlockController : MonoBehaviour {
 	private int combo = 1;
 
 	void Start () {
-		if (team == 1) {
-			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
+		if (player == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
 		} else {
-			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
+			gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 		}
 
-		spawner = FindObjectOfType<Spawner> ();
-		currentBlock = spawner.spawnNext();
+		GameObject block = spawner.getNext();
+		currentBlock = (GameObject)Instantiate(block,
+		                                       transform.position,
+		                                       Quaternion.identity);
 
 		blockGrid = new Grid (10, 25, 10);
 
@@ -126,31 +128,27 @@ public class BlockController : MonoBehaviour {
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if ((ControllerInterface.MoveLeft (player)) && !left) {
 			left = true;
-//			StartCoroutine ("MoveLeftX");
-			StartCoroutine ("MoveLeftZ");
+			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
-		else if (ControllerInterface.MoveRight (team) && !right) {
+		else if (ControllerInterface.MoveRight (player) && !right) {
 			right = true;
-//			StartCoroutine("MoveRightX");
-			StartCoroutine ("MoveRightZ");
+			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotLeft (team) && !rotate) {
+		else if (ControllerInterface.RotLeft (player) && !rotate) {
 			rotate = true;
-//			StartCoroutine("RotateLeftX");
-			StartCoroutine ("RotateLeftZ");
+			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotRight (team) && !rotate) {
+		else if (ControllerInterface.RotRight (player) && !rotate) {
 			rotate = true;
-//			StartCoroutine("RotateRightX");
-			StartCoroutine ("RotateRightZ");
+			StartCoroutine("RotateRightX");
 		}
 
 		// Move Downwards and Fall
@@ -318,8 +316,12 @@ public class BlockController : MonoBehaviour {
 			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 			updateScores(linesDeleted);
+
 			// Spawn next Group
-			currentBlock = spawner.spawnNext();
+			GameObject block = spawner.getNext();
+			currentBlock = (GameObject)Instantiate(block,
+			                                       transform.position,
+			                                       Quaternion.identity);
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);

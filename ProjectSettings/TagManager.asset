@@ -7,6 +7,8 @@ TagManager:
   - freeze
   - Team1_GameBoard
   - Team2_GameBoard
+  - Player1_GameBoard
+  - Player2_GameBoard
   layers:
   - Default
   - TransparentFX
