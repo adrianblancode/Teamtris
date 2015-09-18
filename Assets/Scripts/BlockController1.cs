@@ -23,7 +23,6 @@ public class BlockController1 : MonoBehaviour {
 
 	// Gameboard for this script
 	private GameObject gameBoard;
-	private GameObject plane;
 
 	// Time since last gravity tick
 	private float lastFall = 0;
@@ -86,7 +85,7 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		blockGrid = new Grid (5, 25, 5);
-		slave_controller.setGrid (blockGrid);
+//		slave_controller.setGrid (blockGrid);
 		slave_controller.setBlock (currentBlock);
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
@@ -450,11 +449,6 @@ public class BlockController1 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
-//			Debug.Log ("BlockController1");
-//			Debug.Log ("child pos: " + child.position);
-//			Debug.Log ("gameboard: " + gameBoard.transform.position);
-//			Debug.Log ("v: " + v);
 
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))

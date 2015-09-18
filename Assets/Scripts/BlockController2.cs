@@ -82,13 +82,12 @@ public class BlockController2 : MonoBehaviour {
 		}
 	}
 
-	public void setGrid(Grid g){
-//		blockGrid = g;
-	}
+//	public void setGrid(Grid g){
+////		blockGrid = g;
+//	}
 
 	public void setBlock(GameObject block){
 		currentBlock = (GameObject)Instantiate(block, spawner.transform.position, block.transform.rotation);
-//		currentBlock.transform.Rotate (0, 0, 0, Space.World);
 	}
 
 	// Set rate at which user is able to rotate
@@ -377,12 +376,7 @@ public class BlockController2 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
-//			Debug.Log ("BlockController2");
-//			Debug.Log ("child pos: " + child.position);
-//			Debug.Log ("gameboard: " + gameBoard.transform.position);
-//			Debug.Log ("v: " + v);
-
+		
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
 				return false;
@@ -392,10 +386,6 @@ public class BlockController2 : MonoBehaviour {
 			if (grid[(int)v.x, (int)v.y] != null &&
 			    grid[(int)v.x, (int)v.y].parent != currentBlock.transform)
 				return false;
-			//			Transform[,] grid = blockGrid.getGrid ((int)temp.z);
-			//			if (grid[(int)temp.x, (int)temp.y] != null &&
-			//			    grid[(int)temp.x, (int)temp.y].parent != currentBlock.transform)
-			//				return false;
 		}
 		return true;
 	}
