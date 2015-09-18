@@ -87,7 +87,7 @@ public class BlockController : MonoBehaviour {
 			                                    Quaternion.identity);
 
 		if (player == 2) {
-			initializePosition();
+			//initializePosition();
 		}
 
 		blockGrid = new Grid (10, 25, 10);
@@ -190,18 +190,34 @@ public class BlockController : MonoBehaviour {
 
 	public void updateOtherPlayer(){
 		// Rotate Left
-		if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
-			otherPlayerMove = true;
-			StartCoroutine ("MoveLeftZ");
-		} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
-			otherPlayerMove = true;
-			StartCoroutine ("MoveRightZ");
-		} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
-			otherPlayerRotate = true;
-			StartCoroutine("RotateLeftZ");
-		} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
-			otherPlayerRotate = true;
-			StartCoroutine("RotateRightZ");
+		if (player == 1) {
+			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveLeftZ");
+			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveRightZ");
+			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateLeftZ");
+			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateRightZ");
+			}
+		} else {
+			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveRightZ");
+			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveLeftZ");
+			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateLeftX");
+			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateRightX");
+			}
 		} 
 	}
 
