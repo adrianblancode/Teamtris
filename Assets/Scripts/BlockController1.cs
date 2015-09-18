@@ -478,25 +478,11 @@ public class BlockController1 : MonoBehaviour {
 	// Applies transparency to all blocks that are behind the current block
 	void applyTransparency() {
 
-		int transparencyZ = 999;
+		int nearestZ = getNearestCurrentBlockZPos ();
 
-		restoreTransparency ();
+		disableTransparency (nearestZ);
 
-		for (int z = 0; z < blockGrid.getDepth(); z++) {
-			Transform[,] grid = blockGrid.getGrid (z);
-			
-			for (int y = 0; y < blockGrid.getHeight(); ++y) {
-				for (int x = 0; x < blockGrid.getWidth(); ++x){
-					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
-						if(z < transparencyZ){
-							transparencyZ = z - 1;
-						}
-					}
-				}
-			}
-		}
-
-		for (int z = transparencyZ; z >= 0; z--) {
+		for (int z = nearestZ; z >= 0; z--) {
 			Transform[,] grid = blockGrid.getGrid (z);
 
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
@@ -519,10 +505,45 @@ public class BlockController1 : MonoBehaviour {
 		}
 	}
 
-	void restoreTransparency(){
+	// Returns the the nearest grid position on the Z-axis of a current block
+	int getNearestCurrentBlockZPos(){
+
+		int transparencyZ = 999;
+
+		for (int z = 0; z < blockGrid.getDepth(); z++) {
+			Transform[,] grid = blockGrid.getGrid (z);
+			
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x){
+					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
+						if(z < transparencyZ){
+							transparencyZ = z - 1;
+
+							if(transparencyZ <= 0){
+								transparencyZ = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (transparencyZ >= 999) {
+			return 0;
+		}
+
+		return transparencyZ;
+	}
+
+	void disableTransparency(){
+		disableTransparency (0);
+	}
+
+	// Disable transparency at all blocks at depth z and higher
+	void disableTransparency(int z){
 		for (int y = 0; y < blockGrid.getHeight(); ++y) {
 			for (int x = 0; x < blockGrid.getWidth(); ++x) {
-				for (int z = 0; z < blockGrid.getDepth(); ++z) {
+				for (; z < blockGrid.getDepth(); ++z) {
 					Transform[,] grid = blockGrid.getGrid(z);
 					if (grid[x, y] != null) {
 						Transform p = grid[x, y].parent;
@@ -538,7 +559,7 @@ public class BlockController1 : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	// Displays the new score, level and number of lines to go till next level
 	void updateTexts() {
 		scoreText.text = score.ToString();
