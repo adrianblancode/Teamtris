@@ -6,11 +6,14 @@ public class BlockController : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
-	// Which team owns this blockcontroller
+	// Which player owns this blockcontroller
 	// TODO make work for both teams
-	private int team = 1;
+	public int player = 1;
+
+	// The other player on the team
+	private int otherPlayer = 2;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -40,9 +43,10 @@ public class BlockController : MonoBehaviour {
 	private Grid blockGrid;
 	public GameObject currentBlock;
 	public ParticleSystem effect;
-	private Spawner spawner;
+	public Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
+	private bool otherPlayerMove, otherPlayerRotate, otherPlayerFall = false;
 
 	// Level and its display
 	private int level = 1;
@@ -61,14 +65,30 @@ public class BlockController : MonoBehaviour {
 	private int combo = 1;
 
 	void Start () {
-		if (team == 1) {
-			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
-		} else {
-			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
+
+		// Set who the other player is
+		if (player == 2) {
+			otherPlayer = 1;
 		}
 
-		spawner = FindObjectOfType<Spawner> ();
-		currentBlock = spawner.spawnNext();
+		if (player == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
+		} else {
+			gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
+		}
+
+		GameObject block = spawner.getNext();
+	
+		//TODO update for small board
+		//Vector3 padding = new Vector3 (1, 0, -1);
+
+		currentBlock = (GameObject)Instantiate (block,
+			                                    transform.position,
+			                                    Quaternion.identity);
+
+		if (player == 2) {
+			//initializePosition();
+		}
 
 		blockGrid = new Grid (10, 25, 10);
 
@@ -89,6 +109,15 @@ public class BlockController : MonoBehaviour {
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
 			player1 = new Wiimote ();
 		}
+	}
+
+	public void initializePosition(){
+		for (int i = 0; i < 3; i++) {
+			StartCoroutine ("MoveRightX");
+			StartCoroutine ("MoveRightZ");
+		}
+
+		StartCoroutine("RotateLeftY");
 	}
 
 	// Set rate at which user is able to rotate
@@ -126,31 +155,27 @@ public class BlockController : MonoBehaviour {
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if ((ControllerInterface.MoveLeft (player)) && !left) {
 			left = true;
-//			StartCoroutine ("MoveLeftX");
-			StartCoroutine ("MoveLeftZ");
+			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
-		else if (ControllerInterface.MoveRight (team) && !right) {
+		else if (ControllerInterface.MoveRight (player) && !right) {
 			right = true;
-//			StartCoroutine("MoveRightX");
-			StartCoroutine ("MoveRightZ");
+			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotLeft (team) && !rotate) {
+		else if (ControllerInterface.RotLeft (player) && !rotate) {
 			rotate = true;
-//			StartCoroutine("RotateLeftX");
-			StartCoroutine ("RotateLeftZ");
+			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-		else if (ControllerInterface.RotRight (team) && !rotate) {
+		else if (ControllerInterface.RotRight (player) && !rotate) {
 			rotate = true;
-//			StartCoroutine("RotateRightX");
-			StartCoroutine ("RotateRightZ");
+			StartCoroutine("RotateRightX");
 		}
 
 		// Move Downwards and Fall
@@ -159,6 +184,41 @@ public class BlockController : MonoBehaviour {
 			fall = true;
 			StartCoroutine ("Fall");
 		}
+
+		updateOtherPlayer();
+	}
+
+	public void updateOtherPlayer(){
+		// Rotate Left
+		if (player == 1) {
+			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveLeftZ");
+			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveRightZ");
+			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateLeftZ");
+			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateRightZ");
+			}
+		} else {
+			if ((ControllerInterface.MoveLeft (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveRightZ");
+			} else if ((ControllerInterface.MoveRight (otherPlayer)) && !otherPlayerMove) {
+				otherPlayerMove = true;
+				StartCoroutine ("MoveLeftZ");
+			} else if (ControllerInterface.RotLeft (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateLeftX");
+			} else if (ControllerInterface.RotRight (otherPlayer) && !otherPlayerRotate) {
+				otherPlayerRotate = true;
+				StartCoroutine("RotateRightX");
+			}
+		} 
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -212,6 +272,24 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
+	// CoRoutine for rotating left around the x-axis
+	IEnumerator RotateLeftY(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, -90, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, 90, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
 	// CoRoutine for rotating right around the x-axis
 	IEnumerator RotateRightX(){
 		if(currentBlock.tag != "freeze"){
@@ -230,6 +308,24 @@ public class BlockController : MonoBehaviour {
 		rotate = false;
 	}
 
+	// CoRoutine for rotating right around the x-axis
+	IEnumerator RotateRightY(){
+		if(currentBlock.tag != "freeze"){
+			currentBlock.transform.Rotate(0, 90, 0);
+		}
+		
+		// See if valid
+		if (isValidGridPos ()) {
+			// It's valid. Update grid.
+			updateGrid ();
+		} else {
+			// It's not valid. revert.
+			currentBlock.transform.Rotate (0, -90, 0);
+		}
+		yield return new WaitForSeconds(rotateRate);
+		rotate = false;
+	}
+
 	// CoRoutine for moving left on the z-axis
 	IEnumerator MoveLeftZ(){
 		// Modify position
@@ -243,7 +339,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, 1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		left = false;
+		otherPlayerMove = false;
 	}
 
 	// CoRoutine for moving right on the z-axis
@@ -259,7 +355,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, -1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		right = false;
+		otherPlayerMove = false;
 	}
 
 	// CoRoutine for rotating left around the z-axis
@@ -277,7 +373,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.Rotate (90, 0, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
+		otherPlayerRotate = false;
 	}
 
 	// CoRoutine for moving right around the z-axis
@@ -295,7 +391,7 @@ public class BlockController : MonoBehaviour {
 			currentBlock.transform.Rotate (-90, 0, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
+		otherPlayerRotate = false;
 	}
 
 	// CoRoutine for making pieces fall
@@ -318,12 +414,26 @@ public class BlockController : MonoBehaviour {
 			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 			updateScores(linesDeleted);
+
 			// Spawn next Group
-			currentBlock = spawner.spawnNext();
+			GameObject block = spawner.getNext();
+
+
+			//TODO update for small board
+			Vector3 padding = new Vector3 (2, 0, 2);
+
+			currentBlock = (GameObject)Instantiate(block,
+			                                       transform.position + padding,
+			                                       Quaternion.identity);
+
+			if (player == 2) {
+				initializePosition();
+			}
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
+		otherPlayerFall = false;
 	}
 
 	// Updating the grid with new positions
