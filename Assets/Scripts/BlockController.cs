@@ -186,6 +186,7 @@ public class BlockController : MonoBehaviour {
 		}
 
 		updateOtherPlayer();
+		applyTransparency();
 	}
 
 	public void updateOtherPlayer(){
@@ -482,7 +483,34 @@ public class BlockController : MonoBehaviour {
 		return true;
 	}
 
-	// Displays the new score, level and number of lines to go till next level
+	void applyTransparency() {
+
+		float transparencyZ = 999f;
+
+		foreach (Transform child in currentBlock.transform) {
+			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
+			temp = blockGrid.roundVec3(temp);
+
+			if(temp.z > transparencyZ){
+				transparencyZ = temp.z;
+			}
+		}
+
+		for (int i = 0; i < blockGrid.getDepth(); i++) {
+			Transform[,] grid = blockGrid.getGrid ((int) i);
+
+
+		}
+
+		foreach(Transform child in currentBlock.transform){
+			Color newColor = child.GetComponent<Renderer>().material.color;
+			newColor.a = 0.2f;
+			child.GetComponent<Renderer>().material.color = newColor;
+		}
+
+	}
+	
+		// Displays the new score, level and number of lines to go till next level
 	void updateTexts() {
 		scoreText.text = score.ToString();
 	}
