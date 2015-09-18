@@ -374,7 +374,7 @@ public class BlockController1 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
+			//child.parent = currentBlock.transform;
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 
@@ -478,29 +478,65 @@ public class BlockController1 : MonoBehaviour {
 	// Applies transparency to all blocks that are behind the current block
 	void applyTransparency() {
 
-		float transparencyZ = 999f;
+		int transparencyZ = 999;
 
-		foreach (Transform child in currentBlock.transform) {
-			Vector3 temp = new Vector3(child.position.x - gameBoard.transform.position.x, child.position.y - gameBoard.transform.position.y, child.position.z);
-			temp = blockGrid.roundVec3(temp);
+		restoreTransparency ();
 
-			if(temp.z > transparencyZ){
-				transparencyZ = temp.z;
+		for (int z = 0; z < blockGrid.getDepth(); z++) {
+			Transform[,] grid = blockGrid.getGrid (z);
+			
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x){
+					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
+						if(z < transparencyZ){
+							transparencyZ = z - 1;
+						}
+					}
+				}
 			}
 		}
 
-		for (int i = 0; i < blockGrid.getDepth(); i++) {
-			Transform[,] grid = blockGrid.getGrid ((int) i);
+		for (int z = transparencyZ; z >= 0; z--) {
+			Transform[,] grid = blockGrid.getGrid (z);
 
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x) {
 
+					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
+					
+						foreach(Transform childBlock in grid[x, y].parent){
+
+							//TODO only transparency if on same Z-level
+
+							Renderer r = childBlock.GetComponent<Renderer>();
+							Color newColor = r.material.color;
+							newColor.a = 0.2f;
+							childBlock.GetComponent<Renderer>().material.color = newColor;
+						}
+					}
+				}
+			}
 		}
+	}
 
-		foreach(Transform child in currentBlock.transform){
-			Color newColor = child.GetComponent<Renderer>().material.color;
-			newColor.a = 0.2f;
-			child.GetComponent<Renderer>().material.color = newColor;
+	void restoreTransparency(){
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (int z = 0; z < blockGrid.getDepth(); ++z) {
+					Transform[,] grid = blockGrid.getGrid(z);
+					if (grid[x, y] != null) {
+						Transform p = grid[x, y].parent;
+						
+						foreach(Transform childBlock in p){
+							Renderer r = childBlock.GetComponent<Renderer>();
+							Color newColor = r.material.color;
+							newColor.a = 1.0f;
+							r.material.color = newColor;
+						}
+					}
+				}
+			}
 		}
-
 	}
 	
 	// Displays the new score, level and number of lines to go till next level
