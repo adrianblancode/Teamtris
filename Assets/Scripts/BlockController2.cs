@@ -38,7 +38,7 @@ public class BlockController2 : MonoBehaviour {
 	private float horizontalRate = 0.2f;
 	
 	private Grid blockGrid;
-	public GameObject currentBlock;
+	private GameObject currentBlock;
 	public ParticleSystem effect;
 	
 	private GameObject spawner;
@@ -63,12 +63,12 @@ public class BlockController2 : MonoBehaviour {
 
 	private Component master_controller;
 
-	void Start () {
+	void Awake () {
 		master_controller = GameObject.Find ("BlockController1").GetComponent ("BlockController1");
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 		
-		spawner = GameObject.Find("Spawner2");
-		
+		spawner = GameObject.FindGameObjectWithTag("Spawner2");
+
 		blockGrid = new Grid (5, 25, 5);
 		
 		// Initialize wiimote receiver
@@ -87,7 +87,7 @@ public class BlockController2 : MonoBehaviour {
 //	}
 
 	public void setBlock(GameObject block){
-		currentBlock = (GameObject)Instantiate(block, spawner.transform.position, block.transform.rotation);
+		currentBlock = (GameObject)Instantiate (block, spawner.transform.position, block.transform.rotation);
 	}
 
 	// Set rate at which user is able to rotate
