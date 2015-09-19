@@ -67,26 +67,14 @@ public class BlockController1 : MonoBehaviour {
 
 	private BlockController2 slave_controller;
 
-	void Start () {
+	void Awake () {
 		slave_controller = GameObject.Find("BlockController2").GetComponent<BlockController2>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
 
-		GameObject block = spawner.getNext();
-
-		//TODO update for small board
-		//Vector3 padding = new Vector3 (1, 0, -1);
-
-		currentBlock = (GameObject)Instantiate (block,
-			                                    transform.position,
-			                                    Quaternion.identity);
-
-		if (player == 2) {
-			//initializePosition();
-		}
+		spawner = FindObjectOfType<Spawner> ();
 
 		blockGrid = new Grid (5, 25, 5);
 //		slave_controller.setGrid (blockGrid);
-		slave_controller.setBlock (currentBlock);
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
 //		                                     Quaternion.identity);
@@ -106,13 +94,9 @@ public class BlockController1 : MonoBehaviour {
 		}
 	}
 
-	public void initializePosition(){
-		for (int i = 0; i < 3; i++) {
-			StartCoroutine ("MoveRightX");
-			StartCoroutine ("MoveRightZ");
-		}
-
-		StartCoroutine("RotateLeftY");
+	void Start() {
+		currentBlock = spawner.spawnNext();
+		slave_controller.setBlock (currentBlock);
 	}
 
 	// Set rate at which user is able to rotate
