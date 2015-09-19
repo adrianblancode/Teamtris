@@ -39,7 +39,7 @@ public class BlockController1 : MonoBehaviour {
 
 	private Spawner spawner;
 
-	private bool left, right, rotate, fall = false;
+	private bool move, rotate, fall = false;
 
 	// Level and its display
 	private int level = 1;
@@ -127,15 +127,15 @@ public class BlockController1 : MonoBehaviour {
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 //		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(Input.GetKey(KeyCode.LeftArrow) && !left){
-			left = true;
+		if(Input.GetKey(KeyCode.LeftArrow) && !move){
+			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
 //		if (ControllerInterface.MoveRight (team) && !right) {
-		if(Input.GetKey(KeyCode.RightArrow) && !right){
-			right = true;
+		if(Input.GetKey(KeyCode.RightArrow) && !move){
+			move = true;
 			StartCoroutine("MoveRightX");
 		}
 
@@ -153,13 +153,13 @@ public class BlockController1 : MonoBehaviour {
 			StartCoroutine("RotateRightX");
 		}
 
-		if(Input.GetKey(KeyCode.A) && !left){
-			left = true;
+		if(Input.GetKey(KeyCode.A) && !move){
+			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
-		if(Input.GetKey(KeyCode.D) && !right){
-			right = true;
+		if(Input.GetKey(KeyCode.D) && !move){
+			move = true;
 			StartCoroutine ("MoveRightZ");
 		}
 
@@ -198,7 +198,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (1, 0, 0);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		left = false;
+		move = false;
 	}
 
 	// CoRoutine for moving right on the x-axis
@@ -215,7 +215,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (-1, 0, 0);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		right = false;
+		move = false;
 	}
 
 	// CoRoutine for rotating left around the x-axis
@@ -263,7 +263,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, 1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		left = false;
+		move = false;
 	}
 
 	// CoRoutine for moving right on the z-axis
@@ -279,7 +279,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, -1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		right = false;
+		move = false;
 	}
 
 	// CoRoutine for rotating left around the z-axis
