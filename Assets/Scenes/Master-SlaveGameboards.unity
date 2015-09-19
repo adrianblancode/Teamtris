@@ -588,7 +588,7 @@ GameObject:
   - 23: {fileID: 312645900}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Player2_Plane
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1474,7 +1474,7 @@ GameObject:
   - 23: {fileID: 913953239}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Player1_Plane
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1544,7 +1544,7 @@ GameObject:
   - 4: {fileID: 1006518627}
   m_Layer: 0
   m_Name: Spawner2
-  m_TagString: Untagged
+  m_TagString: Spawner2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2440,7 +2440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c05b867d114601818e99c7ff2c857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentBlock: {fileID: 0}
   effect: {fileID: 0}
   scoreText: {fileID: 0}
 --- !u!4 &1570902081 stripped
