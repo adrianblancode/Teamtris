@@ -8,13 +8,6 @@ public class BlockController1 : MonoBehaviour {
 	// Fixes crashes upon going into the editor
 	private bool ENABLE_WIIMOTE = false;
 
-	// Which player owns this blockcontroller
-	// TODO make work for both teams
-	public int player = 1;
-
-	// The other player on the team
-	private int otherPlayer = 2;
-
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
 
@@ -47,7 +40,6 @@ public class BlockController1 : MonoBehaviour {
 	private Spawner spawner;
 
 	private bool left, right, rotate, fall = false;
-	private bool otherPlayerMove, otherPlayerRotate, otherPlayerFall = false;
 
 	// Level and its display
 	private int level = 1;
@@ -74,7 +66,6 @@ public class BlockController1 : MonoBehaviour {
 		spawner = FindObjectOfType<Spawner> ();
 
 		blockGrid = new Grid (5, 25, 5);
-//		slave_controller.setGrid (blockGrid);
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
 //		                                     Quaternion.identity);
@@ -229,13 +220,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// CoRoutine for rotating left around the x-axis
 	IEnumerator RotateLeftX(){
-		if (currentBlock.tag != "freeze") {
-			currentBlock.transform.Rotate (0, 0, 90, Space.World);
-		} else if(currentBlock.tag == "freeze" &&
-		          currentBlock.transform.rotation.x != 1 &&
-		          currentBlock.transform.rotation.x != 0){
-			currentBlock.transform.Rotate (0, 0, 90, Space.World);
-		}
+		currentBlock.transform.Rotate (0, 0, 90, Space.World);
 
 		// See if valid
 		if (isValidGridPos ()) {
@@ -244,24 +229,6 @@ public class BlockController1 : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, -90, Space.World);
-		}
-		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
-	}
-
-	// CoRoutine for rotating left around the x-axis
-	IEnumerator RotateLeftY(){
-		if(currentBlock.tag != "freeze"){
-			currentBlock.transform.Rotate(0, -90, 0);
-		}
-
-		// See if valid
-		if (isValidGridPos ()) {
-			// It's valid. Update grid.
-			updateGrid ();
-		} else {
-			// It's not valid. revert.
-			currentBlock.transform.Rotate (0, 90, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -269,13 +236,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// CoRoutine for rotating right around the x-axis
 	IEnumerator RotateRightX(){
-		if (currentBlock.tag != "freeze") {
-			currentBlock.transform.Rotate (0, 0, -90, Space.World);
-		} else if(currentBlock.tag == "freeze" &&
-		          currentBlock.transform.rotation.x != 1 &&
-		          currentBlock.transform.rotation.x != 0){
-			currentBlock.transform.Rotate (0, 0, -90, Space.World);
-		}
+		currentBlock.transform.Rotate (0, 0, -90, Space.World);
 
 		// See if valid
 		if (isValidGridPos ()) {
@@ -284,24 +245,6 @@ public class BlockController1 : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, 90, Space.World);
-		}
-		yield return new WaitForSeconds(rotateRate);
-		rotate = false;
-	}
-
-	// CoRoutine for rotating right around the x-axis
-	IEnumerator RotateRightY(){
-		if(currentBlock.tag != "freeze"){
-			currentBlock.transform.Rotate(0, 90, 0);
-		}
-
-		// See if valid
-		if (isValidGridPos ()) {
-			// It's valid. Update grid.
-			updateGrid ();
-		} else {
-			// It's not valid. revert.
-			currentBlock.transform.Rotate (0, -90, 0);
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -320,7 +263,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, 1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		otherPlayerMove = false;
+		left = false;
 	}
 
 	// CoRoutine for moving right on the z-axis
@@ -336,7 +279,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.position += new Vector3 (0, 0, -1);
 		}
 		yield return new WaitForSeconds(horizontalRate);
-		otherPlayerMove = false;
+		right = false;
 	}
 
 	// CoRoutine for rotating left around the z-axis
@@ -352,7 +295,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.Rotate (90, 0, 0, Space.World);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		otherPlayerRotate = false;
+		rotate = false;
 	}
 
 	// CoRoutine for moving right around the z-axis
@@ -367,7 +310,7 @@ public class BlockController1 : MonoBehaviour {
 			currentBlock.transform.Rotate (-90, 0, 0, Space.World);
 		}
 		yield return new WaitForSeconds(rotateRate);
-		otherPlayerRotate = false;
+		rotate = false;
 	}
 
 	// CoRoutine for making pieces fall
