@@ -491,12 +491,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBlock: {fileID: 0}
-  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
-  ghost:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   effect: {fileID: 19821162, guid: c8814b8fd0f9c45589ceb0526224564c, type: 2}
   scoreText: {fileID: 2075436440}
 --- !u!4 &539141186
