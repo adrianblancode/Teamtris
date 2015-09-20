@@ -533,6 +533,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentBlock: {fileID: 0}
+  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
+  ghost:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   effect: {fileID: 19821162, guid: c8814b8fd0f9c45589ceb0526224564c, type: 2}
   scoreText: {fileID: 2075436440}
 --- !u!1 &510600528
@@ -574,6 +580,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c05b867d114601818e99c7ff2c857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
+  ghost:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   effect: {fileID: 0}
   scoreText: {fileID: 0}
 --- !u!1 &542053792
@@ -1256,7 +1268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de977c6929c553c4988ec73faa6c2e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: 1
+  player: 0
   moveObject: {fileID: 143016523}
   moveIcon: {fileID: 2800000, guid: 5e22b96b2acb2c64890332185f765976, type: 3}
   moveActiveIcon: {fileID: 2800000, guid: 5b4bdafbcd8f3ee42ba366452b44c3c2, type: 3}
@@ -1483,7 +1495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de977c6929c553c4988ec73faa6c2e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: 2
+  player: 0
   moveObject: {fileID: 542053792}
   moveIcon: {fileID: 2800000, guid: 5e22b96b2acb2c64890332185f765976, type: 3}
   moveActiveIcon: {fileID: 2800000, guid: 5b4bdafbcd8f3ee42ba366452b44c3c2, type: 3}

@@ -35,6 +35,8 @@ public class BlockController1 : MonoBehaviour {
 
 	private Grid blockGrid;
 	public GameObject currentBlock;
+	public GameObject ghostPrefab;
+	public GameObject[] ghost;
 	public ParticleSystem effect;
 
 	private Spawner spawner;
@@ -62,6 +64,12 @@ public class BlockController1 : MonoBehaviour {
 	void Awake () {
 		slave_controller = GameObject.Find("BlockController2").GetComponent<BlockController2>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
+
+		for (int i = 0; i < 4; i++) {
+			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
+			           							transform.position + new Vector3(i, 10, 0),
+			                                  	Quaternion.identity);
+		}
 
 		spawner = FindObjectOfType<Spawner> ();
 
@@ -368,6 +376,9 @@ public class BlockController1 : MonoBehaviour {
 
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
+
+		// Update ghost
+		updateGhost();
 	}
 
 	// Checks if the current block is in a valid grid position
@@ -388,6 +399,79 @@ public class BlockController1 : MonoBehaviour {
 				return false;
 		}
 		return true;
+	}
+
+	/*
+	 * Update the position of the ghost blocks.
+	 * If there is a free spot where the ghost should be, 
+	 * place one of the 4 blocks, otherwise disable its renderer.
+	 */
+	void updateGhost() {
+		int gap = 25;
+		int newGap = 25;
+		int block = 0;
+		
+		for (int i = 0; i < 4; i++) {
+			ghost[i].GetComponent<MeshRenderer>().enabled = false;
+		}
+
+		// Consider each block of the current tetrimino
+		foreach (Transform child in currentBlock.transform) {
+			int x = (int)(child.transform.position.x - gameBoard.transform.position.x);
+			int y = (int)(child.transform.position.y - gameBoard.transform.position.y);
+			int z = (int)(child.transform.position.z);
+			Transform[,] grid = blockGrid.getGrid(z);
+
+			// If the block is at the bottom of the grid
+			if (y == 0) {
+				gap = 0;
+				break;
+			} else if (y == 1) {
+				gap = 1;
+				continue;
+
+			// If there is nothing beneath the current child
+			} else if (grid[x, y-1] == null) {
+				y--;
+				newGap = 1;
+				while (grid[x, y-1] == null) {
+					newGap++;
+					y--;
+					if (y < 1) break;
+				}
+				if (newGap < gap) {
+					gap = newGap;
+				}
+
+			// If there is another block that is not part of the tetrimino then the block is at the bottom
+			} else if (grid[x, y-1] != null && grid[x, y-1].parent != currentBlock.transform) {
+				gap = 0;
+				break;
+			
+			// If there is another block of the current tetrimino, do nothing
+			} else {
+				continue;
+			}
+		}
+
+		int ghostblock = 0;
+		foreach (Transform child in currentBlock.transform) {
+			int x = (int)(child.transform.position.x - gameBoard.transform.position.x);
+			int y = (int)(child.transform.position.y - gameBoard.transform.position.y);
+			int z = (int)(child.transform.position.z);
+			Transform[,] grid = blockGrid.getGrid(z);
+
+			// If the space is free, place the ghost block
+			if (grid[x, y-gap] == null) {
+				ghost[ghostblock].GetComponent<MeshRenderer>().enabled = true;
+				ghost[ghostblock].transform.position = child.transform.position + new Vector3(0, -gap, 0);
+
+			// Else there is a tetriminos block, so disable the rendering of the ghost block
+			} else {
+				ghost[ghostblock].GetComponent<MeshRenderer>().enabled = false;
+			}
+			ghostblock++;
+		}
 	}
 
 	// Displays the new score, level and number of lines to go till next level
