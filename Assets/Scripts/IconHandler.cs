@@ -5,7 +5,7 @@ using System.Collections;
 public class IconHandler : MonoBehaviour {
 
 	// TODO make work for both teams
-	private int team = 1;
+	public int player;
 
 	// Move icon
 	public GameObject moveObject;
@@ -34,33 +34,33 @@ public class IconHandler : MonoBehaviour {
 	}
 
 	void Update() {
-		if (ControllerInterface.MoveLeft (team)) {
+		if (ControllerInterface.MoveLeft (player)) {
 			moveRawImage.texture = moveActiveIcon;
-		} else if (ControllerInterface.MoveRight (team)) {
+		} else if (ControllerInterface.MoveRight (player)) {
 			moveRawImage.texture = moveActiveIcon;
 		} else {
 			moveRawImage.texture = moveIcon;
 		}
 
-		if (ControllerInterface.RotLeft (team)) {
+		if (ControllerInterface.RotLeft (player)) {
 			rotRawImage.texture = rotActiveIcon;
-		} else if (ControllerInterface.RotRight (team)) {
+		} else if (ControllerInterface.RotRight (player)) {
 			rotRawImage.texture = rotActiveIcon;
 		} else {
 			rotRawImage.texture = rotIcon;
 		}
 
-		if (ControllerInterface.ActionButtonCombined (team)) {
+		if (ControllerInterface.ActionButtonCombined (player)) {
 			downRawImage.texture = downActiveIcon;
-		} else if (ControllerInterface.ActionButton (team, 1)) {
+		} else if (ControllerInterface.ActionButton (player, 1)) {
 			downRawImage.texture = downLeftIcon;
-		} else if (ControllerInterface.ActionButton (team, 2)) {
+		} else if (ControllerInterface.ActionButton (player, 2)) {
 			downRawImage.texture = downRightIcon;
 		} else {
 			downRawImage.texture = downIcon;
 		}
 
-		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 * ControllerInterface.MoveTilt(team));
-		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 * ControllerInterface.RotTilt(team));
+		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 * ControllerInterface.MoveTilt(player));
+		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 * ControllerInterface.RotTilt(player));
 	}
 }
