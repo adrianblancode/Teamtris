@@ -60,6 +60,7 @@ public class BlockController1 : MonoBehaviour {
 	private int combo = 1;
 
 	private BlockController2 slave_controller;
+	private ControllerInterface ci = new ControllerInterface();
 
 	void Awake () {
 		slave_controller = GameObject.Find("BlockController2").GetComponent<BlockController2>();
@@ -69,6 +70,11 @@ public class BlockController1 : MonoBehaviour {
 			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
 			           							transform.position + new Vector3(i, 10, 0),
 			                                  	Quaternion.identity);
+	void Start () {
+		if (team == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
+		} else {
+			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
 		}
 
 		spawner = FindObjectOfType<Spawner> ();
@@ -128,34 +134,34 @@ public class BlockController1 : MonoBehaviour {
 
 		// Grab the wiimote
 		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
-			player1 = (Wiimote)receiver.wiimotes [1];
-		}
+//			player1 = (Wiimote)receiver.wiimotes [1];
+//		}
 
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-//		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if ( ( ci.MoveLeft (team) ) && !left) {
 		if(Input.GetKey(KeyCode.LeftArrow) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
-//		if (ControllerInterface.MoveRight (team) && !right) {
+		else if ( (ci.MoveRight(team) ) && !right) {
 		if(Input.GetKey(KeyCode.RightArrow) && !move){
 			move = true;
 			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-//		if (ControllerInterface.RotLeft (team) && !rotate) {
+		else if ( ( ci.RotLeft(team) ) && !rotate) {
 		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-//		if (ControllerInterface.RotRight (team) && !rotate) {
+		else if ( ( ci.RotRight(team) ) && !rotate) {
 		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightX");
@@ -182,8 +188,8 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		// Move Downwards and Fall
-//		if (ControllerInterface.ActionButtonCombined (1) ||
-//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
+		else if (( ci.ActionButtonCombined(1) ||
+		         Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
 		if(Input.GetKey(KeyCode.Space) ||
 		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
 			fall = true;

@@ -11,7 +11,9 @@ using System.Collections;
 // *** during a frame
 //
 
-public class ControllerInterface : MonoBehaviour {
+public class ControllerInterface {
+
+	// NOTE(Douglas): Do the functions need to be static?
 
 	// Call static functions to check status of an input.
 	// The value is stable during the frame and will only 
@@ -19,30 +21,43 @@ public class ControllerInterface : MonoBehaviour {
 
 	// Player 1 (Player who moves sideways
 	// team = 1 for team 1
-	public static bool MoveRight (int team) {
-		if (team == 1) {
-			return Input.GetKey (KeyCode.RightArrow);
-		} else {
-			return Input.GetKey (KeyCode.D);
-		}
+
+	private Controller
+		player1,
+		player2;
+
+	public ControllerInterface ()
+	{
+		player1 = new Keyboard_player1();
+	}
+	
+
+	public bool MoveRight (int team) {
+//		if (team == 1) {
+//			return Input.GetKey (KeyCode.RightArrow);
+//		} else {
+//			return Input.GetKey (KeyCode.D);
+//		}
+		return player1.MoveRight ();
 	}
 
-	public static bool MoveLeft (int team) {
-		if (team == 1) {
-			return Input.GetKey (KeyCode.LeftArrow); 
-		} else {
-			return Input.GetKey (KeyCode.A);
-		}
+	public bool MoveLeft (int team) {
+//		if (team == 1) {
+//			return Input.GetKey (KeyCode.LeftArrow); 
+//		} else {
+//			return Input.GetKey (KeyCode.A);
+//		}
+		return player1.MoveLeft ();
 	}
 
 	// Gives a value between -1 and 1 depending on the tilt of the WiiMote
-	public static float MoveTilt (int team) {
+	public float MoveTilt (int team) {
 
-		if (MoveLeft (team)) {
-			return -1;
-		} else if (MoveRight (team)) {
-			return 1;
-		}
+//		if (MoveLeft (team)) {
+//			return -1;
+//		} else if (MoveRight (team)) {
+//			return 1;
+//		}
 
 		//TODO implement Wiimote stuff
 		return 0;
@@ -50,24 +65,26 @@ public class ControllerInterface : MonoBehaviour {
 
 	// Player 2 (Player who rotates
 	// team = 1 for team 1
-	public static bool RotRight (int team) {
-		if (team == 1) {
-			return Input.GetKey (KeyCode.DownArrow);
-		} else {
-			return Input.GetKey (KeyCode.S);
-		}
+	public bool RotRight (int team) {
+//		if (team == 1) {
+//			return Input.GetKey (KeyCode.DownArrow);
+//		} else {
+//			return Input.GetKey (KeyCode.S);
+//		}
+		return player1.RotateRight () == 1 ? true : false;
 	}
 	
-	public static bool RotLeft (int team) {
-		if (team == 1) {
-			return Input.GetKey (KeyCode.UpArrow);
-		} else {
-			return Input.GetKey (KeyCode.W);
-		}
+	public bool RotLeft (int team) {
+//		if (team == 1) {
+//			return Input.GetKey (KeyCode.UpArrow);
+//		} else {
+//			return Input.GetKey (KeyCode.W);
+//		}
+		return player1.RotateLeft () == 1 ? true : false;
 	}
 
 	// Gives a value between -1 and 1 depending on the tilt of the WiiMote
-	public static float RotTilt (int team) {
+	public float RotTilt (int team) {
 		
 		if (RotLeft (team)) {
 			return -1;
@@ -85,7 +102,7 @@ public class ControllerInterface : MonoBehaviour {
 
 	// Checks if a specific player on a specific team has pushed the action button
 	// TODO assign wiimote buttons to players
-	public static bool ActionButton (int team, int player) {
+	public bool ActionButton (int team, int player) {
 		if (team == 1) {
 			if(player == 1) {
 				return Input.GetKey (KeyCode.Space);
@@ -104,7 +121,7 @@ public class ControllerInterface : MonoBehaviour {
 	}
 
 	// Checks whether both players of the team have pressed the action button
-	public static bool ActionButtonCombined (int team) {
+	public bool ActionButtonCombined (int team) {
 		return ActionButton(team, 1) && ActionButton(team, 2); 
 	}
 }
