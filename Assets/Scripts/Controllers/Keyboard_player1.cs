@@ -33,8 +33,8 @@ public class Keyboard_player1 : Keyboard {
 		b_left = KeyCode.LeftArrow;
 		b_up = KeyCode.UpArrow;
 		b_down = KeyCode.DownArrow;
-		b_rotRight = KeyCode.LeftAlt;
-		b_rotLeft = KeyCode.LeftControl;
+		b_rotRight = KeyCode.DownArrow;
+		b_rotLeft = KeyCode.UpArrow;
 		b_confirm = KeyCode.Return;
 		b_reject = KeyCode.Backspace;
 		b_pause = KeyCode.KeypadPlus;
