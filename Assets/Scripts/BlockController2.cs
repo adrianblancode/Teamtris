@@ -476,8 +476,6 @@ public class BlockController2 : MonoBehaviour {
 		
 		int nearestZ = getNearestCurrentBlockZPos ();
 
-		Debug.Log (nearestZ);
-
 		disableTransparency ();
 		
 		// Apply transparency to all blocks in front of nearest
