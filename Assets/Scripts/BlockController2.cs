@@ -471,40 +471,45 @@ public class BlockController2 : MonoBehaviour {
 		}
 	}
 
+	// Applies transparency to all blocks that are behind the current block
 	void applyTransparency() {
-
+		
 		int nearestZ = getNearestCurrentBlockZPos ();
 
-		disableTransparency (nearestZ);
+		Debug.Log (nearestZ);
 
-		for (int z = nearestZ; z >= 0; z--) {
+		disableTransparency ();
+		
+		// Apply transparency to all blocks in front of nearest
+		for (int z = 0; z < nearestZ; z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
-
+			
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
 				for (int x = 0; x < blockGrid.getWidth(); ++x) {
-
-					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
 					
+					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
+						
 						foreach(Transform childBlock in grid[x, y].parent){
-
-							//TODO only transparency if on same Z-level
-
-							Renderer r = childBlock.GetComponent<Renderer>();
-							Color newColor = r.material.color;
-							newColor.a = 0.2f;
-							childBlock.GetComponent<Renderer>().material.color = newColor;
+							
+							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
+								
+								Renderer r = childBlock.GetComponent<Renderer>();
+								Color newColor = r.material.color;
+								newColor.a = 0.4f;
+								childBlock.GetComponent<Renderer>().material.color = newColor;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-
+	
 	// Returns the the nearest grid position on the Z-axis of a current block
 	int getNearestCurrentBlockZPos(){
 
 		int transparencyZ = 999;
-
+		
 		for (int z = 0; z < blockGrid.getDepth(); z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
 			
@@ -512,21 +517,17 @@ public class BlockController2 : MonoBehaviour {
 				for (int x = 0; x < blockGrid.getWidth(); ++x){
 					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
 						if(z < transparencyZ){
-							transparencyZ = z - 1;
-
-							if(transparencyZ <= 0){
-								transparencyZ = 0;
-							}
+							transparencyZ = z;
 						}
 					}
 				}
 			}
 		}
-
+		
 		if (transparencyZ >= 999) {
 			return 0;
 		}
-
+		
 		return transparencyZ;
 	}
 
@@ -535,10 +536,12 @@ public class BlockController2 : MonoBehaviour {
 	}
 
 	// Disable transparency at all blocks at depth z and higher
-	void disableTransparency(int z){
+	void disableTransparency(int depth){
+
 		for (int y = 0; y < blockGrid.getHeight(); ++y) {
 			for (int x = 0; x < blockGrid.getWidth(); ++x) {
-				for (; z < blockGrid.getDepth(); ++z) {
+				for (int z = depth; z < blockGrid.getDepth(); ++z) {
+
 					Transform[,] grid = blockGrid.getGrid(z);
 					if (grid[x, y] != null) {
 						Transform p = grid[x, y].parent;
