@@ -69,7 +69,7 @@ public class BlockController2 : MonoBehaviour {
 		master_controller = GameObject.Find ("BlockController1").GetComponent ("BlockController1");
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 
-		spawner = GameObject.FindGameObjectWithTag("Spawner2");
+		spawner = GameObject.Find("Spawner2");
 		
 		for (int i = 0; i < 4; i++) {
 			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
@@ -89,10 +89,6 @@ public class BlockController2 : MonoBehaviour {
 			player1 = new Wiimote ();
 		}
 	}
-
-//	public void setGrid(Grid g){
-////		blockGrid = g;
-//	}
 
 	public void setBlock(GameObject block){
 		currentBlock = (GameObject)Instantiate (block, spawner.transform.position, spawner.transform.rotation);
@@ -338,9 +334,7 @@ public class BlockController2 : MonoBehaviour {
 			linesDeleted = blockGrid.deleteFullPlans();
 			//			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
-//			updateScores(linesDeleted);
-			// Spawn next Group
-//			currentBlock = spawner.spawnNext();
+//			updateScores(linesDeleted)
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
