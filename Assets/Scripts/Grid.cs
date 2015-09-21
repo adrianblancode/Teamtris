@@ -2,10 +2,11 @@
 using System.Collections;
 
 public class Grid {
-	// The Grid itself
-	private int w;
-	private int h;
-	private int d;
+	// The Grid itself. Origin (0,0,0) is
+	// Left, bottom, "nearest"
+	private int w; // Width
+	private int h; // Heigth
+	private int d; // Depth
 
 	private ArrayList grid3d = new ArrayList();
 
@@ -43,8 +44,10 @@ public class Grid {
 	private void deletePlan(int y) {
 		for (int x = 0; x < w; ++x) {
 			for (int z = 0; z < d; ++z) {
-				MonoBehaviour.Destroy(getGrid(z)[x, y].gameObject);
-				getGrid(z)[x, y] = null;
+				if (getGrid(z)[x, y] != null) {
+					MonoBehaviour.Destroy(getGrid(z)[x, y].gameObject);
+					getGrid(z)[x, y] = null;
+				}
 			}
 		}
 	}
@@ -79,13 +82,37 @@ public class Grid {
 	//	 * Checks whether plan 'y' is full or not
 	//	 */
 	private bool isPlanFull(int y) {
-		for (int x = 0; x < w; ++x)
+
+		// Player looking through x,y into z (from front)
+		for (int x = 0; x < w; ++x) {
+			bool zEmpty = true;
 			for (int z = 0; z < d; z++)
-				if (getGrid(z)[x, y] == null)
-					return false;
+				if (getGrid (z) [x, y] != null)
+					zEmpty = false;
+			if (zEmpty) return false;
+		}
+
+		// Player looking through z,y into x (from left)
+		for (int z = 0; z < d; z++) {
+			bool xEmpty = true;
+			for (int x = 0; x < w; ++x)
+				if (getGrid (z) [x, y] != null)
+					xEmpty = false;
+			if (xEmpty) return false;
+		}
+
 		return true;
 	}
 	
+	//private bool isPlanFull(int y) {
+	//	for (int x = 0; x < w; ++x)
+	//		for (int z = 0; z < d; z++)
+	//			if (getGrid(z)[x, y] == null)
+	//				return false;
+	//	return true;
+	//}
+
+
 	//	/*
 	//	 * Checks whether plan 'y' has two full sides
 	//	 * from the players points of vue
