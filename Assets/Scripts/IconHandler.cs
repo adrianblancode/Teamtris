@@ -27,6 +27,8 @@ public class IconHandler : MonoBehaviour {
 	public Texture downRightIcon;
 	private RawImage downRawImage;
 
+	private ControllerInterface ci = new ControllerInterface();
+
 	void Start(){
 		moveRawImage = (RawImage) moveObject.GetComponent<RawImage>();
 		rotRawImage = (RawImage) rotObject.GetComponent<RawImage>();
@@ -34,33 +36,35 @@ public class IconHandler : MonoBehaviour {
 	}
 
 	void Update() {
-		if (ControllerInterface.MoveLeft (player)) {
+		if ( ci.MoveLeft (player)) {
 			moveRawImage.texture = moveActiveIcon;
-		} else if (ControllerInterface.MoveRight (player)) {
-			moveRawImage.texture = moveActiveIcon;
-		} else {
+		} 
+//		else if ( ci.MoveRight (team)) {
+//			moveRawImage.texture = moveActiveIcon;
+//		} 
+		else {
 			moveRawImage.texture = moveIcon;
 		}
 
-		if (ControllerInterface.RotLeft (player)) {
+		if ( ci.RotLeft (player)) {
 			rotRawImage.texture = rotActiveIcon;
-		} else if (ControllerInterface.RotRight (player)) {
+		} else if ( ci.RotRight (player)) {
 			rotRawImage.texture = rotActiveIcon;
 		} else {
 			rotRawImage.texture = rotIcon;
 		}
 
-		if (ControllerInterface.ActionButtonCombined (player)) {
+		if ( ci.ActionButtonCombined (player)) {
 			downRawImage.texture = downActiveIcon;
-		} else if (ControllerInterface.ActionButton (player, 1)) {
+		} else if ( ci.ActionButton (player, 1)) {
 			downRawImage.texture = downLeftIcon;
-		} else if (ControllerInterface.ActionButton (player, 2)) {
+		} else if ( ci.ActionButton (player, 2)) {
 			downRawImage.texture = downRightIcon;
 		} else {
 			downRawImage.texture = downIcon;
 		}
 
-		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 * ControllerInterface.MoveTilt(player));
-		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 * ControllerInterface.RotTilt(player));
+		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 *  ci.MoveTilt(player));
+		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 *  ci.RotTilt(player));
 	}
 }

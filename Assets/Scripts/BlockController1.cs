@@ -41,7 +41,7 @@ public class BlockController1 : MonoBehaviour {
 
 	private Spawner spawner;
 
-	private bool move, rotate, fall = false;
+	private bool move, rotate, fall, spawn = false;
 
 	// Level and its display
 	private int level = 1;
@@ -59,18 +59,28 @@ public class BlockController1 : MonoBehaviour {
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
 
+	// Need a team atm
+	private int team = 1;
+
 	private BlockController2 slave_controller;
+	private ControllerInterface ci = new ControllerInterface();
 
 	void Awake () {
-		slave_controller = GameObject.Find("BlockController2").GetComponent<BlockController2>();
+		slave_controller = GameObject.Find ("BlockController2").GetComponent<BlockController2> ();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
 
 		for (int i = 0; i < 4; i++) {
-			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
-			           							transform.position + new Vector3(i, 10, 0),
+			ghost [i] = (GameObject)Instantiate (ghostPrefab,
+			           							transform.position + new Vector3 (i, 10, 0),
 			                                  	Quaternion.identity);
 		}
-
+	}
+	void Start () {
+		if (team == 1) {
+			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
+		} else {
+			gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
+		}
 		spawner = FindObjectOfType<Spawner> ();
 
 		blockGrid = new Grid (5, 25, 5);
@@ -91,9 +101,7 @@ public class BlockController1 : MonoBehaviour {
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
 			player1 = new Wiimote ();
 		}
-	}
 
-	void Start() {
 		currentBlock = spawner.spawnNext();
 		slave_controller.setBlock (currentBlock);
 	}
@@ -118,11 +126,19 @@ public class BlockController1 : MonoBehaviour {
 		fastFallRate = f;
 	}
 
+	void FixedUpdate(){
+		if (spawn) {
+			currentBlock = spawner.spawnNext();
+			slave_controller.setBlock(currentBlock);
+			spawn = false;
+		}
+	}
+
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
-//			Destroy (currentBlock);
+			Destroy (currentBlock);
 			Destroy(this);
 		}
 
@@ -134,29 +150,25 @@ public class BlockController1 : MonoBehaviour {
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-//		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(Input.GetKey(KeyCode.LeftArrow) && !move){
+		if ( ( ci.MoveLeft (team) ) && !move) {
 			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
-//		if (ControllerInterface.MoveRight (team) && !right) {
-		if(Input.GetKey(KeyCode.RightArrow) && !move){
+		if ( (ci.MoveRight(team) ) && !move) {
 			move = true;
 			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
+		if ( ( ci.RotLeft(team) ) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-//		if (ControllerInterface.RotRight (team) && !rotate) {
-		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
+		if ( ( ci.RotRight(team) ) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateRightX");
 		}
@@ -182,13 +194,12 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		// Move Downwards and Fall
-//		if (ControllerInterface.ActionButtonCombined (1) ||
-//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if(Input.GetKey(KeyCode.Space) ||
-		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
+		if ((ci.ActionButtonCombined(1) ||
+			 Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
 			fall = true;
 			StartCoroutine ("Fall");
 		}
+							
 
 		applyTransparency();
 
@@ -344,8 +355,9 @@ public class BlockController1 : MonoBehaviour {
 			updateScores(linesDeleted);
 
 			// Spawn next Group
-			currentBlock = spawner.spawnNext();
-			slave_controller.setBlock (currentBlock);
+//			currentBlock = spawner.spawnNext();
+//			slave_controller.setBlock (currentBlock);
+			spawn = true;
 
 		}
 		lastFall = Time.time;
