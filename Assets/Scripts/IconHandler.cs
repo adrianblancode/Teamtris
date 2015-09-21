@@ -36,7 +36,7 @@ public class IconHandler : MonoBehaviour {
 	}
 
 	void Update() {
-		if ( ci.MoveLeft (team)) {
+		if ( ci.MoveLeft (player)) {
 			moveRawImage.texture = moveActiveIcon;
 		} 
 //		else if ( ci.MoveRight (team)) {
@@ -46,25 +46,25 @@ public class IconHandler : MonoBehaviour {
 			moveRawImage.texture = moveIcon;
 		}
 
-		if ( ci.RotLeft (team)) {
+		if ( ci.RotLeft (player)) {
 			rotRawImage.texture = rotActiveIcon;
-		} else if ( ci.RotRight (team)) {
+		} else if ( ci.RotRight (player)) {
 			rotRawImage.texture = rotActiveIcon;
 		} else {
 			rotRawImage.texture = rotIcon;
 		}
 
-		if ( ci.ActionButtonCombined (team)) {
+		if ( ci.ActionButtonCombined (player)) {
 			downRawImage.texture = downActiveIcon;
-		} else if ( ci.ActionButton (team, 1)) {
+		} else if ( ci.ActionButton (player, 1)) {
 			downRawImage.texture = downLeftIcon;
-		} else if ( ci.ActionButton (team, 2)) {
+		} else if ( ci.ActionButton (player, 2)) {
 			downRawImage.texture = downRightIcon;
 		} else {
 			downRawImage.texture = downIcon;
 		}
 
-		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 *  ci.MoveTilt(team));
-		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 *  ci.RotTilt(team));
+		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 *  ci.MoveTilt(player));
+		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 *  ci.RotTilt(player));
 	}
 }
