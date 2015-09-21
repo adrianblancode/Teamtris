@@ -188,6 +188,8 @@ public class BlockController2 : MonoBehaviour {
 			fall = true;
 			StartCoroutine ("Fall");
 		}
+		
+		applyTransparency();
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -368,7 +370,7 @@ public class BlockController2 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
+			//child.parent = currentBlock.transform;
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 		
@@ -466,6 +468,90 @@ public class BlockController2 : MonoBehaviour {
 				ghost[ghostblock].GetComponent<MeshRenderer>().enabled = false;
 			}
 			ghostblock++;
+		}
+	}
+
+	void applyTransparency() {
+
+		int nearestZ = getNearestCurrentBlockZPos ();
+
+		disableTransparency (nearestZ);
+
+		for (int z = nearestZ; z >= 0; z--) {
+			Transform[,] grid = blockGrid.getGrid (z);
+
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x) {
+
+					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
+					
+						foreach(Transform childBlock in grid[x, y].parent){
+
+							//TODO only transparency if on same Z-level
+
+							Renderer r = childBlock.GetComponent<Renderer>();
+							Color newColor = r.material.color;
+							newColor.a = 0.2f;
+							childBlock.GetComponent<Renderer>().material.color = newColor;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Returns the the nearest grid position on the Z-axis of a current block
+	int getNearestCurrentBlockZPos(){
+
+		int transparencyZ = 999;
+
+		for (int z = 0; z < blockGrid.getDepth(); z++) {
+			Transform[,] grid = blockGrid.getGrid (z);
+			
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x){
+					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
+						if(z < transparencyZ){
+							transparencyZ = z - 1;
+
+							if(transparencyZ <= 0){
+								transparencyZ = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (transparencyZ >= 999) {
+			return 0;
+		}
+
+		return transparencyZ;
+	}
+
+	void disableTransparency(){
+		disableTransparency (0);
+	}
+
+	// Disable transparency at all blocks at depth z and higher
+	void disableTransparency(int z){
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (; z < blockGrid.getDepth(); ++z) {
+					Transform[,] grid = blockGrid.getGrid(z);
+					if (grid[x, y] != null) {
+						Transform p = grid[x, y].parent;
+						
+						foreach(Transform childBlock in p){
+							Renderer r = childBlock.GetComponent<Renderer>();
+							Color newColor = r.material.color;
+							newColor.a = 1.0f;
+							r.material.color = newColor;
+						}
+					}
+				}
+			}
 		}
 	}
 
