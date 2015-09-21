@@ -118,7 +118,7 @@ public class BlockController2 : MonoBehaviour {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
-//			Destroy (currentBlock);
+			Destroy (currentBlock);
 			Destroy(this);
 		}
 
