@@ -41,7 +41,7 @@ public class BlockController1 : MonoBehaviour {
 
 	private Spawner spawner;
 
-	private bool move, rotate, fall = false;
+	private bool move, rotate, fall, spawn = false;
 
 	// Level and its display
 	private int level = 1;
@@ -127,11 +127,19 @@ public class BlockController1 : MonoBehaviour {
 		fastFallRate = f;
 	}
 
+	void FixedUpdate(){
+		if (spawn) {
+			currentBlock = spawner.spawnNext();
+			slave_controller.setBlock(currentBlock);
+			spawn = false;
+		}
+	}
+
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
-//			Destroy (currentBlock);
+			Destroy (currentBlock);
 			Destroy(this);
 		}
 
@@ -349,8 +357,9 @@ public class BlockController1 : MonoBehaviour {
 			updateScores(linesDeleted);
 
 			// Spawn next Group
-			currentBlock = spawner.spawnNext();
-			slave_controller.setBlock (currentBlock);
+//			currentBlock = spawner.spawnNext();
+//			slave_controller.setBlock (currentBlock);
+			spawn = true;
 
 		}
 		lastFall = Time.time;
