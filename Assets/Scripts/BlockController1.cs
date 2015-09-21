@@ -480,11 +480,10 @@ public class BlockController1 : MonoBehaviour {
 
 		int nearestZ = getNearestCurrentBlockZPos ();
 
-		Debug.Log ("Block position: " + nearestZ);
-
 		disableTransparency ();
 
-		for (int z = nearestZ; z < blockGrid.getDepth(); z++) {
+		// Apply transparency to all blocks in front of nearest
+		for (int z = 0; z < nearestZ; z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
 
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
@@ -494,8 +493,7 @@ public class BlockController1 : MonoBehaviour {
 					
 						foreach(Transform childBlock in grid[x, y].parent){
 
-							//if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
-							if(true){
+							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
 
 								Renderer r = childBlock.GetComponent<Renderer>();
 								Color newColor = r.material.color;
@@ -521,11 +519,7 @@ public class BlockController1 : MonoBehaviour {
 				for (int x = 0; x < blockGrid.getWidth(); ++x){
 					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
 						if(z < transparencyZ){
-							transparencyZ = z - 1;
-
-							if(transparencyZ <= 0){
-								transparencyZ = 0;
-							}
+							transparencyZ = z;
 						}
 					}
 				}
