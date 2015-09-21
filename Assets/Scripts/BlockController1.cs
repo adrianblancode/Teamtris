@@ -480,9 +480,11 @@ public class BlockController1 : MonoBehaviour {
 
 		int nearestZ = getNearestCurrentBlockZPos ();
 
-		disableTransparency (nearestZ);
+		Debug.Log ("Block position: " + nearestZ);
 
-		for (int z = nearestZ; z >= 0; z--) {
+		disableTransparency ();
+
+		for (int z = nearestZ; z < blockGrid.getDepth(); z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
 
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
@@ -492,12 +494,14 @@ public class BlockController1 : MonoBehaviour {
 					
 						foreach(Transform childBlock in grid[x, y].parent){
 
-							//TODO only transparency if on same Z-level
+							//if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
+							if(true){
 
-							Renderer r = childBlock.GetComponent<Renderer>();
-							Color newColor = r.material.color;
-							newColor.a = 0.2f;
-							childBlock.GetComponent<Renderer>().material.color = newColor;
+								Renderer r = childBlock.GetComponent<Renderer>();
+								Color newColor = r.material.color;
+								newColor.a = 0.2f;
+								childBlock.GetComponent<Renderer>().material.color = newColor;
+							}
 						}
 					}
 				}
@@ -540,10 +544,12 @@ public class BlockController1 : MonoBehaviour {
 	}
 
 	// Disable transparency at all blocks at depth z and higher
-	void disableTransparency(int z){
+	void disableTransparency(int depth){
+
 		for (int y = 0; y < blockGrid.getHeight(); ++y) {
 			for (int x = 0; x < blockGrid.getWidth(); ++x) {
-				for (; z < blockGrid.getDepth(); ++z) {
+				for (int z = depth; z < blockGrid.getDepth(); ++z) {
+
 					Transform[,] grid = blockGrid.getGrid(z);
 					if (grid[x, y] != null) {
 						Transform p = grid[x, y].parent;
