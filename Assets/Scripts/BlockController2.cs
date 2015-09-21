@@ -6,7 +6,7 @@ public class BlockController2 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
 	// Which team owns this blockcontroller
 	// TODO make work for both teams
