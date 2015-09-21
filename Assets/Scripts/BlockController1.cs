@@ -497,7 +497,7 @@ public class BlockController1 : MonoBehaviour {
 
 								Renderer r = childBlock.GetComponent<Renderer>();
 								Color newColor = r.material.color;
-								newColor.a = 0.2f;
+								newColor.a = 0.4f;
 								childBlock.GetComponent<Renderer>().material.color = newColor;
 							}
 						}
