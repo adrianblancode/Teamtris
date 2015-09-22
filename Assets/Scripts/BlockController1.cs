@@ -76,11 +76,6 @@ public class BlockController1 : MonoBehaviour {
 		}
 	}
 	void Start () {
-		if (team == 1) {
-			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
-		} else {
-			gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
-		}
 		spawner = FindObjectOfType<Spawner> ();
 
 		blockGrid = new Grid (5, 25, 5);
