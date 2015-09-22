@@ -145,12 +145,6 @@ public class BlockController1 : MonoBehaviour {
 			Destroy(this);
 		}
 
-		// Grab the wiimote
-		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
-			player1 = (Wiimote)receiver.wiimotes [1];
-		}
-
-
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		if ( ( ci.MoveLeft (1) ) && !move) {
@@ -197,7 +191,7 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		// Move Downwards and Fall
-		if ((ci.ActionButtonCombined(1) ||
+		if ((ci.MoveDown(1) ||
 			 Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
 			fall = true;
 			StartCoroutine ("Fall");
