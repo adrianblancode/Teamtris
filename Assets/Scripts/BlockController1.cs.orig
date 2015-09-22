@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -41,7 +41,7 @@ public class BlockController1 : MonoBehaviour {
 
 	private Spawner spawner;
 
-	private bool move, rotate, fall, spawn = false;
+	private bool move, rotate, fall = false;
 
 	// Level and its display
 	private int level = 1;
@@ -59,28 +59,28 @@ public class BlockController1 : MonoBehaviour {
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
 
-	// Need a team atm
-	private int team = 1;
-
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
 	private BlockController2 slave_controller;
-	private ControllerInterface ci;
 
 	void Awake () {
-		slave_controller = GameObject.Find ("BlockController2").GetComponent<BlockController2> ();
+		slave_controller = GameObject.Find("BlockController2").GetComponent<BlockController2>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
 
 		for (int i = 0; i < 4; i++) {
-			ghost [i] = (GameObject)Instantiate (ghostPrefab,
-			           							transform.position + new Vector3 (i, 10, 0),
+			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
+			           							transform.position + new Vector3(i, 10, 0),
 			                                  	Quaternion.identity);
-		}
-	}
+=======
+	private ControllerInterface ci = new ControllerInterface();
+
 	void Start () {
 		if (team == 1) {
-			gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
+			gameBoard = GameObject.FindGameObjectWithTag ("Team1_GameBoard");
 		} else {
-			gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
+			gameBoard = GameObject.FindGameObjectWithTag ("Team2_GameBoard");
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 		}
+
 		spawner = FindObjectOfType<Spawner> ();
 
 		blockGrid = new Grid (5, 25, 5);
@@ -94,19 +94,26 @@ public class BlockController1 : MonoBehaviour {
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
 		if (ENABLE_WIIMOTE) {
 			receiver = WiimoteReceiver.Instance;
 			receiver.connect ();
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
 
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
-			// player1 = new Wiimote ();
-		} else {
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
+			player1 = new Wiimote ();
 		}
+	}
 
+	void Start() {
 		currentBlock = spawner.spawnNext();
 		slave_controller.setBlock (currentBlock);
+=======
+//		receiver = WiimoteReceiver.Instance;
+//		receiver.connect ();
+
+		// Create a dummy wiimote to avoid the NullReferenceException in Update()
+//		player1 = new Wiimote ();
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 	}
 
 	// Set rate at which user is able to rotate
@@ -129,82 +136,111 @@ public class BlockController1 : MonoBehaviour {
 		fastFallRate = f;
 	}
 
-	void FixedUpdate(){
-		if (spawn) {
-			currentBlock = spawner.spawnNext();
-			slave_controller.setBlock(currentBlock);
-			spawn = false;
-		}
-	}
-
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			Debug.Log("GAME OVER");
-			Destroy (currentBlock);
+//			Destroy (currentBlock);
 			Destroy(this);
 		}
 
 		// Grab the wiimote
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
 		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
 			player1 = (Wiimote)receiver.wiimotes [1];
 		}
+=======
+//		if (receiver.wiimotes.ContainsKey (1)) {
+//			player1 = (Wiimote)receiver.wiimotes [1];
+//		}
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		if ( ( ci.MoveLeft (1) ) && !move) {
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
+//		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if(Input.GetKey(KeyCode.LeftArrow) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
 		// Move Right
-		if ( (ci.MoveRight(1) ) && !move) {
+//		if (ControllerInterface.MoveRight (team) && !right) {
+		if(Input.GetKey(KeyCode.RightArrow) && !move){
 			move = true;
 			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-		if ( ( ci.RotLeft(1) ) && !rotate) {
+//		if (ControllerInterface.RotLeft (team) && !rotate) {
+		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
+=======
+		if ( ( ci.MoveLeft (team) ) && !left) {
+			left = true;
+//			StartCoroutine ("MoveLeftX");
+			StartCoroutine ("MoveLeftZ");
+		}
+
+		// Move Right
+		else if ( (ci.MoveRight(team) ) && !right) {
+			right = true;
+//			StartCoroutine("MoveRightX");
+			StartCoroutine("MoveRightZ");
+		}
+
+		// Rotate Left
+		else if ( ( ci.RotLeft(team) ) && !rotate) {
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 			rotate = true;
 			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-		if ( ( ci.RotRight(1) ) && !rotate) {
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
+//		if (ControllerInterface.RotRight (team) && !rotate) {
+		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightX");
 		}
 
-		if(ci.MoveLeft(2) && !move){
+		if(Input.GetKey(KeyCode.A) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
-		if(ci.MoveRight(2) && !move){
+		if(Input.GetKey(KeyCode.D) && !move){
 			move = true;
 			StartCoroutine ("MoveRightZ");
 		}
 
-		if(ci.RotLeft(2) && !rotate){
+		if(Input.GetKey(KeyCode.W) && !rotate){
+=======
+		else if ( ( ci.RotRight(team) ) && !rotate) {
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 			rotate = true;
 			StartCoroutine ("RotateLeftZ");
 		}
 
-		if(ci.RotRight(2) && !rotate){
+		if(Input.GetKey(KeyCode.S) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateRightZ");
 		}
 
 		// Move Downwards and Fall
-		if ((ci.ActionButtonCombined(1) ||
-			 Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
+<<<<<<< HEAD:Assets/Scripts/BlockController1.cs
+//		if (ControllerInterface.ActionButtonCombined (1) ||
+//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
+		if(Input.GetKey(KeyCode.Space) ||
+		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
+=======
+		else if (( ci.ActionButtonCombined(1) ||
+		         Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
+>>>>>>> Wiimote-integration:Assets/Scripts/BlockController.cs
 			fall = true;
 			StartCoroutine ("Fall");
 		}
-							
 
-		applyTransparency();
 
 	}
 
@@ -358,9 +394,8 @@ public class BlockController1 : MonoBehaviour {
 			updateScores(linesDeleted);
 
 			// Spawn next Group
-//			currentBlock = spawner.spawnNext();
-//			slave_controller.setBlock (currentBlock);
-			spawn = true;
+			currentBlock = spawner.spawnNext();
+			slave_controller.setBlock (currentBlock);
 
 		}
 		lastFall = Time.time;
@@ -389,7 +424,7 @@ public class BlockController1 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-			//child.parent = currentBlock.transform;
+
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 
@@ -487,91 +522,6 @@ public class BlockController1 : MonoBehaviour {
 				ghost[ghostblock].GetComponent<MeshRenderer>().enabled = false;
 			}
 			ghostblock++;
-		}
-	}
-
-	// Applies transparency to all blocks that are behind the current block
-	void applyTransparency() {
-
-		int nearestZ = getNearestCurrentBlockZPos ();
-
-		disableTransparency ();
-
-		// Apply transparency to all blocks in front of nearest
-		for (int z = 0; z < nearestZ; z++) {
-			Transform[,] grid = blockGrid.getGrid (z);
-
-			for (int y = 0; y < blockGrid.getHeight(); ++y) {
-				for (int x = 0; x < blockGrid.getWidth(); ++x) {
-
-					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
-					
-						foreach(Transform childBlock in grid[x, y].parent){
-
-							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
-
-								Renderer r = childBlock.GetComponent<Renderer>();
-								Color newColor = r.material.color;
-								newColor.a = 0.4f;
-								childBlock.GetComponent<Renderer>().material.color = newColor;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Returns the the nearest grid position on the Z-axis of a current block
-	int getNearestCurrentBlockZPos(){
-
-		int transparencyZ = 999;
-
-		for (int z = 0; z < blockGrid.getDepth(); z++) {
-			Transform[,] grid = blockGrid.getGrid (z);
-			
-			for (int y = 0; y < blockGrid.getHeight(); ++y) {
-				for (int x = 0; x < blockGrid.getWidth(); ++x){
-					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
-						if(z < transparencyZ){
-							transparencyZ = z;
-						}
-					}
-				}
-			}
-		}
-
-		if (transparencyZ >= 999) {
-			return 0;
-		}
-
-		return transparencyZ;
-	}
-
-	void disableTransparency(){
-		disableTransparency (0);
-	}
-
-	// Disable transparency at all blocks at depth z and higher
-	void disableTransparency(int depth){
-
-		for (int y = 0; y < blockGrid.getHeight(); ++y) {
-			for (int x = 0; x < blockGrid.getWidth(); ++x) {
-				for (int z = depth; z < blockGrid.getDepth(); ++z) {
-
-					Transform[,] grid = blockGrid.getGrid(z);
-					if (grid[x, y] != null) {
-						Transform p = grid[x, y].parent;
-						
-						foreach(Transform childBlock in p){
-							Renderer r = childBlock.GetComponent<Renderer>();
-							Color newColor = r.material.color;
-							newColor.a = 1.0f;
-							r.material.color = newColor;
-						}
-					}
-				}
-			}
 		}
 	}
 

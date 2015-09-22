@@ -27,12 +27,13 @@ public class IconHandler : MonoBehaviour {
 	public Texture downRightIcon;
 	private RawImage downRawImage;
 
-	private ControllerInterface ci = new ControllerInterface();
+	private ControllerInterface ci;
 
 	void Start(){
 		moveRawImage = (RawImage) moveObject.GetComponent<RawImage>();
 		rotRawImage = (RawImage) rotObject.GetComponent<RawImage>();
 		downRawImage = (RawImage) downObject.GetComponent<RawImage>();
+		ci = new ControllerInterface (player, false);
 	}
 
 	void Update() {

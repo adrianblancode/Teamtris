@@ -165,10 +165,10 @@ public class Wiimote : Controller {
 	}
 
 	public float RotateRight() {
-		return MOTION_ANGLE_ROLL;
+		return BUTTON_A;
 	}
 	public float RotateLeft() {
-		return MOTION_ANGLE_ROLL;
+		return BUTTON_B;
 	}
 	
 	public bool Confirm() {

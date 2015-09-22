@@ -65,28 +65,36 @@ public class BlockController2 : MonoBehaviour {
 
 	private Component master_controller;
 
+	private ControllerInterface ci;
+
 	void Awake () {
 		master_controller = GameObject.Find ("BlockController1").GetComponent ("BlockController1");
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 
-		spawner = GameObject.Find("Spawner2");
+		spawner = GameObject.Find ("Spawner2");
 		
 		for (int i = 0; i < 4; i++) {
-			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
-			                                   transform.position + new Vector3(i, 10, 0),
+			ghost [i] = (GameObject)Instantiate (ghostPrefab,
+			                                   transform.position + new Vector3 (i, 10, 0),
 			                                   Quaternion.identity);
 		}
 
 		blockGrid = new Grid (5, 25, 5);
+	}
+
+	void Start() {
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
 		if (ENABLE_WIIMOTE) {
 			receiver = WiimoteReceiver.Instance;
 			receiver.connect ();
-
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
+			
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
-			player1 = new Wiimote ();
+			// player1 = new Wiimote ();
+		} else {
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
 	}
 
@@ -122,36 +130,31 @@ public class BlockController2 : MonoBehaviour {
 			Destroy(this);
 		}
 
-		// Grab the wiimote
-		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
-			player1 = (Wiimote)receiver.wiimotes [1];
-		}
-
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		//		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(Input.GetKey(KeyCode.LeftArrow) && !move){
+		if(ci.MoveLeft() && !move){
 			move = true;
 			StartCoroutine("MoveRightZ");
 		}
 
 		// Move Right
 		//		if (ControllerInterface.MoveRight (team) && !right) {
-		if(Input.GetKey(KeyCode.RightArrow) && !move){
+		if(ci.MoveRight() && !move){
 			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
+		if(ci.RotLeft() && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotRight (team) && !rotate) {
-		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
+		if(ci.RotRight() && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftZ");
 		}
