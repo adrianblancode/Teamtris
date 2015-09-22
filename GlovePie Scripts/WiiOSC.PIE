@@ -1,6 +1,6 @@
 ﻿var.port = 8876
 
-debug = "On: " + Wiimote1.Exists + " Wiimote battery level: " + Wiimote1.Battery + " Rotation: " + Wiimote1.YawSpeed
+debug = "1.On: " + Wiimote1.Exists + " || 2.On: " + Wiimote2.Exists
 
 // ======== BUTTONS ==========
 SendOsc("localhost", var.port, "/wii/1/button/A", int(Wiimote1.A))
@@ -25,7 +25,29 @@ SendOsc("localhost", var.port, "/wii/1/nunchuck/button/C", int(Wiimote1.Nunchuk.
 SendOsc("localhost", var.port, "/wii/1/nunchuck/button/Z", int(Wiimote1.Nunchuk.Z))
 SendOsc("localhost", var.port, "/wii/1/nunchuck/joy", float(Wiimote1.Nunchuk.JoyX), float(Wiimote1.Nunchuk.JoyY))
 // SendOsc("localhost", var.port, "/wii/1/nunchuck/accel/pry", tostring(Wiimote1.Nunchuk.Pitch), tostring(Wiimote1.Nunchuk.Roll), tostring(Wiimote1.Nunchuck.Yaw), 0)
-
-
-
 SendOsc("localhost", var.port, "/wii/1/done", true)
+
+// ======== BUTTONS ==========
+SendOsc("localhost", var.port, "/wii/2/button/A", int(Wiimote2.A))
+SendOsc("localhost", var.port, "/wii/2/button/B", int(Wiimote2.B))
+SendOsc("localhost", var.port, "/wii/2/button/Up", int(Wiimote2.Up))
+SendOsc("localhost", var.port, "/wii/2/button/Left", int(Wiimote2.Left))
+SendOsc("localhost", var.port, "/wii/2/button/Down", int(Wiimote2.Down))
+SendOsc("localhost", var.port, "/wii/2/button/Right", int(Wiimote2.Right))
+SendOsc("localhost", var.port, "/wii/2/button/Plus", int(Wiimote2.Plus))
+SendOsc("localhost", var.port, "/wii/2/button/Minus", int(Wiimote2.Minus))
+SendOsc("localhost", var.port, "/wii/2/button/Home", int(Wiimote2.Home))
+SendOsc("localhost", var.port, "/wii/2/button/1", int(Wiimote2.One))
+SendOsc("localhost", var.port, "/wii/2/button/2", int(Wiimote2.Two))
+
+// ========= MOVEMENT ==========
+SendOsc("localhost", var.port, "/wii/2/accel/xyz", float(Wiimote2.gx), float(Wiimote2.gy), float(Wiimote2.gz))
+SendOsc("localhost", var.port, "/wii/2/motion/angles", float(Wiimote2.Pitch), float(Wiimote2.Roll), float(Wiimote2.Yaw))
+SendOsc("localhost", var.port, "/wii/2/motion/velo", float(Wiimote2.PitchSpeed in radians), float(Wiimote2.RollSpeed in radians), float(-Wiimote2.YawSpeed in radians))
+
+// ========= NUNCHUCK ==========
+SendOsc("localhost", var.port, "/wii/2/nunchuck/button/C", int(Wiimote2.Nunchuk.C))
+SendOsc("localhost", var.port, "/wii/2/nunchuck/button/Z", int(Wiimote2.Nunchuk.Z))
+SendOsc("localhost", var.port, "/wii/2/nunchuck/joy", float(Wiimote2.Nunchuk.JoyX), float(Wiimote2.Nunchuk.JoyY))
+// SendOsc("localhost", var.port, "/wii/2/nunchuck/accel/pry", tostring(Wiimote2.Nunchuk.Pitch), tostring(Wiimote2.Nunchuk.Roll), tostring(Wiimote2.Nunchuck.Yaw), 0)
+SendOsc("localhost", var.port, "/wii/2/done", true)

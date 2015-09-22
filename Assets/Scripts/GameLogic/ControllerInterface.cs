@@ -33,10 +33,18 @@ public class ControllerInterface {
 		this.team = team;
 		this.reciever = reciever;
 		if (!usingRemote) {
-			player = new Keyboard_player1 ();
+			if (team == 1) {
+				player = new Keyboard_player1 ();
+			} else {
+				player = new Keyboard_player2 ();
+			}
 		} else {
 			if (reciever != null && reciever.wiimotes.ContainsKey(team)) {
 				player = (Wiimote)reciever.wiimotes [team];
+			} else if (team == 1) {
+				player = new Keyboard_player1 ();
+			} else {
+				player = new Keyboard_player2 ();
 			}
 		}
 	}
@@ -64,6 +72,13 @@ public class ControllerInterface {
 //			return Input.GetKey (KeyCode.A);
 //		}
 		return player.MoveLeft ();
+	}
+	
+	public bool MoveDown(int team) {
+		if (reciever != null && reciever.wiimotes.ContainsKey(team)) {
+			player = (Wiimote)reciever.wiimotes [team];
+		}
+		return player.MoveDown ();
 	}
 
 	// Gives a value between -1 and 1 depending on the tilt of the WiiMote

@@ -6,11 +6,11 @@ public class BlockController2 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = false;
+	private bool ENABLE_WIIMOTE = true;
 
 	// Which team owns this blockcontroller
 	// TODO make work for both teams
-	private int team = 1;
+	private int team = 2;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -133,48 +133,48 @@ public class BlockController2 : MonoBehaviour {
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		//		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(ci.MoveLeft() && !move){
+		if(ci.MoveLeft(1) && !move){
 			move = true;
 			StartCoroutine("MoveRightZ");
 		}
 
 		// Move Right
 		//		if (ControllerInterface.MoveRight (team) && !right) {
-		if(ci.MoveRight() && !move){
+		if(ci.MoveRight(1) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		if(ci.RotLeft() && !rotate){
+		if(ci.RotLeft(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotRight (team) && !rotate) {
-		if(ci.RotRight() && !rotate){
+		if(ci.RotRight(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftZ");
 		}
 
-		if(Input.GetKey(KeyCode.A) && !move){
+		if(ci.MoveLeft(2) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
-		if(Input.GetKey(KeyCode.D) && !move){
+		if(ci.MoveRight(2) && !move){
 			move = true;
 			StartCoroutine ("MoveRightX");
 		}
 
-		if(Input.GetKey(KeyCode.W) && !rotate){
+		if(ci.RotLeft(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateLeftX");
 		}
 
-		if(Input.GetKey(KeyCode.S) && !rotate){
+		if(ci.RotRight(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateRightX");
 		}
@@ -182,7 +182,7 @@ public class BlockController2 : MonoBehaviour {
 		// Move Downwards and Fall
 		//		if (ControllerInterface.ActionButtonCombined (1) ||
 		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if(Input.GetKey(KeyCode.Space) ||
+		if(ci.MoveDown(2) ||
 		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
