@@ -43,6 +43,14 @@ public class BlockController1 : MonoBehaviour {
 
 	private bool move, rotate, fall, spawn = false;
 
+	// Time in seconds it takes for each speedup
+	private int speedUpRate = 30;
+
+	// Time in seconds last speedup occurred at
+	private int lastSpeedUp = 0;
+	private float speedUpMultiplier = 1.2f;
+	public Text speedUpText;
+
 	// Level and its display
 	private int level = 1;
 
@@ -197,6 +205,7 @@ public class BlockController1 : MonoBehaviour {
 							
 
 		applyTransparency();
+		StartCoroutine ("speedUp");
 
 	}
 
@@ -609,6 +618,19 @@ public class BlockController1 : MonoBehaviour {
 
 		// Update of the displays
 		updateTexts();
+	}
+
+	IEnumerator speedUp(){
+		int currentTime = (int) Time.timeSinceLevelLoad % 60;
+
+		if ((currentTime % speedUpRate) > lastSpeedUp) {
+			fallRateMultiplier *= speedUpMultiplier;
+			lastSpeedUp = currentTime;
+
+			speedUpText.enabled = true;
+			yield return new WaitForSeconds(3);
+			speedUpText.enabled = false;
+		}
 	}
 
 	void OnApplicationQuit(){
