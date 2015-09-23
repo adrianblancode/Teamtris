@@ -552,6 +552,7 @@ GameObject:
   - 224: {fileID: 487035636}
   - 222: {fileID: 487035639}
   - 114: {fileID: 487035638}
+  - 114: {fileID: 487035637}
   m_Layer: 5
   m_Name: SpeedUp
   m_TagString: Untagged
@@ -576,6 +577,18 @@ RectTransform:
   m_AnchoredPosition: {x: 10, y: 0}
   m_SizeDelta: {x: 350, y: 140}
   m_Pivot: {x: .5, y: .5}
+--- !u!114 &487035637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 487035635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3926d04ffe8834397a0533bdcfadc6c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 487035638}
 --- !u!114 &487035638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,7 +609,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 2
+    m_Alignment: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0

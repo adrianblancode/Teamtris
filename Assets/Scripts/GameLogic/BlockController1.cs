@@ -41,7 +41,7 @@ public class BlockController1 : MonoBehaviour {
 
 	private Spawner spawner;
 
-	private bool move, rotate, fall, spawn = false;
+	private bool move, rotate, fall, spawn, game_over = false;
 
 	// Time in seconds it takes for each speedup
 	private int speedUpRate = 30;
@@ -137,7 +137,7 @@ public class BlockController1 : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		if (spawn) {
+		if (spawn && !game_over) {
 			currentBlock = spawner.spawnNext();
 			slave_controller.setBlock(currentBlock);
 			spawn = false;
@@ -147,9 +147,11 @@ public class BlockController1 : MonoBehaviour {
 	void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
+			game_over = true;
 			Debug.Log("GAME OVER");
-			Destroy (currentBlock);
-			Destroy(this);
+			speedUpText.text = "Game Over!";
+			Destroy(currentBlock);
+			Destroy(gameObject);
 		}
 
 		if (!partnerControllerSet && ci.getController (2) == null) {
@@ -406,6 +408,9 @@ public class BlockController1 : MonoBehaviour {
 
 	// Checks if the current block is in a valid grid position
 	bool isValidGridPos() {
+		if (currentBlock == null) {
+			return false;
+		}
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
@@ -649,5 +654,9 @@ public class BlockController1 : MonoBehaviour {
 		if(receiver != null){
 			receiver.disconnect ();
 		}
+	}
+	void OnDestroy() {
+		speedUpText.text = "Game Over";
+		Debug.Log("BlockController1 was destroyed");
 	}
 }
