@@ -31,7 +31,7 @@ public class Keyboard_player2 : Keyboard {
 	public Keyboard_player2() {
 		b_right = KeyCode.D;
 		b_left = KeyCode.A;
-		b_up = KeyCode.W;
+		b_up = KeyCode.K;
 		b_down = KeyCode.Space;
 		b_rotRight = KeyCode.W;
 		b_rotLeft = KeyCode.S;

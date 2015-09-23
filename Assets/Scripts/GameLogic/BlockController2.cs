@@ -58,17 +58,19 @@ public class BlockController2 : MonoBehaviour {
 	public Text scoreText;
 
 	// Number of lines deleted each time a block falls down (ranges 0..4)
-	private int linesDeleted;
+//	private int linesDeleted;
 
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
 
-	private Component master_controller;
+	private BlockController1 master_controller;
 
-	private ControllerInterface ci;
+	public ControllerInterface ci;
+
+	private bool partnerControllerSet = false;
 
 	void Awake () {
-		master_controller = GameObject.Find ("BlockController1").GetComponent ("BlockController1");
+		master_controller = GameObject.Find ("BlockController1").GetComponent<BlockController1>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 
 		spawner = GameObject.Find ("Spawner2");
@@ -80,9 +82,6 @@ public class BlockController2 : MonoBehaviour {
 		}
 
 		blockGrid = new Grid (5, 25, 5);
-	}
-
-	void Start() {
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
@@ -96,6 +95,11 @@ public class BlockController2 : MonoBehaviour {
 		} else {
 			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
+	}
+
+	void Start() {
+
+
 	}
 
 	public void setBlock(GameObject block){
@@ -129,6 +133,10 @@ public class BlockController2 : MonoBehaviour {
 			Destroy (currentBlock);
 			Destroy(this);
 		}
+		if (!partnerControllerSet && ci.getController (1) == null) {
+			ci.setController (1, master_controller.ci.getController (1));
+			partnerControllerSet = true;
+		}
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
@@ -140,21 +148,21 @@ public class BlockController2 : MonoBehaviour {
 
 		// Move Right
 		//		if (ControllerInterface.MoveRight (team) && !right) {
-		if(ci.MoveRight(1) && !move){
+		else if(ci.MoveRight(1) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		if(ci.RotLeft(1) && !rotate){
+		else if(ci.RotLeft(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotRight (team) && !rotate) {
-		if(ci.RotRight(1) && !rotate){
+		else if(ci.RotRight(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftZ");
 		}
@@ -164,17 +172,17 @@ public class BlockController2 : MonoBehaviour {
 			StartCoroutine ("MoveLeftX");
 		}
 
-		if(ci.MoveRight(2) && !move){
+		else if(ci.MoveRight(2) && !move){
 			move = true;
 			StartCoroutine ("MoveRightX");
 		}
 
-		if(ci.RotLeft(2) && !rotate){
+		else if(ci.RotLeft(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateLeftX");
 		}
 
-		if(ci.RotRight(2) && !rotate){
+		else if(ci.RotRight(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateRightX");
 		}
@@ -336,7 +344,7 @@ public class BlockController2 : MonoBehaviour {
 			//			effect.transform.position = currentBlock.transform.position;
 			//			effect.Play();
 			// Clear filled horizontal lines
-			linesDeleted = blockGrid.deleteFullPlans();
+//			linesDeleted = blockGrid.deleteFullPlans();
 			//			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 //			updateScores(linesDeleted)
@@ -403,7 +411,7 @@ public class BlockController2 : MonoBehaviour {
 	void updateGhost() {
 		int gap = 25;
 		int newGap = 25;
-		int block = 0;
+//		int block = 0;
 		
 		for (int i = 0; i < 4; i++) {
 			ghost[i].GetComponent<MeshRenderer>().enabled = false;

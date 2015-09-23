@@ -31,8 +31,8 @@ public class Keyboard_player1 : Keyboard {
 	public Keyboard_player1() {
 		b_right = KeyCode.RightArrow;
 		b_left = KeyCode.LeftArrow;
-		b_up = KeyCode.UpArrow;
-		b_down = KeyCode.DownArrow;
+		b_up = KeyCode.L;
+		b_down = KeyCode.Space;
 		b_rotRight = KeyCode.DownArrow;
 		b_rotLeft = KeyCode.UpArrow;
 		b_confirm = KeyCode.Return;

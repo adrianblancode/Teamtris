@@ -63,7 +63,9 @@ public class BlockController1 : MonoBehaviour {
 	private int team = 1;
 
 	private BlockController2 slave_controller;
-	private ControllerInterface ci;
+	public ControllerInterface ci;
+
+	private bool partnerControllerSet = false;
 
 	void Awake () {
 		slave_controller = GameObject.Find ("BlockController2").GetComponent<BlockController2> ();
@@ -73,6 +75,18 @@ public class BlockController1 : MonoBehaviour {
 			ghost [i] = (GameObject)Instantiate (ghostPrefab,
 			           							transform.position + new Vector3 (i, 10, 0),
 			                                  	Quaternion.identity);
+		}
+		// Initialize wiimote receiver
+		// TODO(Douglas): Make this work for multiple controllers (if needed)
+		if (ENABLE_WIIMOTE) {
+			receiver = WiimoteReceiver.Instance;
+			receiver.connect ();
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
+			
+			// Create a dummy wiimote to avoid the NullReferenceException in Update()
+			// player1 = new Wiimote ();
+		} else {
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
 	}
 	void Start () {
@@ -91,19 +105,6 @@ public class BlockController1 : MonoBehaviour {
 //		effect.Stop();
 
 //		updateTexts();
-
-		// Initialize wiimote receiver
-		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		if (ENABLE_WIIMOTE) {
-			receiver = WiimoteReceiver.Instance;
-			receiver.connect ();
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
-
-			// Create a dummy wiimote to avoid the NullReferenceException in Update()
-			// player1 = new Wiimote ();
-		} else {
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
-		}
 
 		currentBlock = spawner.spawnNext();
 		slave_controller.setBlock (currentBlock);
@@ -145,6 +146,11 @@ public class BlockController1 : MonoBehaviour {
 			Destroy(this);
 		}
 
+		if (!partnerControllerSet && ci.getController (2) == null) {
+			ci.setController (2, slave_controller.ci.getController (2));
+			partnerControllerSet = true;
+		}
+
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		if ( ( ci.MoveLeft (1) ) && !move) {
@@ -153,19 +159,19 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		// Move Right
-		if ( (ci.MoveRight(1) ) && !move) {
+		else if ( (ci.MoveRight(1) ) && !move) {
 			move = true;
 			StartCoroutine("MoveRightX");
 		}
 
 		// Rotate Left
-		if ( ( ci.RotLeft(1) ) && !rotate) {
+		else if ( ( ci.RotLeft(1) ) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateLeftX");
 		}
 
 		// Rotate Left
-		if ( ( ci.RotRight(1) ) && !rotate) {
+		else if ( ( ci.RotRight(1) ) && !rotate) {
 			rotate = true;
 			StartCoroutine("RotateRightX");
 		}
@@ -175,17 +181,17 @@ public class BlockController1 : MonoBehaviour {
 			StartCoroutine ("MoveLeftZ");
 		}
 
-		if(ci.MoveRight(2) && !move){
+		else if(ci.MoveRight(2) && !move){
 			move = true;
 			StartCoroutine ("MoveRightZ");
 		}
 
-		if(ci.RotLeft(2) && !rotate){
+		else if(ci.RotLeft(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateLeftZ");
 		}
 
-		if(ci.RotRight(2) && !rotate){
+		else if(ci.RotRight(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateRightZ");
 		}
@@ -419,7 +425,7 @@ public class BlockController1 : MonoBehaviour {
 	void updateGhost() {
 		int gap = 25;
 		int newGap = 25;
-		int block = 0;
+//		int block = 0;
 		
 		for (int i = 0; i < 4; i++) {
 			ghost[i].GetComponent<MeshRenderer>().enabled = false;
