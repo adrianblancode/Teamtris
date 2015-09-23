@@ -42,6 +42,7 @@ public class BlockController1 : MonoBehaviour {
 	private Spawner spawner;
 
 	private bool move, rotate, fall, spawn, game_over = false;
+	private bool isGameOver = false;
 
 	// Time in seconds it takes for each speedup
 	private int speedUpRate = 30;
@@ -634,6 +635,11 @@ public class BlockController1 : MonoBehaviour {
 
 	// Every speedUpRate seconds, increases speed and shows text
 	void speedUp(){
+
+		if(isGameOver){
+			return;
+		}
+
 		int currentTime = (int) Time.timeSinceLevelLoad;
 
 		// We check that we have waited speedUpRate time
@@ -657,6 +663,7 @@ public class BlockController1 : MonoBehaviour {
 		}
 	}
 	void OnDestroy() {
+		isGameOver = true;
 		speedUpText.text = "Game Over";
 		Debug.Log("BlockController1 was destroyed");
 	}
