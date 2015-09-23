@@ -200,8 +200,8 @@ public class BlockController2 : MonoBehaviour {
 		// Move Downwards and Fall
 		//		if (ControllerInterface.ActionButtonCombined (1) ||
 		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if(ci.MoveDown(2) ||
-		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
+		if((ci.MoveDown(2) ||
+		   Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
 		}
