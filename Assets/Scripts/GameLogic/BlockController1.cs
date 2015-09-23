@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = false;
+	private bool ENABLE_WIIMOTE = true;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -110,9 +110,6 @@ public class BlockController1 : MonoBehaviour {
 			while (true) { 
 				if (receiver.wiimotes.ContainsKey(team)) {
 					ci.setController(team,	receiver.wiimotes[team]);
-				}
-				// Race prevention
-				if (ci.getController(1) != null && ci.getController(2) != null) {
 					break;
 				}
 			}
