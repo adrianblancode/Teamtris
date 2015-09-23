@@ -124,15 +124,24 @@ public class ControllerInterface {
 //				player2 = (Wiimote)reciever.wiimotes [team];
 //			}
 //		}
-		if (team == 1) {
-			return player1.MoveDown ();
-		} else {
-			return player2.MoveDown ();
+		if (player1 != null && player2 != null) {
+
+			if (team == 1) {
+				return player1.MoveDown ();
+			} else {
+				return player2.MoveDown ();
+			}
 		}
+
+		return false;
 	}
 
 	public bool MoveDownCombined() {
-		return player1.MoveDown () && player2.MoveDown ();;
+		if (player1 != null && player2 != null) {
+			return player1.MoveDown () && player2.MoveDown ();
+		}
+
+		return false;
 	}
 
 	// Gives a value between -1 and 1 depending on the tilt of the WiiMote
