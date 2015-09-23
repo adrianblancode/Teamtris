@@ -47,6 +47,13 @@ public class BlockController2 : MonoBehaviour {
 
 	private bool move, rotate, fall = false;
 
+	// Time in seconds it takes for each speedup
+	private int speedUpRate = 30;
+	
+	// Time in seconds last speedup occurred at
+	private int lastSpeedUp = 0;
+	private float speedUpMultiplier = 0.8f;
+
 	// Level and its display
 	private int level = 1;
 
@@ -186,6 +193,7 @@ public class BlockController2 : MonoBehaviour {
 		}
 		
 		applyTransparency();
+		speedUp();
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -592,6 +600,17 @@ public class BlockController2 : MonoBehaviour {
 
 		// Update of the displays
 		updateTexts();
+	}
+
+	// Every speedUpRate seconds, increases speed
+	void speedUp(){
+		int currentTime = (int) Time.timeSinceLevelLoad;
+		
+		// We check that we have waited speedUpRate time
+		if ((currentTime - lastSpeedUp) / speedUpRate >= 1) {
+			fallRateMultiplier *= speedUpMultiplier;
+			lastSpeedUp = currentTime;
+		}
 	}
 
 	void OnApplicationQuit(){
