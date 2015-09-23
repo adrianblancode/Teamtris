@@ -77,7 +77,7 @@ public class BlockController2 : MonoBehaviour {
 			                                   Quaternion.identity);
 		}
 
-		blockGrid = new Grid (5, 25, 5);
+		blockGrid = new Grid (5, 25, 5, Grid.MsMode.Slave);
 
 		// Initialize wiimote receiver
 		// TODO(Douglas): Make this work for multiple controllers (if needed)

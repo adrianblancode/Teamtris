@@ -78,7 +78,7 @@ public class BlockController1 : MonoBehaviour {
 	void Start () {
 		spawner = FindObjectOfType<Spawner> ();
 
-		blockGrid = new Grid (5, 25, 5);
+		blockGrid = new Grid (5, 25, 5, Grid.MsMode.Master);
 //		effect = (ParticleSystem)Instantiate(effect,
 //		                                     transform.position,
 //		                                     Quaternion.identity);
