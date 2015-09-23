@@ -179,11 +179,13 @@ public class BlockController2 : MonoBehaviour {
 		// Move Downwards and Fall
 		//		if (ControllerInterface.ActionButtonCombined (1) ||
 		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if(Input.GetKey(KeyCode.Space) ||
-		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
+		if((Input.GetKey(KeyCode.Space) ||
+		   Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
 		}
+		
+		applyTransparency();
 	}
 
 	// CoRoutine for moving left on the x-axis
@@ -362,7 +364,7 @@ public class BlockController2 : MonoBehaviour {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
+			//child.parent = currentBlock.transform;
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 		
@@ -460,6 +462,91 @@ public class BlockController2 : MonoBehaviour {
 				ghost[ghostblock].GetComponent<MeshRenderer>().enabled = false;
 			}
 			ghostblock++;
+		}
+	}
+
+	// Applies transparency to all blocks that are behind the current block
+	void applyTransparency() {
+		
+		int nearestZ = getNearestCurrentBlockZPos ();
+
+		disableTransparency ();
+		
+		// Apply transparency to all blocks in front of nearest
+		for (int z = 0; z < nearestZ; z++) {
+			Transform[,] grid = blockGrid.getGrid (z);
+			
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x) {
+					
+					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
+						
+						foreach(Transform childBlock in grid[x, y].parent){
+							
+							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
+								
+								Renderer r = childBlock.GetComponent<Renderer>();
+								Color newColor = r.material.color;
+								newColor.a = 0.4f;
+								childBlock.GetComponent<Renderer>().material.color = newColor;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	// Returns the the nearest grid position on the Z-axis of a current block
+	int getNearestCurrentBlockZPos(){
+
+		int transparencyZ = 999;
+		
+		for (int z = 0; z < blockGrid.getDepth(); z++) {
+			Transform[,] grid = blockGrid.getGrid (z);
+			
+			for (int y = 0; y < blockGrid.getHeight(); ++y) {
+				for (int x = 0; x < blockGrid.getWidth(); ++x){
+					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
+						if(z < transparencyZ){
+							transparencyZ = z;
+						}
+					}
+				}
+			}
+		}
+		
+		if (transparencyZ >= 999) {
+			return 0;
+		}
+		
+		return transparencyZ;
+	}
+
+	void disableTransparency(){
+		disableTransparency (0);
+	}
+
+	// Disable transparency at all blocks at depth z and higher
+	void disableTransparency(int depth){
+
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (int z = depth; z < blockGrid.getDepth(); ++z) {
+
+					Transform[,] grid = blockGrid.getGrid(z);
+					if (grid[x, y] != null) {
+						Transform p = grid[x, y].parent;
+						
+						foreach(Transform childBlock in p){
+							Renderer r = childBlock.GetComponent<Renderer>();
+							Color newColor = r.material.color;
+							newColor.a = 1.0f;
+							r.material.color = newColor;
+						}
+					}
+				}
+			}
 		}
 	}
 
