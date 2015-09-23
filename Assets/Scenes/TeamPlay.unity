@@ -1409,7 +1409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564f385246197f44094571887ec9399e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: 0
+  player: 1
   moveObject: {fileID: 143016523}
   moveIcon: {fileID: 2800000, guid: 5e22b96b2acb2c64890332185f765976, type: 3}
   moveActiveIcon: {fileID: 2800000, guid: 5b4bdafbcd8f3ee42ba366452b44c3c2, type: 3}
@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564f385246197f44094571887ec9399e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: 0
+  player: 2
   moveObject: {fileID: 542053792}
   moveIcon: {fileID: 2800000, guid: 5e22b96b2acb2c64890332185f765976, type: 3}
   moveActiveIcon: {fileID: 2800000, guid: 5b4bdafbcd8f3ee42ba366452b44c3c2, type: 3}
