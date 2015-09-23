@@ -84,21 +84,7 @@ public class BlockController1 : MonoBehaviour {
 			           							transform.position + new Vector3 (i, 10, 0),
 			                                  	Quaternion.identity);
 		}
-		// Initialize wiimote receiver
-		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		if (ENABLE_WIIMOTE) {
-			receiver = WiimoteReceiver.Instance;
 
-			if(receiver != null){
-				receiver.connect ();
-				ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
-			} else {
-				ci = new ControllerInterface(team, ENABLE_WIIMOTE);
-			}
-
-		} else {
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
-		}
 	}
 
 	void Start () {
@@ -113,8 +99,33 @@ public class BlockController1 : MonoBehaviour {
 
 //		updateTexts();
 
+		// Initialize wiimote receiver
+		// TODO(Douglas): Make this work for multiple controllers (if needed)
+		ci = ControllerInterface.Instance;
+		if (ENABLE_WIIMOTE) {
+			receiver = WiimoteReceiver.Instance;
+			receiver.connect ();
+
+			while (true) { 
+				if (receiver.wiimotes.ContainsKey(team)) {
+					ci.setController(team,	receiver.wiimotes[team]);
+				}
+				// Race prevention
+				if (ci.getController(1) != null && ci.getController(2) != null) {
+					break;
+				}
+			}
+			
+		} else {
+			ci.setController(team, new Keyboard_player1());
+		}
+
 		currentBlock = spawner.spawnNext();
 		slave_controller.setBlock (currentBlock);
+//		if (!partnerControllerSet) {
+//			ci.setController (2, slave_controller.ci.getController (2));
+//			partnerControllerSet = true;
+//		}
 	}
 
 	// Set rate at which user is able to rotate
@@ -155,10 +166,7 @@ public class BlockController1 : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		if (!partnerControllerSet && ci.getController (2) == null) {
-			ci.setController (2, slave_controller.ci.getController (2));
-			partnerControllerSet = true;
-		}
+
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left

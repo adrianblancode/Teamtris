@@ -13,6 +13,8 @@ using System.Collections;
 
 public class ControllerInterface {
 
+	static readonly ControllerInterface instance = new ControllerInterface();
+
 	// NOTE(Douglas): Do the functions need to be static?
 
 	// Call static functions to check status of an input.
@@ -49,6 +51,11 @@ public class ControllerInterface {
 			throw new UnityException ("Tried to get controller from unknown player");
 		}
 	}
+
+	// Returning the instance of this class.
+	public static ControllerInterface Instance { get {return instance;}}
+
+	public ControllerInterface () {}
 
 	public ControllerInterface (int team, bool usingRemote, WiimoteReceiver reciever = null)
 	{

@@ -87,26 +87,33 @@ public class BlockController2 : MonoBehaviour {
 
 		blockGrid = new Grid (5, 25, 5);
 
-		// Initialize wiimote receiver
-		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		if (ENABLE_WIIMOTE) {
-			receiver = WiimoteReceiver.Instance;
 
-			if(receiver != null){
-				receiver.connect ();
-				ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
-			} else {
-				ci = new ControllerInterface(team, ENABLE_WIIMOTE);
-			}
-
-		} else {
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
-		}
 	}
 
 	void Start() {
 
-
+		// Initialize wiimote receiver
+		// TODO(Douglas): Make this work for multiple controllers (if needed)
+		ci = ControllerInterface.Instance;
+		if (ENABLE_WIIMOTE) {
+			receiver = WiimoteReceiver.Instance;
+			receiver.connect ();
+			while (true) { 
+				if (receiver.wiimotes.ContainsKey(team)) {
+					ci.setController(team,	receiver.wiimotes[team]);
+				}
+				// Race prevention
+				if (ci.getController(1) != null && ci.getController(2) != null) {
+					break;
+				}
+			}
+		} else {
+			ci.setController(team, new Keyboard_player2());
+		}
+//		if (!partnerControllerSet) {
+//			ci.setController (1, master_controller.ci.getController (1));
+//			partnerControllerSet = true;
+//		}
 	}
 
 	public void setBlock(GameObject block){
@@ -140,10 +147,7 @@ public class BlockController2 : MonoBehaviour {
 			Destroy (currentBlock);
 			Destroy(this);
 		}
-		if (!partnerControllerSet && ci.getController (1) == null) {
-			ci.setController (1, master_controller.ci.getController (1));
-			partnerControllerSet = true;
-		}
+
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
