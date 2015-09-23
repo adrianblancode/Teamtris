@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -21,7 +21,7 @@ public class BlockController1 : MonoBehaviour {
 	private float lastFall = 0;
 
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 1.5f;
+	private float fallRate = 1.25f;
 	private float fallRateMultiplier = 1.0f;
 
 	// Rate in seconds between each fastfall of the block
@@ -42,13 +42,14 @@ public class BlockController1 : MonoBehaviour {
 	private Spawner spawner;
 
 	private bool move, rotate, fall, spawn, game_over = false;
+	private bool isGameOver = false;
 
 	// Time in seconds it takes for each speedup
 	private int speedUpRate = 30;
 
 	// Time in seconds last speedup occurred at
 	private int lastSpeedUp = 0;
-	private float speedUpMultiplier = 0.8f;
+	private float speedUpMultiplier = 0.87f;
 	public Text speedUpText;
 
 	// Level and its display
@@ -642,6 +643,11 @@ public class BlockController1 : MonoBehaviour {
 
 	// Every speedUpRate seconds, increases speed and shows text
 	void speedUp(){
+
+		if(isGameOver){
+			return;
+		}
+
 		int currentTime = (int) Time.timeSinceLevelLoad;
 
 		// We check that we have waited speedUpRate time
@@ -665,6 +671,7 @@ public class BlockController1 : MonoBehaviour {
 		}
 	}
 	void OnDestroy() {
+		isGameOver = true;
 		speedUpText.text = "Game Over";
 		Debug.Log("BlockController1 was destroyed");
 	}

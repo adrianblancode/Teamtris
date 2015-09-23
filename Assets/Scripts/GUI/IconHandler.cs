@@ -40,9 +40,9 @@ public class IconHandler : MonoBehaviour {
 		if ( ci.MoveLeft (player)) {
 			moveRawImage.texture = moveActiveIcon;
 		} 
-//		else if ( ci.MoveRight (team)) {
-//			moveRawImage.texture = moveActiveIcon;
-//		} 
+		else if ( ci.MoveRight (player)) {
+			moveRawImage.texture = moveActiveIcon;
+		} 
 		else {
 			moveRawImage.texture = moveIcon;
 		}
@@ -55,11 +55,11 @@ public class IconHandler : MonoBehaviour {
 			rotRawImage.texture = rotIcon;
 		}
 
-		if ( ci.ActionButtonCombined (player)) {
+		if ( ci.MoveDownCombined()) {
 			downRawImage.texture = downActiveIcon;
-		} else if ( ci.ActionButton (player, 1)) {
+		} else if ( ci.MoveDown (1)) {
 			downRawImage.texture = downLeftIcon;
-		} else if ( ci.ActionButton (player, 2)) {
+		} else if ( ci.MoveDown (2)) {
 			downRawImage.texture = downRightIcon;
 		} else {
 			downRawImage.texture = downIcon;
