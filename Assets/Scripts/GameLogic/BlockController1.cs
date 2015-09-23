@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -21,7 +21,7 @@ public class BlockController1 : MonoBehaviour {
 	private float lastFall = 0;
 
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 1.5f;
+	private float fallRate = 1.2f;
 	private float fallRateMultiplier = 1.0f;
 
 	// Rate in seconds between each fastfall of the block
@@ -48,7 +48,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// Time in seconds last speedup occurred at
 	private int lastSpeedUp = 0;
-	private float speedUpMultiplier = 0.8f;
+	private float speedUpMultiplier = 0.87f;
 	public Text speedUpText;
 
 	// Level and its display
