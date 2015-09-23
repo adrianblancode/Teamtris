@@ -21,7 +21,7 @@ public class BlockController1 : MonoBehaviour {
 	private float lastFall = 0;
 
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 1.2f;
+	private float fallRate = 1.25f;
 	private float fallRateMultiplier = 1.0f;
 
 	// Rate in seconds between each fastfall of the block
