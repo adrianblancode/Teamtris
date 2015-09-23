@@ -6,7 +6,7 @@ public class BlockController2 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = false;
+	private bool ENABLE_WIIMOTE = true;
 
 	// Which team owns this blockcontroller
 	// TODO make work for both teams
@@ -63,9 +63,6 @@ public class BlockController2 : MonoBehaviour {
 	// Global score and its display
 	private int score = 0;
 	public Text scoreText;
-
-	// Number of lines deleted each time a block falls down (ranges 0..4)
-//	private int linesDeleted;
 
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
@@ -200,7 +197,7 @@ public class BlockController2 : MonoBehaviour {
 		// Move Downwards and Fall
 		//		if (ControllerInterface.ActionButtonCombined (1) ||
 		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if((ci.MoveDown(2) ||
+		if((ci.MoveDownCombined() ||
 		   Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
@@ -355,7 +352,7 @@ public class BlockController2 : MonoBehaviour {
 			//			effect.transform.position = currentBlock.transform.position;
 			//			effect.Play();
 			// Clear filled horizontal lines
-//			linesDeleted = blockGrid.deleteFullPlans();
+			blockGrid.deleteFullPlans();
 			//			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 //			updateScores(linesDeleted)

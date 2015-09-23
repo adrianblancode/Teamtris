@@ -131,6 +131,10 @@ public class ControllerInterface {
 		}
 	}
 
+	public bool MoveDownCombined() {
+		return player1.MoveDown () && player2.MoveDown ();;
+	}
+
 	// Gives a value between -1 and 1 depending on the tilt of the WiiMote
 	public float MoveTilt (int team) {
 		// Might be a performance sink. Refactor if needed

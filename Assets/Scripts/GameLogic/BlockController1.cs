@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = false;
+	private bool ENABLE_WIIMOTE = true;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -100,6 +100,7 @@ public class BlockController1 : MonoBehaviour {
 			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
 	}
+
 	void Start () {
 		spawner = FindObjectOfType<Spawner> ();
 
@@ -205,7 +206,7 @@ public class BlockController1 : MonoBehaviour {
 		}
 
 		// Move Downwards and Fall
-		if ((ci.MoveDown(1) ||
+		if ((ci.MoveDownCombined() ||
 			 Time.time - lastFall >= fallRate * fallRateMultiplier ) && !fall) {
 			fall = true;
 			StartCoroutine ("Fall");
