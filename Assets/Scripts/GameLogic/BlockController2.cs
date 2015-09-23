@@ -6,11 +6,11 @@ public class BlockController2 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = false;
+	private bool ENABLE_WIIMOTE = true;
 
 	// Which team owns this blockcontroller
 	// TODO make work for both teams
-	private int team = 1;
+	private int team = 2;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -65,22 +65,26 @@ public class BlockController2 : MonoBehaviour {
 	public Text scoreText;
 
 	// Number of lines deleted each time a block falls down (ranges 0..4)
-	private int linesDeleted;
+//	private int linesDeleted;
 
 	// Number of times in a row that 4 lines where deleted at the same time
 	private int combo = 1;
 
-	private Component master_controller;
+	private BlockController1 master_controller;
+
+	public ControllerInterface ci;
+
+	private bool partnerControllerSet = false;
 
 	void Awake () {
-		master_controller = GameObject.Find ("BlockController1").GetComponent ("BlockController1");
+		master_controller = GameObject.Find ("BlockController1").GetComponent<BlockController1>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 
-		spawner = GameObject.Find("Spawner2");
+		spawner = GameObject.Find ("Spawner2");
 		
 		for (int i = 0; i < 4; i++) {
-			ghost[i] = (GameObject)Instantiate(	ghostPrefab,
-			                                   transform.position + new Vector3(i, 10, 0),
+			ghost [i] = (GameObject)Instantiate (ghostPrefab,
+			                                   transform.position + new Vector3 (i, 10, 0),
 			                                   Quaternion.identity);
 		}
 
@@ -91,10 +95,18 @@ public class BlockController2 : MonoBehaviour {
 		if (ENABLE_WIIMOTE) {
 			receiver = WiimoteReceiver.Instance;
 			receiver.connect ();
-
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
+			
 			// Create a dummy wiimote to avoid the NullReferenceException in Update()
-			player1 = new Wiimote ();
+			// player1 = new Wiimote ();
+		} else {
+			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
+	}
+
+	void Start() {
+
+
 	}
 
 	public void setBlock(GameObject block){
@@ -128,57 +140,56 @@ public class BlockController2 : MonoBehaviour {
 			Destroy (currentBlock);
 			Destroy(this);
 		}
-
-		// Grab the wiimote
-		if (receiver != null && receiver.wiimotes.ContainsKey (1)) {
-			player1 = (Wiimote)receiver.wiimotes [1];
+		if (!partnerControllerSet && ci.getController (1) == null) {
+			ci.setController (1, master_controller.ci.getController (1));
+			partnerControllerSet = true;
 		}
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		//		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(Input.GetKey(KeyCode.LeftArrow) && !move){
+		if(ci.MoveLeft(1) && !move){
 			move = true;
 			StartCoroutine("MoveRightZ");
 		}
 
 		// Move Right
 		//		if (ControllerInterface.MoveRight (team) && !right) {
-		if(Input.GetKey(KeyCode.RightArrow) && !move){
+		else if(ci.MoveRight(1) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		if(Input.GetKey(KeyCode.UpArrow) && !rotate){
+		else if(ci.RotLeft(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateRightZ");
 		}
 
 		// Rotate Left
 		//		if (ControllerInterface.RotRight (team) && !rotate) {
-		if(Input.GetKey(KeyCode.DownArrow) && !rotate){
+		else if(ci.RotRight(1) && !rotate){
 			rotate = true;
 			StartCoroutine("RotateLeftZ");
 		}
 
-		if(Input.GetKey(KeyCode.A) && !move){
+		if(ci.MoveLeft(2) && !move){
 			move = true;
 			StartCoroutine ("MoveLeftX");
 		}
 
-		if(Input.GetKey(KeyCode.D) && !move){
+		else if(ci.MoveRight(2) && !move){
 			move = true;
 			StartCoroutine ("MoveRightX");
 		}
 
-		if(Input.GetKey(KeyCode.W) && !rotate){
+		else if(ci.RotLeft(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateLeftX");
 		}
 
-		if(Input.GetKey(KeyCode.S) && !rotate){
+		else if(ci.RotRight(2) && !rotate){
 			rotate = true;
 			StartCoroutine ("RotateRightX");
 		}
@@ -186,8 +197,8 @@ public class BlockController2 : MonoBehaviour {
 		// Move Downwards and Fall
 		//		if (ControllerInterface.ActionButtonCombined (1) ||
 		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
-		if((Input.GetKey(KeyCode.Space) ||
-		   Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
+		if(ci.MoveDown(2) ||
+		   Time.time - lastFall >= fallRate * fallRateMultiplier && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
 		}
@@ -341,7 +352,7 @@ public class BlockController2 : MonoBehaviour {
 			//			effect.transform.position = currentBlock.transform.position;
 			//			effect.Play();
 			// Clear filled horizontal lines
-			linesDeleted = blockGrid.deleteFullPlans();
+//			linesDeleted = blockGrid.deleteFullPlans();
 			//			linesDeleted = 0;
 			// Update the scores depending on the number of lines deleted
 //			updateScores(linesDeleted)
@@ -408,7 +419,7 @@ public class BlockController2 : MonoBehaviour {
 	void updateGhost() {
 		int gap = 25;
 		int newGap = 25;
-		int block = 0;
+//		int block = 0;
 		
 		for (int i = 0; i < 4; i++) {
 			ghost[i].GetComponent<MeshRenderer>().enabled = false;
