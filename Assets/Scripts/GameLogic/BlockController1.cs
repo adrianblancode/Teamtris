@@ -6,7 +6,7 @@ public class BlockController1 : MonoBehaviour {
 
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
+	private bool ENABLE_WIIMOTE = false;
 
 	// Wiimote controller
 	private WiimoteReceiver receiver = null;
@@ -88,11 +88,14 @@ public class BlockController1 : MonoBehaviour {
 		// TODO(Douglas): Make this work for multiple controllers (if needed)
 		if (ENABLE_WIIMOTE) {
 			receiver = WiimoteReceiver.Instance;
-			receiver.connect ();
-			ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
-			
-			// Create a dummy wiimote to avoid the NullReferenceException in Update()
-			// player1 = new Wiimote ();
+
+			if(receiver != null){
+				receiver.connect ();
+				ci = new ControllerInterface(team, ENABLE_WIIMOTE, receiver);
+			} else {
+				ci = new ControllerInterface(team, ENABLE_WIIMOTE);
+			}
+
 		} else {
 			ci = new ControllerInterface(team, ENABLE_WIIMOTE);
 		}
