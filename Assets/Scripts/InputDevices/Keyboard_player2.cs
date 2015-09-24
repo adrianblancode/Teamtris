@@ -4,6 +4,7 @@ using System.Collections;
 public class Keyboard_player2 : Keyboard {
 
 	// TODO(Douglas): Able to set the controls.
+	public override KeyCode quit{ get { return b_quit; } set{} }
 	public override KeyCode right{ get { return b_right; } set{} }
 	public override KeyCode left{ get { return b_left; } set{} }
 	public override KeyCode up{ get { return b_up; } set{} }
@@ -15,6 +16,7 @@ public class Keyboard_player2 : Keyboard {
 	public override KeyCode pause{ get { return b_pause; } set{} }
 
 	private KeyCode 
+		b_quit,
 		b_right,
 		b_left,
 		b_up,
@@ -29,6 +31,7 @@ public class Keyboard_player2 : Keyboard {
 	 * Default bindings for player 1
 	 */
 	public Keyboard_player2() {
+		b_quit = KeyCode.Escape;
 		b_right = KeyCode.D;
 		b_left = KeyCode.A;
 		b_up = KeyCode.K;

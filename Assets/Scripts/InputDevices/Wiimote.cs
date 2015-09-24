@@ -180,6 +180,9 @@ public class Wiimote : Controller {
 	public bool Pause() {
 		return BUTTON_PLUS == 1 ? true : false;
 	}
+	public bool Quit() {
+		return BUTTON_HOME == 1 ? true : false;
+	}
 	
 	public void update(string oscMessage, ArrayList values, DateTime currentTime)
 	{

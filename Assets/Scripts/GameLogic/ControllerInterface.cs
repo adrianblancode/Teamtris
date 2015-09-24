@@ -85,6 +85,14 @@ public class ControllerInterface {
 	}
 	
 
+	public bool Quit (int team) {
+		if (team == 1) {
+			return player1.Quit ();
+		} else {
+			return player2.Quit ();
+		}
+	}
+
 	public bool MoveRight (int team) {
 		// Might be a performance sink. Refactor if needed
 //		if (reciever != null && reciever.wiimotes.ContainsKey(team)) {
