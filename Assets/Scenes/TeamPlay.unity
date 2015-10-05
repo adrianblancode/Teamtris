@@ -687,7 +687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c551a054c284f239c68998a7b6eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostPrefab: {fileID: 0}
+  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
   ghost:
   - {fileID: 0}
   - {fileID: 0}
