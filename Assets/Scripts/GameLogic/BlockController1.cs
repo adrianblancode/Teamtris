@@ -74,8 +74,6 @@ public class BlockController1 : MonoBehaviour {
 	private BlockController2 slave_controller;
 	public ControllerInterface ci;
 
-	private bool partnerControllerSet = false;
-
 	void Awake () {
 		slave_controller = GameObject.Find ("BlockController2").GetComponent<BlockController2> ();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player1_GameBoard");
@@ -85,7 +83,6 @@ public class BlockController1 : MonoBehaviour {
 			           							transform.position + new Vector3 (i, 10, 0),
 			                                  	Quaternion.identity);
 		}
-
 	}
 
 	void Start () {
@@ -667,9 +664,9 @@ public class BlockController1 : MonoBehaviour {
 			receiver.disconnect ();
 		}
 	}
-	void OnDestroy() {
-		isGameOver = true;
-		speedUpText.text = "Game Over";
-		Debug.Log("BlockController1 was destroyed");
-	}
+//	void OnDestroy() {
+//		isGameOver = true;
+//		speedUpText.text = "Game Over";
+////		Debug.Log("BlockController1 was destroyed");
+//	}
 }

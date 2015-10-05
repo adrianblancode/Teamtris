@@ -502,6 +502,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 485998897}
   - 114: {fileID: 485998898}
+  - 114: {fileID: 485998899}
   m_Layer: 0
   m_Name: BlockController1
   m_TagString: Untagged
@@ -527,7 +528,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 485998896}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b94dda6a95b58ab45aeffbd28a87b75b, type: 3}
   m_Name: 
@@ -540,6 +541,25 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   effect: {fileID: 19821162, guid: c8814b8fd0f9c45589ceb0526224564c, type: 2}
+  speedUpText: {fileID: 487035638}
+  scoreText: {fileID: 2075436440}
+--- !u!114 &485998899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 485998896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068d8ffff17e14930bf29d05d74e6e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
+  ghost:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   speedUpText: {fileID: 487035638}
   scoreText: {fileID: 2075436440}
 --- !u!1 &487035635
@@ -617,6 +637,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 510600529}
   - 114: {fileID: 510600530}
+  - 114: {fileID: 510600531}
   m_Layer: 0
   m_Name: BlockController2
   m_TagString: Untagged
@@ -642,7 +663,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 510600528}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6f076ce6e2217f4c819e80ef0009557, type: 3}
   m_Name: 
@@ -654,6 +675,25 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   effect: {fileID: 0}
+  scoreText: {fileID: 0}
+--- !u!114 &510600531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 510600528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c551a054c284f239c68998a7b6eed8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 0}
+  ghost:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  speedUpText: {fileID: 0}
   scoreText: {fileID: 0}
 --- !u!1 &542053792
 GameObject:
