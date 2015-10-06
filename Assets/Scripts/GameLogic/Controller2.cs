@@ -10,8 +10,78 @@ public class Controller2 : BaseController {
 		team = 2;
 	}
 
+	protected override void Update (){
+		// Default position not valid? Then it's game over
+		if (!isValidGridPos()) {
+			Debug.Log("GAME OVER");
+			Destroy (currentBlock);
+			Destroy(this);
+		}
+		
+		
+		// TODO(Douglas): Clean up button checking for wiimotes.
+		// Move Left
+		//		if ((ControllerInterface.MoveLeft (team)) && !left) {
+		if(ci.MoveLeft(1) && !move){
+			move = true;
+			StartCoroutine("MoveRightZ");
+		}
+		
+		// Move Right
+		//		if (ControllerInterface.MoveRight (team) && !right) {
+		else if(ci.MoveRight(1) && !move){
+			move = true;
+			StartCoroutine ("MoveLeftZ");
+		}
+		
+		// Rotate Left
+		//		if (ControllerInterface.RotLeft (team) && !rotate) {
+		else if(ci.RotLeft(1) && !rotate){
+			rotate = true;
+			StartCoroutine("RotateRightZ");
+		}
+		
+		// Rotate Left
+		//		if (ControllerInterface.RotRight (team) && !rotate) {
+		else if(ci.RotRight(1) && !rotate){
+			rotate = true;
+			StartCoroutine("RotateLeftZ");
+		}
+		
+		if(ci.MoveLeft(2) && !move){
+			move = true;
+			StartCoroutine ("MoveLeftX");
+		}
+		
+		else if(ci.MoveRight(2) && !move){
+			move = true;
+			StartCoroutine ("MoveRightX");
+		}
+		
+		else if(ci.RotLeft(2) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateLeftX");
+		}
+		
+		else if(ci.RotRight(2) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateRightX");
+		}
+		
+		// Move Downwards and Fall
+		//		if (ControllerInterface.ActionButtonCombined (1) ||
+		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
+		if((ci.MoveDownCombined() ||
+		    Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
+			fall = true;
+			StartCoroutine ("Fall");
+		}
+		
+		applyTransparency();
+		speedUp();
+	}
+
 	protected override void Awake () {
-//		other_controller = GameObject.Find ("BlockController1").GetComponent<Controller1>();
 		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
 		
 		spawner = GameObject.Find ("Spawner2");
