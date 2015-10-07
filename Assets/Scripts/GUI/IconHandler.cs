@@ -65,7 +65,7 @@ public class IconHandler : MonoBehaviour {
 			downRawImage.texture = downIcon;
 		}
 
-		moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 *  ci.MoveTilt(player));
-		rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 *  ci.RotTilt(player));
+		//moveRawImage.transform.eulerAngles = new Vector3(0, 0, -40 *  ci.MoveTilt(player));
+		//rotRawImage.transform.eulerAngles = new Vector3(0, 0, -45 *  ci.RotTilt(player));
 	}
 }
