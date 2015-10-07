@@ -1,198 +1,136 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class BlockController2 : MonoBehaviour {
-
+public class BaseController : MonoBehaviour {
 	// WARNING This disables the wiimote for debugging
 	// Fixes crashes upon going into the editor
-	private bool ENABLE_WIIMOTE = true;
-
-	// Which team owns this blockcontroller
-	// TODO make work for both teams
-	private int team = 2;
-
+	protected bool ENABLE_WIIMOTE = false;
+	
 	// Wiimote controller
-	private WiimoteReceiver receiver = null;
-
+	protected WiimoteReceiver receiver = null;
+	
 	// The wii controllers for this team
-	private Wiimote player1;
-
+	protected Wiimote player1;
+	
 	// Gameboard for this script
-	private GameObject gameBoard;
-
+	protected GameObject gameBoard;
+	
 	// Time since last gravity tick
-	private float lastFall = 0;
-
+	protected float lastFall = 0;
+	
 	// Rate in seconds between each natural fall of the block
-	private float fallRate = 1.25f;
-	private float fallRateMultiplier = 1.0f;
-
+	protected float fallRate = 1.25f;
+	protected float fallRateMultiplier = 1.0f;
+	
 	// Rate in seconds between each fastfall of the block
-	private float fastFallRate = 0.05f;
-
+	protected float fastFallRate = 0.05f;
+	
 	// Rate in seconds a block can be rotated
-	private float rotateRate = 0.4f;
-
+	protected float rotateRate = 0.4f;
+	
 	// Rate in seconds a block can be moved horizontally
-	private float horizontalRate = 0.2f;
+	protected float horizontalRate = 0.2f;
+	
+	protected Grid blockGrid;
+	protected GameObject currentBlock;
 
-	private Grid blockGrid;
-	private GameObject currentBlock;
+	// Ghost objects
 	public GameObject ghostPrefab;
 	public GameObject[] ghost;
-	public ParticleSystem effect;
-
-	private GameObject spawner;
-
-	private bool move, rotate, fall = false;
-
+//	public ParticleSystem effect;
+	
+//	protected Spawner spawner;
+	
+	protected bool move, rotate, fall, spawn, game_over = false;
+	
 	// Time in seconds it takes for each speedup
-	private int speedUpRate = 30;
+	protected int speedUpRate = 30;
 	
 	// Time in seconds last speedup occurred at
-	private int lastSpeedUp = 0;
-	private float speedUpMultiplier = 0.87f;
-
+	protected int lastSpeedUp = 0;
+	protected float speedUpMultiplier = 0.87f;
+	
 	// Level and its display
-	private int level = 1;
-
+	protected int level = 1;
+	
 	// Number of lines deleted in the level and its display
-	private int lineCount = 0;
-
+	protected int lineCount = 0;
+	
 	// Global score and its display
-	private int score = 0;
+	protected int score = 0;
+	public Text speedUpText;
 	public Text scoreText;
-
+	
+	// Number of lines deleted each time a block falls down (ranges 0..4)
+	protected int linesDeleted;
+	
 	// Number of times in a row that 4 lines where deleted at the same time
-	private int combo = 1;
-
-//	private BlockController1 master_controller;
-
+	protected int combo = 1;
+	
+	// Need a team atm
+	protected int team, other_team;
+	
+//	protected BaseController other_controller;
 	public ControllerInterface ci;
 
-//	private bool partnerControllerSet = false;
-
-	void Awake () {
-//		master_controller = GameObject.Find ("BlockController1").GetComponent<BlockController1>();
-		gameBoard = GameObject.FindGameObjectWithTag ("Player2_GameBoard");
-
-		spawner = GameObject.Find ("Spawner2");
-		
-		for (int i = 0; i < 4; i++) {
-			ghost [i] = (GameObject)Instantiate (ghostPrefab,
-			                                   transform.position + new Vector3 (i, 10, 0),
-			                                   Quaternion.identity);
-		}
-
-		blockGrid = new Grid (5, 25, 5);
-	}
-
-	void Start() {
-		// Initialize wiimote receiver
-		// TODO(Douglas): Make this work for multiple controllers (if needed)
-		ci = ControllerInterface.Instance;
-		if (ENABLE_WIIMOTE) {
-			receiver = WiimoteReceiver.Instance;
-			receiver.connect ();
-			while (true) { 
-				if (receiver.wiimotes.ContainsKey(team)) {
-					ci.setController(team,	receiver.wiimotes[team]);
-					break;
-				}
-			}
-		} else {
-			ci.setController(team, new Keyboard_player2());
-		}
-	}
-
-	public void setBlock(GameObject block){
-		currentBlock = (GameObject)Instantiate (block, spawner.transform.position, spawner.transform.rotation);
-	}
-
-	// Set rate at which user is able to rotate
-	public void setRotateRate(float r){
-		rotateRate = r;
-	}
-
-	// Set rate at which user is able to move horizontally
-	public void setHorizontalRate(float h){
-		horizontalRate = h;
-	}
-
-	// Set the rate at which the blocks fall naturally
-	public void setFallRateMultiplier(float f){
-		fallRateMultiplier = f;
-	}
-
-	// Set rate at which user is able to make blocks fastfall
-	public void setFastFallRate(float f){
-		fastFallRate = f;
-	}
-
-	void Update() {
+	protected virtual void Update() {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
+			game_over = true;
 			Debug.Log("GAME OVER");
 			Destroy (currentBlock);
 			Destroy(this);
 		}
-
-
+		
+		
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
-		//		if ((ControllerInterface.MoveLeft (team)) && !left) {
-		if(ci.MoveLeft(1) && !move){
+		if(ci.MoveLeft(team) && !move){
 			move = true;
-			StartCoroutine("MoveRightZ");
+			StartCoroutine("MoveLeftX");
 		}
-
+		
 		// Move Right
-		//		if (ControllerInterface.MoveRight (team) && !right) {
-		else if(ci.MoveRight(1) && !move){
-			move = true;
-			StartCoroutine ("MoveLeftZ");
-		}
-
-		// Rotate Left
-		//		if (ControllerInterface.RotLeft (team) && !rotate) {
-		else if(ci.RotLeft(1) && !rotate){
-			rotate = true;
-			StartCoroutine("RotateRightZ");
-		}
-
-		// Rotate Left
-		//		if (ControllerInterface.RotRight (team) && !rotate) {
-		else if(ci.RotRight(1) && !rotate){
-			rotate = true;
-			StartCoroutine("RotateLeftZ");
-		}
-
-		if(ci.MoveLeft(2) && !move){
-			move = true;
-			StartCoroutine ("MoveLeftX");
-		}
-
-		else if(ci.MoveRight(2) && !move){
+		else if(ci.MoveRight(team) && !move){
 			move = true;
 			StartCoroutine ("MoveRightX");
 		}
-
-		else if(ci.RotLeft(2) && !rotate){
+		
+		// Rotate Left
+		else if(ci.RotLeft(team) && !rotate){
 			rotate = true;
-			StartCoroutine ("RotateLeftX");
+			StartCoroutine("RotateLeftX");
+		}
+		
+		// Rotate Left
+		else if(ci.RotRight(team) && !rotate){
+			rotate = true;
+			StartCoroutine("RotateRightX");
+		}
+		
+		if(ci.MoveLeft(other_team) && !move){
+			move = true;
+			StartCoroutine ("MoveLeftZ");
+		}
+		
+		else if(ci.MoveRight(other_team) && !move){
+			move = true;
+			StartCoroutine ("MoveRightZ");
+		}
+		
+		else if(ci.RotLeft(other_team) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateLeftZ");
+		}
+		
+		else if(ci.RotRight(other_team) && !rotate){
+			rotate = true;
+			StartCoroutine ("RotateRightZ");
 		}
 
-		else if(ci.RotRight(2) && !rotate){
-			rotate = true;
-			StartCoroutine ("RotateRightX");
-		}
-
-		// Move Downwards and Fall
-		//		if (ControllerInterface.ActionButtonCombined (1) ||
-		//			Time.time - lastFall >= fallRate * fallRateMultiplier && !fall) {
 		if((ci.MoveDownCombined() ||
-		   Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
+		    Time.time - lastFall >= fallRate * fallRateMultiplier) && !fall){
 			fall = true;
 			StartCoroutine ("Fall");
 		}
@@ -201,7 +139,35 @@ public class BlockController2 : MonoBehaviour {
 		speedUp();
 	}
 
-	// CoRoutine for moving left on the x-axis
+	protected virtual void Awake(){
+	}
+
+	protected virtual void Start(){
+	}
+
+	protected virtual void FixedUpdate(){
+	}
+
+	// Set rate at which user is able to rotate
+	public void setRotateRate(float r){
+		rotateRate = r;
+	}
+	
+	// Set rate at which user is able to move horizontally
+	public void setHorizontalRate(float h){
+		horizontalRate = h;
+	}
+	
+	// Set the rate at which the blocks fall naturally
+	public void setFallRateMultiplier(float f){
+		fallRateMultiplier = f;
+	}
+	
+	// Set rate at which user is able to make blocks fastfall
+	public void setFastFallRate(float f){
+		fastFallRate = f;
+	}
+
 	IEnumerator MoveLeftX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(-1, 0, 0);
@@ -216,12 +182,12 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		move = false;
 	}
-
+	
 	// CoRoutine for moving right on the x-axis
 	IEnumerator MoveRightX(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(1, 0, 0);
-
+		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -233,11 +199,11 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		move = false;
 	}
-
+	
 	// CoRoutine for rotating left around the x-axis
 	IEnumerator RotateLeftX(){
 		currentBlock.transform.Rotate(0, 0, 90, Space.World);
-
+		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -249,11 +215,11 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
-
+	
 	// CoRoutine for rotating right around the x-axis
 	IEnumerator RotateRightX(){
 		currentBlock.transform.Rotate(0, 0, -90, Space.World);
-
+		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -265,7 +231,7 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
-
+	
 	// CoRoutine for moving left on the z-axis
 	IEnumerator MoveLeftZ(){
 		// Modify position
@@ -281,7 +247,7 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		move = false;
 	}
-
+	
 	// CoRoutine for moving right on the z-axis
 	IEnumerator MoveRightZ(){
 		// Modify position
@@ -297,11 +263,11 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(horizontalRate);
 		move = false;
 	}
-
+	
 	// CoRoutine for rotating left around the z-axis
 	IEnumerator RotateLeftZ(){
 		currentBlock.transform.Rotate(-90, 0, 0, Space.World);
-
+		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -313,11 +279,11 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
-
+	
 	// CoRoutine for moving right around the z-axis
 	IEnumerator RotateRightZ(){
 		currentBlock.transform.Rotate(90, 0, 0, Space.World);
-
+		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
@@ -329,12 +295,12 @@ public class BlockController2 : MonoBehaviour {
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
-
+	
 	// CoRoutine for making pieces fall
-	IEnumerator Fall(){
+	protected virtual IEnumerator Fall(){
 		// Modify position
 		currentBlock.transform.position += new Vector3(0, -1, 0);
-
+		
 		// See if valid
 		if (isValidGridPos()) {
 			// It's valid. Update grid.
@@ -342,22 +308,17 @@ public class BlockController2 : MonoBehaviour {
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.position += new Vector3(0, 1, 0);
-			// Play the explosion effect
-			//			effect.transform.position = currentBlock.transform.position;
-			//			effect.Play();
-			// Clear filled horizontal lines
-			blockGrid.deleteFullPlans();
-			//			linesDeleted = 0;
-			// Update the scores depending on the number of lines deleted
-//			updateScores(linesDeleted)
+
+			linesDeleted =  blockGrid.deleteFullPlans();
+			updateScores(linesDeleted);
 		}
 		lastFall = Time.time;
 		yield return new WaitForSeconds(fastFallRate);
 		fall = false;
 	}
-
+	
 	// Updating the grid with new positions
-	void updateGrid() {
+	protected void updateGrid() {
 		// Remove old children from grid
 		for (int y = 0; y < blockGrid.getHeight(); ++y) {
 			for (int x = 0; x < blockGrid.getWidth(); ++x) {
@@ -371,7 +332,7 @@ public class BlockController2 : MonoBehaviour {
 				}
 			}
 		}
-
+		
 		// Add new children to grid
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
@@ -384,18 +345,18 @@ public class BlockController2 : MonoBehaviour {
 		// Update ghost
 		updateGhost();
 	}
-
+	
 	// Checks if the current block is in a valid grid position
-	bool isValidGridPos() {
+	protected bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
 			// Offset the position with the gameboards position
 			Vector3 temp = child.position - gameBoard.transform.position;
 			Vector3 v = blockGrid.roundVec3(temp);
-
+			
 			// Not inside Border?
 			if (!blockGrid.insideBorder(v))
 				return false;
-
+			
 			// Block in grid cell (and not part of same group)?
 			Transform[,] grid = blockGrid.getGrid ((int)v.z);
 			if (grid[(int)v.x, (int)v.y] != null &&
@@ -404,16 +365,16 @@ public class BlockController2 : MonoBehaviour {
 		}
 		return true;
 	}
-	
+
 	/*
 	 * Update the position of the ghost blocks.
 	 * If there is a free spot where the ghost should be, 
 	 * place one of the 4 blocks, otherwise disable its renderer.
 	 */
-	void updateGhost() {
+	protected void updateGhost() {
 		int gap = 25;
 		int newGap = 25;
-//		int block = 0;
+		//		int block = 0;
 		
 		for (int i = 0; i < 4; i++) {
 			ghost[i].GetComponent<MeshRenderer>().enabled = false;
@@ -479,25 +440,19 @@ public class BlockController2 : MonoBehaviour {
 	}
 
 	// Applies transparency to all blocks that are behind the current block
-	void applyTransparency() {
-		
+	protected void applyTransparency() {
 		int nearestZ = getNearestCurrentBlockZPos ();
-
+		
 		disableTransparency ();
 		
 		// Apply transparency to all blocks in front of nearest
 		for (int z = 0; z < nearestZ; z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
-			
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
 				for (int x = 0; x < blockGrid.getWidth(); ++x) {
-					
 					if(grid[x, y] != null && grid[x, y].parent != currentBlock.transform){
-						
 						foreach(Transform childBlock in grid[x, y].parent){
-							
 							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
-								
 								Renderer r = childBlock.GetComponent<Renderer>();
 								Color newColor = r.material.color;
 								newColor.a = 0.4f;
@@ -512,12 +467,11 @@ public class BlockController2 : MonoBehaviour {
 	
 	// Returns the the nearest grid position on the Z-axis of a current block
 	int getNearestCurrentBlockZPos(){
-
+		
 		int transparencyZ = 999;
 		
 		for (int z = 0; z < blockGrid.getDepth(); z++) {
 			Transform[,] grid = blockGrid.getGrid (z);
-			
 			for (int y = 0; y < blockGrid.getHeight(); ++y) {
 				for (int x = 0; x < blockGrid.getWidth(); ++x){
 					if(grid[x, y] != null && grid[x, y].parent == currentBlock.transform){
@@ -535,18 +489,18 @@ public class BlockController2 : MonoBehaviour {
 		
 		return transparencyZ;
 	}
-
+	
 	void disableTransparency(){
 		disableTransparency (0);
 	}
-
+	
 	// Disable transparency at all blocks at depth z and higher
 	void disableTransparency(int depth){
-
+		
 		for (int y = 0; y < blockGrid.getHeight(); ++y) {
 			for (int x = 0; x < blockGrid.getWidth(); ++x) {
 				for (int z = depth; z < blockGrid.getDepth(); ++z) {
-
+					
 					Transform[,] grid = blockGrid.getGrid(z);
 					if (grid[x, y] != null) {
 						Transform p = grid[x, y].parent;
@@ -565,11 +519,12 @@ public class BlockController2 : MonoBehaviour {
 
 	// Displays the new score, level and number of lines to go till next level
 	void updateTexts() {
-		scoreText.text = score.ToString();
+		if(scoreText != null)
+			scoreText.text = score.ToString();
 	}
-
+	
 	// Updates the score depending of the number of lines deleted with the last fallen block
-	void updateScores(int linesDeleted) {
+	protected void updateScores(int linesDeleted) {
 		// Increase the score and change the combo
 		switch (linesDeleted) {
 		case 1 :
@@ -592,23 +547,23 @@ public class BlockController2 : MonoBehaviour {
 			// If no line has been deleted, the score and combo do not change.
 			break;
 		}
-
+		
 		// Increase this level's line count
 		lineCount += linesDeleted;
-
+		
 		// If the player achieved the goal (10 lines)
 		// then level up and count set back to 0
 		if (lineCount + linesDeleted > 9) {
 			lineCount = lineCount % 10;
 			level++;
 		}
-
+		
 		// Update of the displays
 		updateTexts();
 	}
-
+	
 	// Every speedUpRate seconds, increases speed
-	void speedUp(){
+	protected virtual void speedUp(){
 		int currentTime = (int) Time.timeSinceLevelLoad;
 		
 		// We check that we have waited speedUpRate time
@@ -617,10 +572,11 @@ public class BlockController2 : MonoBehaviour {
 			lastSpeedUp = currentTime;
 		}
 	}
-
+	
 	void OnApplicationQuit(){
 		if(receiver != null){
 			receiver.disconnect ();
 		}
 	}
+	
 }
