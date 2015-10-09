@@ -111,8 +111,9 @@ public class Controller2 : BaseController {
 		}
 	}
 
-	public void setBlock(GameObject block){
+	public void setBlock(GameObject block, int k1, int k2){
 		currentBlock = (GameObject)Instantiate (block, spawner.transform.position, spawner.transform.rotation);
+		currentBlock.transform.Rotate (k1 * 90, k2 * 90, 0, Space.Self);
 	}
 
 }
