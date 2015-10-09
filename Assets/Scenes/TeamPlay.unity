@@ -535,41 +535,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94dda6a95b58ab45aeffbd28a87b75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ENABLE_WIIMOTE: 1
-  gameBoard: {fileID: 0}
-  lastFall: 0
-  fallRate: 1.25
-  fallRateMultiplier: 1
-  fastFallRate: .0500000007
-  rotateRate: .400000006
-  horizontalRate: .200000003
-  currentBlock: {fileID: 0}
-  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
-  ghost:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  effect: {fileID: 19821162, guid: c8814b8fd0f9c45589ceb0526224564c, type: 2}
-  spawner: {fileID: 0}
-  move: 0
-  rotate: 0
-  fall: 0
-  spawn: 0
-  game_over: 0
-  isGameOver: 0
-  speedUpRate: 30
-  lastSpeedUp: 0
-  speedUpMultiplier: .870000005
-  speedUpText: {fileID: 487035638}
-  level: 1
-  lineCount: 0
-  score: 0
-  scoreText: {fileID: 2075436440}
-  linesDeleted: 0
-  combo: 1
-  team: 1
-  slave_controller: {fileID: 0}
 --- !u!114 &485998899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,35 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f076ce6e2217f4c819e80ef0009557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ENABLE_WIIMOTE: 1
-  team: 2
-  gameBoard: {fileID: 0}
-  lastFall: 0
-  fallRate: 1.25
-  fallRateMultiplier: 1
-  fastFallRate: .0500000007
-  rotateRate: .400000006
-  horizontalRate: .200000003
-  currentBlock: {fileID: 0}
-  ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
-  ghost:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  effect: {fileID: 0}
-  spawner: {fileID: 0}
-  move: 0
-  rotate: 0
-  fall: 0
-  speedUpRate: 30
-  lastSpeedUp: 0
-  speedUpMultiplier: .870000005
-  level: 1
-  lineCount: 0
-  score: 0
-  scoreText: {fileID: 0}
-  combo: 1
 --- !u!114 &510600531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1358,8 +1294,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294289570}
-  m_LocalRotation: {x: .130526215, y: 0, z: 0, w: .991444886}
-  m_LocalPosition: {x: 7.19999981, y: 15.5, z: -40}
+  m_LocalRotation: {x: .173648223, y: 0, z: 0, w: .984807789}
+  m_LocalPosition: {x: 7.19999981, y: 18.2000008, z: -37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1307325725}
@@ -1753,7 +1689,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1553361695}
   m_LocalRotation: {x: 0, y: .707106829, z: 0, w: .707106709}
-  m_LocalPosition: {x: 2, y: 10, z: 2}
+  m_LocalPosition: {x: 2, y: 10, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2041201595}
