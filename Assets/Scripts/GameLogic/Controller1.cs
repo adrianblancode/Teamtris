@@ -109,6 +109,8 @@ public class Controller1 : BaseController {
 
 	void OnDestroy() {
 		game_over = true;
-		speedUpText.text = "Game Over";
+		if (speedUpText != null) {
+			speedUpText.text = "Game Over";
+		}
 	}
 }
