@@ -1681,7 +1681,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294289570}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &1294289572
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1710,11 +1710,11 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
+    width: .5
     height: 1
   near clip plane: .300000012
   far clip plane: 150
-  field of view: 20
+  field of view: 22
   orthographic: 0
   orthographic size: 11.3999996
   m_Depth: -1
@@ -3223,13 +3223,13 @@ Camera:
   m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: .5
     y: 0
-    width: 1
+    width: .5
     height: 1
   near clip plane: .300000012
   far clip plane: 150
-  field of view: 20
+  field of view: 22
   orthographic: 0
   orthographic size: 11.3999996
   m_Depth: -1
