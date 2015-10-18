@@ -785,6 +785,7 @@ GameObject:
   - 81: {fileID: 908610282}
   - 114: {fileID: 908610287}
   - 114: {fileID: 908610288}
+  - 114: {fileID: 908610289}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -826,14 +827,14 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 1
-    height: 1
+    y: -.303625375
+    width: .5
+    height: 1.60725081
   near clip plane: .300000012
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -903,6 +904,25 @@ MonoBehaviour:
   separableBlurShader: {fileID: 4800000, guid: e97c14fbb5ea04c3a902cc533d7fc5d1, type: 3}
   chromAberrationShader: {fileID: 4800000, guid: 2b4f29398d9484ccfa9fd220449f5eee,
     type: 3}
+--- !u!114 &908610289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 908610281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3576edd11037454286e5a805299d42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ratioWidth: 8
+  ratioHeight: 9
+  desiredCameraViewportRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: .5
+    height: 1
 --- !u!1 &1031784323
 GameObject:
   m_ObjectHideFlags: 0

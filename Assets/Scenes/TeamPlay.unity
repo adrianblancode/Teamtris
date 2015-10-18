@@ -1668,6 +1668,7 @@ GameObject:
   - 114: {fileID: 1294289578}
   - 114: {fileID: 1294289577}
   - 114: {fileID: 1294289576}
+  - 114: {fileID: 1294289579}
   m_Layer: 0
   m_Name: Left Camera
   m_TagString: MainCamera
@@ -1709,12 +1710,12 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: .0936213806
     width: .5
-    height: 1
+    height: .812757254
   near clip plane: .300000012
   far clip plane: 150
-  field of view: 22
+  field of view: 25
   orthographic: 0
   orthographic size: 11.3999996
   m_Depth: -1
@@ -1826,6 +1827,25 @@ MonoBehaviour:
   scanSize: 1024
   rgb1: {r: 1, g: 1, b: 1, a: 1}
   rgb2: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1294289579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1294289570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3576edd11037454286e5a805299d42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ratioWidth: 8
+  ratioHeight: 9
+  desiredCameraViewportRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: .5
+    height: 1
 --- !u!1 &1295933737
 GameObject:
   m_ObjectHideFlags: 0
@@ -3087,6 +3107,7 @@ GameObject:
   - 114: {fileID: 1749130566}
   - 114: {fileID: 1749130565}
   - 114: {fileID: 1749130564}
+  - 114: {fileID: 1749130571}
   m_Layer: 0
   m_Name: Right Camera
   m_TagString: MainCamera
@@ -3224,12 +3245,12 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: .5
-    y: 0
+    y: .0936213806
     width: .5
-    height: 1
+    height: .812757254
   near clip plane: .300000012
   far clip plane: 150
-  field of view: 22
+  field of view: 25
   orthographic: 0
   orthographic size: 11.3999996
   m_Depth: -1
@@ -3245,6 +3266,25 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
   m_StereoMirrorMode: 0
+--- !u!114 &1749130571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1749130562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3576edd11037454286e5a805299d42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ratioWidth: 8
+  ratioHeight: 9
+  desiredCameraViewportRect:
+    serializedVersion: 2
+    x: .5
+    y: 0
+    width: .5
+    height: 1
 --- !u!1 &1829193482
 GameObject:
   m_ObjectHideFlags: 0
