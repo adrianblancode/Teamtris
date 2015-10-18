@@ -20,7 +20,7 @@ public class BaseController : MonoBehaviour {
 	protected float lastFall = 0;
 	
 	// Rate in seconds between each natural fall of the block
-	protected float fallRate = 1.25f;
+	protected float fallRate = 1.6f;
 	protected float fallRateMultiplier = 1.0f;
 	
 	// Rate in seconds between each fastfall of the block
@@ -49,7 +49,7 @@ public class BaseController : MonoBehaviour {
 	
 	// Time in seconds last speedup occurred at
 	protected int lastSpeedUp = 0;
-	protected float speedUpMultiplier = 0.87f;
+	protected float speedUpMultiplier = 0.92f;
 	
 	// Level and its display
 	protected int level = 1;
@@ -455,7 +455,9 @@ public class BaseController : MonoBehaviour {
 							if(Mathf.Abs(childBlock.position.z - grid[x, y].position.z) < 0.1f){
 								Renderer r = childBlock.GetComponent<Renderer>();
 								Color newColor = r.material.color;
-								newColor.a = 0.4f;
+
+								float distance = ((float) nearestZ - z);
+								newColor.a = 0.8f - 0.25f * distance;
 								childBlock.GetComponent<Renderer>().material.color = newColor;
 							}
 						}

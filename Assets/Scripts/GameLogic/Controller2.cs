@@ -92,7 +92,7 @@ public class Controller2 : BaseController {
 			                                     Quaternion.identity);
 		}
 		
-		blockGrid = new Grid (5, 25, 5);
+		blockGrid = new Grid (4, 20, 4);
 	}
 
 	protected override void Start(){
