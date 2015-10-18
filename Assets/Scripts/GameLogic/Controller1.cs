@@ -47,13 +47,16 @@ public class Controller1 : BaseController {
 		}
 		
 		currentBlock = spawner.spawnNext();
-		other_controller.setBlock (currentBlock);
+		other_controller.setBlock (currentBlock, 0, 0);
 	}
 
 	protected override void FixedUpdate(){
 		if (spawn && !game_over) {
 			currentBlock = spawner.spawnNext();
-			other_controller.setBlock(currentBlock);
+			int k1 = Random.Range(0, 3);
+			int k2 = Random.Range(0, 3);
+			currentBlock.transform.Rotate(k1*90, k2*90, 0, Space.World);
+			other_controller.setBlock(currentBlock, k1, k2);
 			spawn = false;
 		}
 	}
