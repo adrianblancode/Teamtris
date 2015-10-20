@@ -8,7 +8,16 @@ public class MatchEffectControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine("WalkingLights");	
+	//	StartCoroutine("WalkingLights");
+
+
+		// Activate a laser beam from every child object having
+		// a LineRenderer component
+		foreach (Transform child in transform) {
+			if (child.GetComponent<LineRenderer>()) {
+				StartCoroutine("Laser", child.transform);
+			}
+		}
 	}
 	
 	// Update is called once per frame
@@ -42,6 +51,42 @@ public class MatchEffectControl : MonoBehaviour {
 					spot.enabled = true;
 			}
 			yield return new WaitForSeconds(.8f);
+		}
+	}
+
+	//
+	// Activates a laser beam from a Component containing
+	// a LineRenderer component
+	// 
+	// direction:  Use transform.forward as default
+	//
+	IEnumerator Laser(Transform laserEmitter) {
+		LineRenderer line = laserEmitter.GetComponent<LineRenderer> ();
+
+		line.enabled = true;
+		print ("Passerat line.enabled!");
+
+		while (true) {
+			// Cycles texture over time
+			line.material.mainTextureOffset = new Vector2(0, Time.time);
+
+			Ray ray = new Ray (laserEmitter.position, laserEmitter.forward);
+			RaycastHit hit;
+
+			line.SetPosition (0, ray.origin);
+
+			if (Physics.Raycast (ray, out hit, 100)) {
+				line.SetPosition (1, hit.point);
+
+				// Tutorial example shooting at a point of an object
+				if (hit.rigidbody) {
+					hit.rigidbody.AddForceAtPosition(laserEmitter.forward, hit.point);
+				}
+
+			} else {
+				line.SetPosition (1, ray.GetPoint(100));
+			}
+			yield return null;
 		}
 	}
 }
