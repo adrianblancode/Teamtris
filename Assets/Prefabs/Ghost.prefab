@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3323510}
   - 65: {fileID: 6545732}
   - 23: {fileID: 2393698}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ghost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +107,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
