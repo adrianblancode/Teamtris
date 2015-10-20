@@ -55,16 +55,19 @@ public class MatchEffectControl : MonoBehaviour {
 	}
 
 	//
-	// Activates a laser beam from a Component containing
-	// a LineRenderer component
-	// 
-	// direction:  Use transform.forward as default
+	// Activates a laser beam from an object containing
+	// - a LineRenderer component (laserbeam)
+	// - a Light component in a child (halo point at line start)
 	//
 	IEnumerator Laser(Transform laserEmitter) {
 		LineRenderer line = laserEmitter.GetComponent<LineRenderer> ();
+		Light haloPoint1 = laserEmitter.GetComponentInChildren<Light> ();
+
+		// Make a second halo point for the beam hitting something
+		Light haloPoint2 = GameObject.Instantiate (haloPoint1);
+		haloPoint2.enabled = false;
 
 		line.enabled = true;
-		print ("Passerat line.enabled!");
 
 		while (true) {
 			// Cycles texture over time
@@ -75,15 +78,21 @@ public class MatchEffectControl : MonoBehaviour {
 
 			line.SetPosition (0, ray.origin);
 
-			if (Physics.Raycast (ray, out hit, 100)) {
+			if (Physics.Raycast (ray, out hit, 10)) {
+				// Beam ends at object it hits, add halo glow there
 				line.SetPosition (1, hit.point);
+				// Move halo a bit to get it just outside the block
+				haloPoint2.transform.position = hit.point - 0.15f*laserEmitter.forward;
+				haloPoint2.enabled = true;
 
-				// Tutorial example shooting at a point of an object
+				// If the object is a physics object, we can blow it away
 				if (hit.rigidbody) {
-					hit.rigidbody.AddForceAtPosition(laserEmitter.forward, hit.point);
+//					hit.rigidbody.AddForceAtPosition(laserEmitter.forward*10, hit.point);
 				}
-
-			} else {
+			}
+			else {
+				// Beam goes to infinity, no halo at the end point
+				haloPoint2.enabled = false;
 				line.SetPosition (1, ray.GetPoint(100));
 			}
 			yield return null;
