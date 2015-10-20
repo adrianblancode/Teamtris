@@ -359,7 +359,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 536746401}
   - 114: {fileID: 536746400}
-  - 114: {fileID: 536746402}
   m_Layer: 0
   m_Name: QuitWatcher
   m_TagString: Untagged
@@ -390,17 +389,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
---- !u!114 &536746402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 536746399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dc46fecd8aa63948a68c31175aa99de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &572523810
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,9 +815,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: -.303625375
+    y: -.191163629
     width: .5
-    height: 1.60725081
+    height: 1.38232732
   near clip plane: .300000012
   far clip plane: 1000
   field of view: 60
