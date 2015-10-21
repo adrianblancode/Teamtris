@@ -1,4 +1,4 @@
-﻿Shader "Custom/CustomShader" {
+﻿Shader "Custom/CustomCRTShader" {
 	Properties {
 		_MainTex ("", 2D) = "white" {}
 	}
@@ -16,6 +16,7 @@
 
             #include "UnityCG.cginc"
 
+			// Data structure to pass information from vertex shader to fragment shader
 			struct v2f {
 				float4 position : POSITION;
 				float2 texCoord : TEXCOORD0;
@@ -51,42 +52,69 @@
 				
 				return texCoord;
 			}
-
-            //Our Fragment Shader
-			fixed4 frag (v2f input) : COLOR{
 			
-				float scanlineIntensity = 1.5;
+			fixed4 vignette(v2f input){
+				float vignetteIntensity = 0.2;
+				float vignetteBrightness = 20.0;
+			
+				// If either the horizontal or vertical position is out of bounds (due to our curving)
+				// The vignette will return negative values which turns the pixels into black
+				// 
+				float horizontal = input.texCoord.x  * (1.0 - input.texCoord.x);
+				float vertical = input.texCoord.y * (1.0 - input.texCoord.y);
+
+				float vignette = horizontal * vertical * vignetteBrightness;
 				
-				fixed4 color = tex2D(_MainTex, input.texCoord); //Get the orginal rendered color
-				//input.texCoord = RadialDistortion(_MainTex)
-				input.texCoord = curve(input.texCoord);
-
-				// Vignette
-				float vig = (0.0 + 1.0 * 16.0 * input.texCoord.x * input.texCoord.y *(1.0 - input.texCoord.x) * (1.0 - input.texCoord.y));
-				color *= (pow(vig,0.3));
-
+				if(horizontal < 0 && vertical < 0){
+					return pow(-vignette, vignetteIntensity);
+				}
+				
+				return pow(vignette, vignetteIntensity);
+			}
+			
+			fixed4 horizontalScanlines(v2f input){
+				float scanlineIntensity = 1.5;
+			
 				// We generate the scanline abberations through lightening and darkening based on screen coordinates
 				// Instead of a sine wave, we use a fourier transform to emulate a square-like wave
 				float scanlines = sin(input.texCoord.y * 1000.0 * scanlineIntensity)
 					+ 0.13 * sin(input.texCoord.y * 1000.0 * scanlineIntensity * 3);
 
-				color = color * (1.0 + 0.3 * scanlines);
-				
+				return (1.0 + 0.2 * scanlines);
+			}
+			
+			fixed4 verticalScanlines(v2f input){
+				return 1.0 - 0.65 * (clamp(((input.position.x % 2.0) - 1.0) * 2.0, 0.0, 1.0));
+			}
+			
+			fixed4 clipCurve(v2f input){
 				// When we curved the image, some of the texture coordinates will reach out of bounds
 				// These fragments, we simply color them black
 				if (input.texCoord.x > 1.0 || input.texCoord.y > 1.0){
-					color *= 0.0;
+					return 0.0;
 				}
 				if (input.texCoord.x < 0.0 || input.texCoord.y < 0.0) {
-					color *= 0.0;
+					return 0.0;
 				}
 				
-				// Verical scanlines
-				color *= 1.0 - 0.65 * (clamp(((input.position.x % 2.0) - 1.0) * 2.0, 0.0, 1.0));
+				return 1.0;
+			}
 
-				//fixed4(pow(res, fixed3(1.0f / gamma, 1.0f / gamma, 1.0f / gamma)), col.a) * col.a;
+            //Our Fragment Shader
+			fixed4 frag (v2f input) : COLOR{
+				fixed4 color = tex2D(_MainTex, input.texCoord); //Get the orginal rendered color
+				
+				input.texCoord = curve(input.texCoord);
+
+				color *= vignette(input);
+				color *= horizontalScanlines(input);
+				color *= verticalScanlines(input);
+				color *= clipCurve(input);
 			
-				return color * 1.5f;
+				// The image is now darker so we increase brightness
+				color *= 1.8f;
+
+				return color;
 			}
 			
             ENDCG
