@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CustomShader : MonoBehaviour {
+public class CustomCRTShader : MonoBehaviour {
 
 	// We attach our custom shader to a material
 	public Material material;
