@@ -74,7 +74,7 @@
 			
 			// Generates horizontal scanlines with fourier transforms
 			fixed4 horizontalScanlines(v2f input){
-				float scanlineIntensity = 1.5;
+				float scanlineIntensity = 1.0;
 			
 				// We generate the scanline abberations through lightening and darkening based on screen coordinates
 				// Instead of a sine wave, we use a fourier transform to emulate a square-like wave
@@ -87,11 +87,25 @@
 			// Turns every other pixel line into black
 			fixed4 verticalScanlines(v2f input){
 				float darkenIntensity = 0.65;
+				float epsilon = 0.001;
 				
 				float hor = (input.position.x % 2.0);
-				if(hor > 1.0){
+				if(hor > (1.0 - epsilon)){
 					return 1.0;
 				} else return 1.0 - darkenIntensity;
+			}
+			
+			fixed4 clipCurve(v2f input){
+				// When we curved the image, some of the texture coordinates will reach out of bounds
+				// These fragments, we simply color them black
+				if (input.texCoord.x > 1.0 || input.texCoord.y > 1.0){
+					return 0.0;
+				}
+				if (input.texCoord.x < 0.0 || input.texCoord.y < 0.0) {
+					return 0.0;
+				}
+				
+				return 1.0;
 			}
 
 			//Our Fragment Shader
@@ -102,6 +116,7 @@
 				color *= vignette(input);
 				color *= horizontalScanlines(input);
 				color *= verticalScanlines(input);
+				color *= clipCurve(input);
 			
 				// The image is now darker so we increase brightness
 				color *= 1.8f;
