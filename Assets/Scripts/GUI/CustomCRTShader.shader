@@ -21,12 +21,12 @@
 				float2 texCoord : TEXCOORD0;
 			};
 
-            v2f vert(appdata_base v) : POSITION {
-                v2f output;
+			v2f vert(appdata_base v) : POSITION {
+				v2f output;
 				output.position = mul (UNITY_MATRIX_MVP, v.vertex);
 				output.texCoord = MultiplyUV (UNITY_MATRIX_TEXTURE0, v.texcoord.xy);
 				return output;
-            }
+			}
 			
 			sampler2D _MainTex; //Reference in Pass is necessary to let us use this variable in shaders
 
@@ -94,7 +94,7 @@
 				} else return 1.0 - darkenIntensity;
 			}
 
-            //Our Fragment Shader
+			//Our Fragment Shader
 			fixed4 frag (v2f input) : COLOR{
 				fixed4 color = tex2D(_MainTex, input.texCoord); //Get the orginal rendered color
 
