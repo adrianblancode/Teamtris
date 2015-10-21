@@ -2,18 +2,18 @@
 	Properties {
 		_MainTex ("", 2D) = "white" {}
 	}
-	
-    SubShader {
-    
-    ZTest Always Cull Off ZWrite Off Fog { Mode Off } //Rendering settings
-    
-        Pass {
-            CGPROGRAM
 
-            #pragma vertex vert
-            #pragma fragment frag
-            #pragma target 3.0
-            #include "UnityCG.cginc"
+	SubShader {
+
+	ZTest Always Cull Off ZWrite Off Fog { Mode Off } //Rendering settings
+
+		Pass {
+			CGPROGRAM
+
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma target 3.0
+			#include "UnityCG.cginc"
 
 			// Data structure to pass information from vertex shader to fragment shader
 			struct v2f {
@@ -108,8 +108,8 @@
 
 				return color;
 			}
-			
-            ENDCG
-        }
-    }
+
+			ENDCG
+		}
+	}
 }
