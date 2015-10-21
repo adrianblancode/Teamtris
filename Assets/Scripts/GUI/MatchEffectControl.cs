@@ -2,55 +2,49 @@
 using System.Collections;
 
 public class MatchEffectControl : MonoBehaviour {
+	// Script keeps an own active flag, since deactivating the 
+	// Component's flag will stop the script and deactivate forever
+	public bool active = false;
+	private bool notStarted = true;
 
-	// #of spots in front, the rest are assumed to be on the side
-	const int frontSpots = 4; 
-
-	// Use this for initialization
 	void Start () {
-	//	StartCoroutine("WalkingLights");
-
-
-		// Activate a laser beam from every child object having
-		// a LineRenderer component
-		foreach (Transform child in transform) {
-			if (child.GetComponent<LineRenderer>()) {
-				StartCoroutine("Laser", child.transform);
-			}
-		}
+		activationMode(active);	
 	}
 	
-	// Update is called once per frame
-	void Update () {			
+
+	// Called when a value is changed in inspector
+	void OnValidate () {
+		activationMode(active);
 	}
 
-	IEnumerator WalkingLights() {
-		int spotNumber;
+	void Update () {
 
-		while (true) {
-			spotNumber = 1;
+		// Toggle this effect on/off by key L = "laser"
+		if (Input.GetKeyDown (KeyCode.L)) {
+			active = !active;
+			activationMode(active);
+		}
+	}
+
+	//
+	// Set activationmode
+	//
+	// Shows or hides all objects used for the matcheffect feature
+	//
+	void activationMode(bool active) {
+		foreach (Transform child in transform) {
+			child.gameObject.SetActive(active);
+		}
+
+		if (active && notStarted) {
+			// Activate a laser beam from every child object having
+			// a LineRenderer component
 			foreach (Transform child in transform) {
-				Light spot = child.GetComponent<Light>();
-
-				// Enable front spots, disable side spots 
-				if (spotNumber++ <= frontSpots)
-					spot.enabled = true;
-				else
-					spot.enabled = false;
+				if (child.GetComponent<LineRenderer> ()) {
+					StartCoroutine ("Laser", child.transform);
+				}
 			}
-			yield return new WaitForSeconds(.3f);
-
-			spotNumber = 1;
-			foreach (Transform child in transform) {
-				Light spot = child.GetComponent<Light>();
-				
-				// Disable front spots, enable side spots 
-				if (spotNumber++ <= frontSpots)
-					spot.enabled = false;
-				else
-					spot.enabled = true;
-			}
-			yield return new WaitForSeconds(.8f);
+			notStarted = false;
 		}
 	}
 
@@ -70,30 +64,36 @@ public class MatchEffectControl : MonoBehaviour {
 		line.enabled = true;
 
 		while (true) {
-			// Cycles texture over time
-			line.material.mainTextureOffset = new Vector2(0, Time.time);
+			// Idle, unless active
+			if (active) {
+				// Cycles texture over time
+				line.material.mainTextureOffset = new Vector2(0, Time.time);
 
-			Ray ray = new Ray (laserEmitter.position, laserEmitter.forward);
-			RaycastHit hit;
+				Ray ray = new Ray (laserEmitter.position, laserEmitter.forward);
+				RaycastHit hit;
 
-			line.SetPosition (0, ray.origin);
+				line.SetPosition (0, ray.origin);
 
-			if (Physics.Raycast (ray, out hit, 10)) {
-				// Beam ends at object it hits, add halo glow there
-				line.SetPosition (1, hit.point);
-				// Move halo a bit to get it just outside the block
-				haloPoint2.transform.position = hit.point - 0.15f*laserEmitter.forward;
-				haloPoint2.enabled = true;
+				if (Physics.Raycast (ray, out hit, 10)) {
+					// Beam ends at object it hits, add halo glow there
+					line.SetPosition (1, hit.point);
+					// Move halo a bit to get it just outside the block
+					haloPoint2.transform.position = hit.point - 0.15f*laserEmitter.forward;
+					haloPoint2.enabled = true;
 
-				// If the object is a physics object, we can blow it away
-				if (hit.rigidbody) {
-//					hit.rigidbody.AddForceAtPosition(laserEmitter.forward*10, hit.point);
+					// If the object is a physics object, we can blow it away
+					if (hit.rigidbody) {
+	//					hit.rigidbody.AddForceAtPosition(laserEmitter.forward*10, hit.point);
+					}
+				}
+				else {
+					// Beam goes to infinity, no halo at the end point
+					haloPoint2.enabled = false;
+					line.SetPosition (1, ray.GetPoint(100));
 				}
 			}
 			else {
-				// Beam goes to infinity, no halo at the end point
 				haloPoint2.enabled = false;
-				line.SetPosition (1, ray.GetPoint(100));
 			}
 			yield return null;
 		}
