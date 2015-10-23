@@ -38,3 +38,5 @@ Thumbs.db
 
 # vim
 *.swp
+
+_site/*
