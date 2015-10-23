@@ -128,11 +128,11 @@
 
           <div class="col-sm-15 col-md-15">
             <div class="thumbnail">
-              <img src="webfoto.JPG">
+              <img src="https://scontent-ams2-1.xx.fbcdn.net/hprofile-xfp1/t31.0-1/c379.0.1290.1290/10506738_10150004552801856_220367501106153455_o.jpg">
               <div class="caption">
-                <h3>M&aring;rten Norman</h3>
-                <p class="lead">I'm a student in Simulation and Virtual Design, graduating 2016. My passion is advanced interaction between humans and machines. Before KTH, I worked as a System Designer in Telecom. This means I'm used to coordinate complicated projects and deliver reliable machines on time.  In this project, I worked on learning the Unity platform while using it in a real project. Learing to answer questions like: How is this implemeted in the architecture? What is the Unity designer's intended ways of doing things?  My concrete graphics oriented coding has been physics and particle oriented effects.</p>
-                <center><a href="https://se.linkedin.com/in/martennorman"><i class="glyphicon glyphicon-envelope"></i></a></center>
+                <h3>Morten Norman</h3>
+                <p class="lead">Self-introduction here</p>
+                <center><a href="mailto:martenno@kth.se"><i class="glyphicon glyphicon-envelope"></i></a></center>
               </div>
             </div>
           </div>
