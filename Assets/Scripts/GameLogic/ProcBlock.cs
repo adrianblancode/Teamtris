@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class ProcBlock : MonoBehaviour {
 
+	private int x_limit, y_limit, z_limit;
+
     public GameObject[] block_parts;
 
     private enum Directions { Forward=0, Backward, Left, Right, Up, Down };
