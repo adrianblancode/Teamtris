@@ -116,6 +116,7 @@ public class Controller1 : BaseController {
 		game_over = true;
 		if (speedUpText) {
 			speedUpText.text = "Game Over";
+			other_controller.speedUpText.text = speedUpText.text;
 		}
 	}
 }
