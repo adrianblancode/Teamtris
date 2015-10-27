@@ -1144,7 +1144,7 @@ GameObject:
   - 222: {fileID: 487035639}
   - 114: {fileID: 487035638}
   m_Layer: 5
-  m_Name: SpeedUp
+  m_Name: SpeedUp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1244,8 +1244,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  speedUpText: {fileID: 0}
-  scoreText: {fileID: 0}
+  speedUpText: {fileID: 1030328399}
+  scoreText: {fileID: 1030328399}
 --- !u!1 &542053792
 GameObject:
   m_ObjectHideFlags: 0
@@ -2925,7 +2925,7 @@ GameObject:
   - 222: {fileID: 1030328400}
   - 114: {fileID: 1030328399}
   m_Layer: 5
-  m_Name: SpeedUp
+  m_Name: SpeedUp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3271,7 +3271,7 @@ GameObject:
   - 222: {fileID: 1208990098}
   - 114: {fileID: 1208990097}
   m_Layer: 5
-  m_Name: Score
+  m_Name: Score2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6954,7 +6954,7 @@ GameObject:
   - 222: {fileID: 2075436441}
   - 114: {fileID: 2075436440}
   m_Layer: 5
-  m_Name: Score
+  m_Name: Score1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
