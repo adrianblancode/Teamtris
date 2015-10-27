@@ -1245,7 +1245,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   speedUpText: {fileID: 1030328399}
-  scoreText: {fileID: 1030328399}
+  scoreText: {fileID: 1208990097}
 --- !u!1 &542053792
 GameObject:
   m_ObjectHideFlags: 0

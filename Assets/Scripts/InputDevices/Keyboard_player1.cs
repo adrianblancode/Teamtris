@@ -29,14 +29,14 @@ public class Keyboard_player1 : Keyboard {
 	 * Default bindings for player 1
 	 */
 	public Keyboard_player1() {
-		b_right = KeyCode.RightArrow;
-		b_left = KeyCode.LeftArrow;
-		b_up = KeyCode.L;
+		b_right = KeyCode.D;
+		b_left = KeyCode.A;
+		b_up = KeyCode.K;
 		b_down = KeyCode.Space;
-		b_rotRight = KeyCode.DownArrow;
-		b_rotLeft = KeyCode.UpArrow;
-		b_confirm = KeyCode.Return;
-		b_reject = KeyCode.Backspace;
-		b_pause = KeyCode.KeypadPlus;
+		b_rotRight = KeyCode.W;
+		b_rotLeft = KeyCode.S;
+		b_confirm = KeyCode.E;
+		b_reject = KeyCode.R;
+		b_pause = KeyCode.Q;
 	}
 }
