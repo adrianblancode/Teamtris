@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ProcBlock : MonoBehaviour {
-
+	
+	private LinkedList<GameObject> block;
+//	private Stack<GameObject> block;
+	private bool generate = false;
 	private Vector3 block_scale = new Vector3(0.9f, 0.9f, 0.9f);
 
 	private int x_limit, y_limit, z_limit;
@@ -14,7 +17,9 @@ public class ProcBlock : MonoBehaviour {
     private Dictionary<Directions, Vector3> direction_mapping;
     private Dictionary<Directions, Directions> directions_opposite;
 
-    ProcBlock() {
+    void Awake() {
+		block = new LinkedList<GameObject>();
+
         direction_mapping = new Dictionary<Directions, Vector3>();
         
         direction_mapping.Add(Directions.Right,     new Vector3(1, 0, 0));
@@ -36,37 +41,115 @@ public class ProcBlock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject b = genBlock ();
+		int i = Random.Range (0, block_parts.Length);
+		GameObject first_piece = (GameObject)Instantiate (block_parts [i]);
+		first_piece.transform.position = new Vector3 (0, 0, 0);
+		first_piece.transform.localScale = block_scale;
+		block.AddLast (first_piece);
+
+		StartCoroutine ("test");
 	}
 
-	// Update is called once per frame
-	void Update () {
+	IEnumerator apply_rule1(){
+		WaitForSeconds wait = new WaitForSeconds (1.0f);
 
+		rule1 (block.Last.Value);
+
+		yield return wait;
+		generate = false;
 	}
 
-    public GameObject genBlock(){
-		GameObject parent = new GameObject ();
+	IEnumerator apply_rule2(){
+		WaitForSeconds wait = new WaitForSeconds (1.0f);
+		
+		rule2 (block.Last.Value);
+		
+		yield return wait;
+		generate = false;
+	}
 
-        int b = Random.Range(0, block_parts.Length);
-        int num_childs = Random.Range(0, 20);
-        
-        Directions last_direction = Directions.Invalid;
-		Vector3 last_position = parent.transform.position;
-        for(int i = 0; i < num_childs; ++i){
-            Directions dir = (Directions)Random.Range(0, 6);
-			while(last_direction != Directions.Invalid && dir != directions_opposite[last_direction]){
-				dir = (Directions)Random.Range(0, 6);
+	IEnumerator test(){
+		for (int i = 0; i < 6; ++i) {
+			rule2 (block.Last.Value);
+			yield return new WaitForSeconds (1.0f);
+		}
+	}
+
+	void FixedUpdate(){
+//		if (!generate) {
+//			generate = true;
+//			StartCoroutine("apply_rule2");
+//		}
+	}
+	
+	private bool is_valid_position(Vector3 position){
+		LinkedList<GameObject>.Enumerator it = block.GetEnumerator ();
+		while (it.MoveNext()) {
+			if(it.Current.transform.position == position){
+				return false;
 			}
-			Vector3 new_position = last_position + direction_mapping[dir];
-			GameObject current = (GameObject)Instantiate(block_parts[b], new_position, parent.transform.rotation);
+		}
+		return true;
+	}
 
-			current.transform.localScale = block_scale;
-			current.transform.SetParent(parent.transform);
+	// Basic rules
 
-			last_position = new_position;
-            last_direction = dir;
-        }
+	/* Rule1:
+	 *  _	   _ _
+	 * |_| -> |_|_|
+	 * 
+	 */
+	private void rule1(GameObject lh){
+		Directions dir = (Directions)Random.Range (0, 6);
+		Vector3 new_pos = lh.transform.position + direction_mapping [dir];
+		while (!is_valid_position(new_pos)) {
+			dir = (Directions)Random.Range (0, 6);
+			new_pos = lh.transform.position + direction_mapping [dir];
+		}
+		GameObject child = (GameObject)Instantiate (lh, new_pos, lh.transform.rotation);
+		child.transform.localScale = block_scale;
+		block.AddLast (child);
+	}
 
-        return parent;
-    }
+//	/* Rule2:
+//	 *  _	   _ _ _
+//	 * |_| -> |_|_|_|
+//	 * 
+//	 */
+//	
+	private void rule2(GameObject lh){
+		Directions dir1 = (Directions)Random.Range (0, 6);
+		Directions dir2 = (Directions)Random.Range (0, 6);
+		Vector3 new_pos1 = lh.transform.position + direction_mapping [dir1];
+		Vector3 new_pos2 = lh.transform.position + direction_mapping [dir2];
+		while (!is_valid_position(new_pos1) && is_valid_position(new_pos2)) {
+			dir1 = (Directions)Random.Range (0, 6);
+			dir2 = (Directions)Random.Range (0, 6);
+			new_pos1 = lh.transform.position + direction_mapping [dir1];
+			new_pos2 = lh.transform.position + direction_mapping [dir2];
+		}
+		GameObject child1 = (GameObject)Instantiate (lh, new_pos1, lh.transform.rotation);
+		GameObject child2 = (GameObject)Instantiate (lh, new_pos2, lh.transform.rotation);
+		child1.transform.localScale = block_scale;
+		child2.transform.localScale = block_scale;
+		block.AddLast (child1);
+		block.AddLast (child2);
+	}
+//
+//	// More complex rules
+//
+//	/* Rule4:	 
+//	 *  _ _	     _ _ _
+//	 * |_|_| -> |_|_|_|
+//	 * 
+//	 */
+//	private GameObject rule4(GameObject lh){
+//	
+//	}
+
+	/* Rule5:
+	 *  _	   _ _
+	 * |_| -> |_|_|
+	 * |_| -> |_|
+	 */
 }
