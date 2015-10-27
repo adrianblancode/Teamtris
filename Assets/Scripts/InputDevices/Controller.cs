@@ -7,6 +7,7 @@ public interface Controller {
 	bool MoveLeft();
 	bool MoveUp();
 	bool MoveDown();
+	bool Quit();
 
 	/*
 	 * When implementing this function for wiimotes (or other non-discrete controllers)

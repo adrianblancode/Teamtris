@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class BaseController : MonoBehaviour {
-	// WARNING This disables the wiimote for debugging
-	// Fixes crashes upon going into the editor
-	protected bool ENABLE_WIIMOTE = false;
+
+	// WIImote class has the enable flag.
+	protected bool ENABLE_WIIMOTE = Wiimote.enableWiiMote ();
 	
 	// Wiimote controller
 	protected WiimoteReceiver receiver = null;
@@ -82,8 +82,7 @@ public class BaseController : MonoBehaviour {
 			Destroy (currentBlock);
 			Destroy(this);
 		}
-		
-		
+
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left
 		if(ci.MoveLeft(team) && !move){
