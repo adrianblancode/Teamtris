@@ -48,7 +48,14 @@ public class Controller2 : BaseController {
 			Destroy (currentBlock);
 			Destroy(this);
 		}
+
+		if (Input.GetKeyDown (KeyCode.G)) {
+			ghostActive = !ghostActive;
+		}
 		
+		if (Input.GetKeyDown (KeyCode.H)) {
+			highColumnActive = !highColumnActive;
+		}
 		
 		// TODO(Douglas): Clean up button checking for wiimotes.
 		// Move Left

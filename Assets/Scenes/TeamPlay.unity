@@ -1138,6 +1138,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  highColumnMat: {fileID: 0}
   speedUpText: {fileID: 487035638}
   scoreText: {fileID: 2075436440}
 --- !u!1 &487035635
@@ -1254,6 +1255,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  highColumnMat: {fileID: 0}
   speedUpText: {fileID: 1030328399}
   scoreText: {fileID: 1208990097}
 --- !u!1 &547612393
@@ -3601,10 +3603,10 @@ Camera:
   m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -.0851814523
-    y: 0
-    width: 1.17036295
-    height: 1
+    x: 0
+    y: .0105756279
+    width: .5
+    height: .978848755
   near clip plane: .300000012
   far clip plane: 150
   field of view: 25
@@ -5753,10 +5755,10 @@ Camera:
   m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: .414818555
-    y: 0
-    width: 1.17036295
-    height: 1
+    x: .5
+    y: .0105756279
+    width: .5
+    height: .978848755
   near clip plane: .300000012
   far clip plane: 150
   field of view: 25

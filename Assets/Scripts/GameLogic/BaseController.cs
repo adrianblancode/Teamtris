@@ -39,10 +39,14 @@ public class BaseController : MonoBehaviour {
 	public Text nextBlockText;
 
 	// Ghost objects
+	protected bool ghostActive = true;
 	public GameObject ghostPrefab;
 	public GameObject[] ghost;
 //	public ParticleSystem effect;
 	
+	protected bool highColumnActive = true;
+	public Material highColumnMat;
+
 //	protected Spawner spawner;
 	
 	protected bool move, rotate, fall, spawn, game_over = false;
@@ -83,6 +87,14 @@ public class BaseController : MonoBehaviour {
 			game_over = true;
 			Destroy (currentBlock);
 			Destroy(this);
+		}
+
+		if (Input.GetKeyDown (KeyCode.G)) {
+			ghostActive = !ghostActive;
+		}
+		
+		if (Input.GetKeyDown (KeyCode.H)) {
+			highColumnActive = !highColumnActive;
 		}
 
 		// TODO(Douglas): Clean up button checking for wiimotes.
@@ -473,10 +485,85 @@ public class BaseController : MonoBehaviour {
 			blockGrid.getGrid ((int)v.z)[(int)v.x, (int)v.y] = child;
 		}
 		
-		// Update ghost
-		updateGhost();
+		// Update material on high columns if enabled
+		if (highColumnActive) {
+			highColumns();
+		} else {
+			for (int x = 0; x < blockGrid.getWidth(); ++x) {
+				for (int z = 0; z < blockGrid.getDepth(); ++z) {
+					disableEffect(x, z);
+				}
+			}
+		}
+		
+		// Update ghost if enabled
+		if (ghostActive) { 
+			updateGhost();
+		} else {		
+			for (int i = 0; i < 4; i++) {
+				ghost[i].GetComponent<MeshRenderer>().enabled = false;
+			}
+		}
+	}
+
+	// Enable high column effect on column in x z in the grid
+	protected void enableEffect(int x, int z) {
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			Transform[,] grid = blockGrid.getGrid(z);
+			if (grid[x, y] != null) {
+				if (grid[x, y].parent != currentBlock.transform) {
+					MeshRenderer rend = grid[x, y].GetComponent<MeshRenderer>();
+					MatHolder holder = grid[x, y].GetComponent<MatHolder>();
+					if (!holder.effectOn) {
+						rend.material = holder.shaderEffect;
+						holder.effectOn = true;
+					}
+				}
+			}
+		}
 	}
 	
+	// Disable high column effect on column in x z in the grid
+	protected void disableEffect(int x, int z) {
+		for (int y = 0; y < blockGrid.getHeight(); ++y) {
+			Transform[,] grid = blockGrid.getGrid(z);
+			if (grid[x, y] != null) {
+				if (grid[x, y].parent != currentBlock.transform) {
+					MeshRenderer rend = grid[x, y].GetComponent<MeshRenderer>();
+					MatHolder holder = grid[x, y].GetComponent<MatHolder>();
+					if (holder.effectOn) {
+						rend.material = holder.mainMat;
+						holder.effectOn = false;
+					}
+				}
+			}
+		}
+	}
+	
+	// Check each column of the grid to enable or disable the effect
+	// depending on the height of the column
+	protected void highColumns() {
+		for (int x = 0; x < blockGrid.getWidth(); ++x) {
+			for (int z = 0; z < blockGrid.getDepth(); ++z) {
+				bool empty = true;
+				for (int y = (blockGrid.getHeight() - 13); y < (blockGrid.getHeight() - 10); ++y) {
+					Transform[,] grid = blockGrid.getGrid(z);
+					// If any of the 3 top blocks is not null,
+					// change material of the column and got to next column
+					if (grid[x, y] != null) {
+						empty = false;
+						if (grid[x, y].parent !=  currentBlock.transform) {
+							enableEffect(x, z);
+							break;
+						}
+					}
+				}
+				if (empty) 
+					disableEffect(x, z);
+			}
+		}
+	}
+
 	// Checks if the current block is in a valid grid position
 	protected bool isValidGridPos() {
 		foreach (Transform child in currentBlock.transform) {
