@@ -203,15 +203,47 @@ public class BaseController : MonoBehaviour {
 	
 	// CoRoutine for rotating left around the x-axis
 	IEnumerator RotateLeftX(){
-		currentBlock.transform.Rotate(0, 0, 90, Space.World);
+		bool rotated = false;
 		
+		currentBlock.transform.Rotate(0, 0, 90, Space.World);
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
 			updateGrid ();
+			rotated = true;
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, -90, Space.World);
+		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(0, 0, 90, Space.World);
+			currentBlock.transform.position += new Vector3(-1, 0, 0);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(1, 0, 0);
+				currentBlock.transform.Rotate (0, 0, -90, Space.World);
+			}
+		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(0, 0, 90, Space.World);
+			currentBlock.transform.position += new Vector3(1, 0, 0);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(-1, 0, 0);
+				currentBlock.transform.Rotate (0, 0, -90, Space.World);
+			}
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
@@ -219,16 +251,49 @@ public class BaseController : MonoBehaviour {
 	
 	// CoRoutine for rotating right around the x-axis
 	IEnumerator RotateRightX(){
+		bool rotated = false;
+
 		currentBlock.transform.Rotate(0, 0, -90, Space.World);
-		
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
 			updateGrid ();
+			rotated = true;
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (0, 0, 90, Space.World);
 		}
+
+		if (!rotated) {
+			currentBlock.transform.Rotate(0, 0, -90, Space.World);
+			currentBlock.transform.position += new Vector3(-1, 0, 0);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(1, 0, 0);
+				currentBlock.transform.Rotate (0, 0, 90, Space.World);
+			}
+		}
+
+		if (!rotated) {
+			currentBlock.transform.Rotate(0, 0, -90, Space.World);
+			currentBlock.transform.position += new Vector3(1, 0, 0);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(-1, 0, 0);
+				currentBlock.transform.Rotate (0, 0, 90, Space.World);
+			}
+		}
+
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
@@ -267,31 +332,96 @@ public class BaseController : MonoBehaviour {
 	
 	// CoRoutine for rotating left around the z-axis
 	IEnumerator RotateLeftZ(){
-		currentBlock.transform.Rotate(-90, 0, 0, Space.World);
+		bool rotated = false;
 		
+		currentBlock.transform.Rotate(-90, 0, 0, Space.World);
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
 			updateGrid ();
+			rotated = true;
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (90, 0, 0, Space.World);
 		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(-90, 0, 0, Space.World);
+			currentBlock.transform.position += new Vector3(0, 0, -1);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(0, 0, 1);
+				currentBlock.transform.Rotate (90, 0, 0, Space.World);
+			}
+		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(-90, 0, 0, Space.World);
+			currentBlock.transform.position += new Vector3(0, 0, 1);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(0, 0, -1);
+				currentBlock.transform.Rotate (90, 0, 0, Space.World);
+			}
+		}
+
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
 	}
 	
 	// CoRoutine for moving right around the z-axis
 	IEnumerator RotateRightZ(){
-		currentBlock.transform.Rotate(90, 0, 0, Space.World);
+		bool rotated = false;
 		
+		currentBlock.transform.Rotate(90, 0, 0, Space.World);
 		// See if valid
 		if (isValidGridPos ()) {
 			// It's valid. Update grid.
 			updateGrid ();
+			rotated = true;
 		} else {
 			// It's not valid. revert.
 			currentBlock.transform.Rotate (-90, 0, 0, Space.World);
+		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(90, 0, 0, Space.World);
+			currentBlock.transform.position += new Vector3(0, 0, -1);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(0, 0, 1);
+				currentBlock.transform.Rotate (-90, 0, 0, Space.World);
+			}
+		}
+		
+		if (!rotated) {
+			currentBlock.transform.Rotate(90, 0, 0, Space.World);
+			currentBlock.transform.position += new Vector3(0, 0, 1);
+			// See if valid
+			if (isValidGridPos ()) {
+				// It's valid. Update grid.
+				updateGrid ();
+				rotated = true;
+			} else {
+				// It's not valid. revert.
+				currentBlock.transform.position += new Vector3(0, 0, -1);
+				currentBlock.transform.Rotate (-90, 0, 0, Space.World);
+			}
 		}
 		yield return new WaitForSeconds(rotateRate);
 		rotate = false;
