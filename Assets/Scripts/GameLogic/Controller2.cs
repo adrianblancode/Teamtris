@@ -15,7 +15,7 @@ public class Controller2 : BaseController {
 		
 		spawner = GameObject.Find ("Spawner2");
 
-		nextBlockPosition = nextBlockText.transform.position + new Vector3(1, -2, 0);
+		nextBlockPosition = nextBlockText.transform.position + new Vector3(-2, -2, 0);
 
 		for (int i = 0; i < 4; i++) {
 			ghost [i] = (GameObject)Instantiate (ghostPrefab,

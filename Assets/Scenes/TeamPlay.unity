@@ -883,7 +883,7 @@ GameObject:
   - 222: {fileID: 298187188}
   - 114: {fileID: 298187187}
   m_Layer: 5
-  m_Name: NextPiece
+  m_Name: NextPiece1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1131,6 +1131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 068d8ffff17e14930bf29d05d74e6e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextBlockText: {fileID: 298187187}
   ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
   ghost:
   - {fileID: 0}
@@ -1246,6 +1247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c551a054c284f239c68998a7b6eed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextBlockText: {fileID: 830632773}
   ghostPrefab: {fileID: 105440, guid: 901dd27e764664054bf7e093b9dddb7b, type: 2}
   ghost:
   - {fileID: 0}
@@ -2091,7 +2093,7 @@ GameObject:
   - 222: {fileID: 830632774}
   - 114: {fileID: 830632773}
   m_Layer: 5
-  m_Name: NextPiece
+  m_Name: NextPiece2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3599,10 +3601,10 @@ Camera:
   m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: -.0703923702
-    width: .5
-    height: 1.14078474
+    x: -.0851814523
+    y: 0
+    width: 1.17036295
+    height: 1
   near clip plane: .300000012
   far clip plane: 150
   field of view: 25
@@ -5751,10 +5753,10 @@ Camera:
   m_BackGroundColor: {r: .266666681, g: .266666681, b: .266666681, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: .5
-    y: -.0703923702
-    width: .5
-    height: 1.14078474
+    x: .414818555
+    y: 0
+    width: 1.17036295
+    height: 1
   near clip plane: .300000012
   far clip plane: 150
   field of view: 25

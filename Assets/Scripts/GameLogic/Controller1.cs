@@ -19,7 +19,7 @@ public class Controller1 : BaseController {
 
 		spawner = FindObjectOfType<Spawner> ();
 
-		nextBlockPosition = nextBlockText.transform.position + new Vector3(1, -2, 0);
+		nextBlockPosition = nextBlockText.transform.position + new Vector3(1.5f, -2, 0);
 
 		for (int i = 0; i < 4; i++) {
 			ghost [i] = (GameObject)Instantiate (ghostPrefab,
