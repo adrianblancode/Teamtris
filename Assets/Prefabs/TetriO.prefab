@@ -26,6 +26,7 @@ GameObject:
   - 33: {fileID: 3354794}
   - 65: {fileID: 6535702}
   - 23: {fileID: 2374390}
+  - 114: {fileID: 11496734}
   m_Layer: 0
   m_Name: BlockO (2)
   m_TagString: Untagged
@@ -44,6 +45,7 @@ GameObject:
   - 33: {fileID: 3311752}
   - 65: {fileID: 6503528}
   - 23: {fileID: 2394210}
+  - 114: {fileID: 11467176}
   m_Layer: 0
   m_Name: BlockO
   m_TagString: Untagged
@@ -62,6 +64,7 @@ GameObject:
   - 33: {fileID: 3379764}
   - 65: {fileID: 6561424}
   - 23: {fileID: 2349906}
+  - 114: {fileID: 11409416}
   m_Layer: 0
   m_Name: BlockO (3)
   m_TagString: Untagged
@@ -80,6 +83,7 @@ GameObject:
   - 33: {fileID: 3363654}
   - 65: {fileID: 6526056}
   - 23: {fileID: 2383846}
+  - 114: {fileID: 11467990}
   m_Layer: 0
   m_Name: BlockO (1)
   m_TagString: Untagged
@@ -323,6 +327,62 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11409416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2651fdef68ce54b84aafe16ecbdad694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMat: {fileID: 2100000, guid: a1256c71561dc492aafc6ee3d36954be, type: 2}
+  shaderEffect: {fileID: 2100000, guid: 0c11baffdfbe84ef597c855a77e81280, type: 2}
+  effectOn: 0
+--- !u!114 &11467176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 179432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2651fdef68ce54b84aafe16ecbdad694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMat: {fileID: 2100000, guid: a1256c71561dc492aafc6ee3d36954be, type: 2}
+  shaderEffect: {fileID: 2100000, guid: 0c11baffdfbe84ef597c855a77e81280, type: 2}
+  effectOn: 0
+--- !u!114 &11467990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 186940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2651fdef68ce54b84aafe16ecbdad694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMat: {fileID: 2100000, guid: a1256c71561dc492aafc6ee3d36954be, type: 2}
+  shaderEffect: {fileID: 2100000, guid: 0c11baffdfbe84ef597c855a77e81280, type: 2}
+  effectOn: 0
+--- !u!114 &11496734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 153064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2651fdef68ce54b84aafe16ecbdad694, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMat: {fileID: 2100000, guid: a1256c71561dc492aafc6ee3d36954be, type: 2}
+  shaderEffect: {fileID: 2100000, guid: 0c11baffdfbe84ef597c855a77e81280, type: 2}
+  effectOn: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -358,6 +418,14 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: -1.62920685e-07
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: mainMat
+      value: 
+      objectReference: {fileID: 2100000, guid: a1256c71561dc492aafc6ee3d36954be, type: 2}
+    - target: {fileID: 0}
+      propertyPath: shaderEffect
+      value: 
+      objectReference: {fileID: 2100000, guid: 0c11baffdfbe84ef597c855a77e81280, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 131384}
