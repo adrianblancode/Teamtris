@@ -69,6 +69,7 @@ public class ProcBlock : MonoBehaviour {
 	}
 
 	IEnumerator test(){
+		yield return new WaitForSeconds (1.0f);
 		for (int i = 0; i < 6; ++i) {
 			rule2 (block.Last.Value);
 			yield return new WaitForSeconds (1.0f);
