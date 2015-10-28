@@ -8,6 +8,7 @@ using System.Collections;
  */
 public abstract class Keyboard : Controller {
 
+	abstract public KeyCode quit{ get; set; }
 	abstract public KeyCode right{ get; set; }
 	abstract public KeyCode left{ get; set; }
 	abstract public KeyCode up{ get; set; }
@@ -17,6 +18,11 @@ public abstract class Keyboard : Controller {
 	abstract public KeyCode confirm{ get; set; }
 	abstract public KeyCode reject{ get; set; }
 	abstract public KeyCode pause{ get; set; }
+	
+	public bool Quit ()
+	{
+		return Input.GetKey (quit);
+	}
 
 	public bool MoveRight ()
 	{
