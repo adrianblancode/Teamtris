@@ -197,7 +197,7 @@ Shader "Custom/SurfaceShaderTest" {
 			float time = _Time[1];
 			v.vertex.xyz += trans(v.vertex.xyz, time);
 			
-//          	UNITY_INITIALIZE_OUTPUT(Input,o);
+          	UNITY_INITIALIZE_OUTPUT(Input,o);
 //		  	float2 p = float2(v.vertex.x, v.vertex.y) * 4.;
 //		  	float brightness = smoothNoise(p);
 //		  	float brightness = fractalNoise(p);
@@ -218,7 +218,7 @@ Shader "Custom/SurfaceShaderTest" {
 //		  	float3 customColor = float3(brightness);
 
 //			o.Albedo = customColor * _Color.rgb;
-			o.Alpha = 1F;
+			o.Alpha = 1.0;
 						
 //			circle(IN, o);
 //			borders(IN, o);
