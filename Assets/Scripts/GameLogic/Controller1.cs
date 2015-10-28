@@ -102,11 +102,13 @@ public class Controller1 : BaseController {
 			
 			// Show text
 			speedUpText.text = "SPEED UP!";
+			other_controller.speedUpText.text = speedUpText.text;
 		}
 		
 		// After three seconds, hide text
 		if (currentTime - lastSpeedUp > 3) {
 			speedUpText.text = "";
+			other_controller.speedUpText.text = speedUpText.text;
 		}
 	}
 
@@ -114,6 +116,7 @@ public class Controller1 : BaseController {
 		game_over = true;
 		if (speedUpText) {
 			speedUpText.text = "Game Over";
+			other_controller.speedUpText.text = speedUpText.text;
 		}
 	}
 }

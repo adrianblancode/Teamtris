@@ -5,8 +5,13 @@
 using System;
 using System.Collections;
 
+
 public class Wiimote : Controller {
-	
+
+	// WARNING This disables the wiimote for debugging
+	// Fixes crashes upon going into the editor
+	private static bool ENABLE_WIIMOTE = false;
+
 	private int id;
 	private DateTime lastUpdate;
 	
@@ -145,7 +150,11 @@ public class Wiimote : Controller {
 	
 	
 	public Wiimote() {}
-	
+
+	public static bool enableWiiMote() {
+		return ENABLE_WIIMOTE;
+	}
+
 	public Wiimote(int id)
 	{
 		this.id = id;
@@ -179,6 +188,9 @@ public class Wiimote : Controller {
 	}
 	public bool Pause() {
 		return BUTTON_PLUS == 1 ? true : false;
+	}
+	public bool Quit() {
+		return BUTTON_HOME == 1 ? true : false;
 	}
 	
 	public void update(string oscMessage, ArrayList values, DateTime currentTime)
