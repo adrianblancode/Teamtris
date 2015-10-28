@@ -748,19 +748,19 @@ public class BaseController : MonoBehaviour {
 		// Increase the score and change the combo
 		switch (linesDeleted) {
 		case 1 :
-			score += 40*level;
+			score += 40;
 			combo = 1;
 			break;
 		case 2 :
-			score += 100*level;
+			score += 100;
 			combo = 1;
 			break;
 		case 3 :
-			score += 300*level;
+			score += 300;
 			combo = 1;
 			break;
 		case 4 :
-			score += 1200*level*combo;
+			score += 1200*combo;
 			combo++;
 			break;
 		default :
