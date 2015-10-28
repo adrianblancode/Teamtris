@@ -19,6 +19,8 @@ public class Controller1 : BaseController {
 
 		spawner = FindObjectOfType<Spawner> ();
 
+		nextBlockPosition = nextBlockText.transform.position + new Vector3(1, -2, 0);
+
 		for (int i = 0; i < 4; i++) {
 			ghost [i] = (GameObject)Instantiate (ghostPrefab,
 			                                     transform.position + new Vector3 (i, 10, 0),
@@ -48,15 +50,24 @@ public class Controller1 : BaseController {
 		
 		currentBlock = spawner.spawnNext();
 		other_controller.setBlock (currentBlock, 0, 0);
+
+		nextBlock = spawner.spawnNext();
+		nextBlock.transform.position = nextBlockPosition;
+		other_controller.setNextBlock (nextBlock);
+
 	}
 
 	protected override void FixedUpdate(){
 		if (spawn && !game_over) {
-			currentBlock = spawner.spawnNext();
+			currentBlock = nextBlock;
+			currentBlock.transform.position = spawner.transform.position;
+			nextBlock = spawner.spawnNext();
+			nextBlock.transform.position = nextBlockPosition;
 			int k1 = Random.Range(0, 3);
 			int k2 = Random.Range(0, 3);
 			currentBlock.transform.Rotate(k1*90, k2*90, 0, Space.World);
 			other_controller.setBlock(currentBlock, k1, k2);
+			other_controller.setNextBlock(nextBlock);
 			spawn = false;
 		}
 	}
@@ -116,7 +127,6 @@ public class Controller1 : BaseController {
 		game_over = true;
 		if (speedUpText) {
 			speedUpText.text = "Game Over";
-			other_controller.speedUpText.text = speedUpText.text;
 		}
 	}
 }

@@ -34,6 +34,9 @@ public class BaseController : MonoBehaviour {
 	
 	protected Grid blockGrid;
 	protected GameObject currentBlock;
+	protected GameObject nextBlock;
+	protected Vector3 nextBlockPosition;
+	public Text nextBlockText;
 
 	// Ghost objects
 	public GameObject ghostPrefab;
@@ -78,7 +81,6 @@ public class BaseController : MonoBehaviour {
 		// Default position not valid? Then it's game over
 		if (!isValidGridPos()) {
 			game_over = true;
-			Debug.Log("GAME OVER");
 			Destroy (currentBlock);
 			Destroy(this);
 		}
