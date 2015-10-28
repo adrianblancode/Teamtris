@@ -81,7 +81,7 @@
 				float scanlines = sin(input.texCoord.y * 1000.0 * scanlineIntensity)
 					+ 0.13 * sin(input.texCoord.y * 1000.0 * scanlineIntensity * 3);
 
-				return (1.0 + 0.2 * scanlines);
+				return (1.0 + 0.15 * scanlines);
 			}
 			
 			// Turns every other pixel line into black
