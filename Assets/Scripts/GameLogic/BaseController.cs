@@ -27,10 +27,10 @@ public class BaseController : MonoBehaviour {
 	protected float fastFallRate = 0.05f;
 	
 	// Rate in seconds a block can be rotated
-	protected float rotateRate = 0.4f;
+	protected float rotateRate = 0.1f;
 	
 	// Rate in seconds a block can be moved horizontally
-	protected float horizontalRate = 0.2f;
+	protected float horizontalRate = 0.1f;
 	
 	protected Grid blockGrid;
 	protected GameObject currentBlock;
