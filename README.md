@@ -14,7 +14,7 @@ By default, wiimotes are not enabled. In order to enable them you must first con
 
 ##Images
 
-![Teamtris image](http://i.imgur.com/qpJ1KfL.jpg)
+![Teamtris image](http://i.imgur.com/rtjhGqs.jpg)
 
 ## Contributors
 Teamtris was developed by Adrian Blanco, Douglas Carlsson, Emilie Le Moël, Victor Hung and Mårten Norman for the course Advanced Graphics and Interaction at KTH.
